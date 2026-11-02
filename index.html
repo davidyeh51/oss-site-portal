@@ -6,13 +6,13 @@
 <meta name="robots" content="noindex,nofollow">
 <title>案場資料庫</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <style>
-:root{--navy:#051c2c;--blue:#2251ff;--cyan:#00a9f4;--ink:#222;--mute:#6b7280;--rule:#d0d5da;--soft:#f4f6f8;--white:#fff;
---serif:Georgia,"Noto Serif TC","Times New Roman",serif;--sans:"Noto Sans TC",Arial,sans-serif}
+:root{--navy:#0c2b15;--blue:#197a56;--cyan:#96f878;--ink:#212427;--mute:#696969;--rule:#d4d4d4;--soft:#f2f2f2;--warm:#f1eeea;--white:#fff;
+--serif:"Palatino Linotype",Palatino,"Noto Serif TC",Georgia,serif;--sans:"Helvetica Neue",Helvetica,Arial,"Noto Sans TC",sans-serif}
 *{box-sizing:border-box}
 body{margin:0;background:var(--white);color:var(--ink);font:15px/1.6 var(--sans)}
 [hidden]{display:none!important}
@@ -91,7 +91,55 @@ tbody tr.row:hover{background:var(--soft)}
 .dl .full{grid-column:1/-1}
 .drawer table{font-size:13px}
 .empty{color:var(--mute);font-size:13px;margin:0}
+/* 視覺語言：深綠＋亮綠點綴、細體襯線標題、圓角卡片、膠囊按鈕 */
+.login-side{border-radius:0 32px 32px 0}
+.login-side h1{font-weight:300;font-size:56px}
+.login-form h2{font-weight:300;font-size:32px}
+label input{border:0;border-radius:10px;background:var(--soft);padding:12px 14px;margin-top:6px}
+.btn{background:var(--cyan);color:var(--navy);border-radius:999px;font-weight:700;padding:13px 28px}
+.btn:hover{background:#7fe563}
+.top{position:sticky;top:12px;z-index:1000;margin:12px 24px 0;background:var(--soft);color:var(--ink);border-radius:18px;padding:10px 24px}
+.top b{font-weight:400;font-size:20px;color:var(--navy)}
+.tab{border:0;border-radius:999px;padding:7px 16px;color:var(--ink);font-size:14px}
+.tab:hover{background:#e3e3e3}
+.tab[aria-current=page]{background:var(--navy);color:#fff}
+.top nav{gap:6px}
+.title{font-weight:300;font-size:40px;line-height:1.25}
+.sub{font-size:16px}
+.kpis{background:var(--navy);border:0;border-radius:24px;padding:12px 32px;color:#fff}
+.kpi strong{color:var(--cyan);font-weight:300;font-size:40px}
+.kpi span{color:rgba(255,255,255,.75)}
+.kpi+.kpi{border-left-color:rgba(255,255,255,.2)}
+h2.ex{font-weight:300;font-size:26px;margin:0 0 16px}
+.filters{background:var(--warm);border-radius:20px;padding:16px 20px}
+.filters label{color:var(--mute)}
+.filters input,.filters select{border:0;border-radius:10px;padding:9px 10px;margin-top:4px}
+.tw{border-top:0}
+th{border-bottom:1px solid var(--navy);padding:10px 14px 10px 0}
+td{padding:11px 14px 11px 0}
+tbody tr.row:hover{background:var(--warm)}
+.link{color:var(--blue);font-weight:500}
+.top .link{color:var(--ink)}
+.pager button{border:1px solid var(--navy);border-radius:999px;padding:6px 18px;color:var(--navy)}
+.pager button:hover:not(:disabled){background:var(--navy);color:#fff}
+.foot{border-top:0;background:var(--soft);border-radius:12px;padding:12px 16px}
+.drawer{border-radius:28px 0 0 28px}
+.drawer h2{font-weight:300;font-size:32px}
+.drawer h3{color:var(--navy);font-size:14px;letter-spacing:0;border-bottom:1px solid var(--rule)}
+.drawer a,.pop a{color:var(--blue)}
+.scrim{background:rgba(12,43,21,.5)}
+#map{border:0;border-radius:20px}
+.mlist{border-top:0;background:var(--warm);border-radius:20px;padding:6px 12px}
+.mlist li{border-bottom-color:var(--rule)}
+.mlist button:hover{background:#e7e2db}
+.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(150,248,120,.55)}
+.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:var(--navy);color:#fff}
 @media(max-width:900px){
+ .login-side{border-radius:0 0 28px 28px}.login-side h1{font-size:36px}
+ .top{margin:8px 8px 0;border-radius:16px;padding:10px 14px}
+ .top nav{overflow-x:auto;flex-wrap:nowrap}.tab{white-space:nowrap}
+ .title{font-size:28px}.kpis{padding:8px 20px}.kpi strong{font-size:30px}
+ .drawer{border-radius:0}
  .login{grid-template-columns:1fr}.login-side{padding:32px 16px}.login-side h1{font-size:30px}
  .top{padding:12px 16px;flex-wrap:wrap;gap:8px}.top nav{order:3;margin:0;width:100%}.filters.c,.filters.k{grid-template-columns:1fr 1fr}.mapwrap{grid-template-columns:1fr;height:auto}#map{height:60vh}.mlist{max-height:320px}main{padding:24px 16px 48px}.title{font-size:24px}
  .kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(3){border-left:0;padding-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}
@@ -122,8 +170,7 @@ tbody tr.row:hover{background:var(--soft)}
     <h1 class="title" id="kHeadline">載入中</h1>
     <p class="sub" id="kSubline"></p>
     <div class="kpis" id="kKpis"></div>
-    <p class="exhibit">EXHIBIT 1</p>
-    <h2 class="ex">客戶清單（點選列可看合約與案場）</h2>
+        <h2 class="ex">客戶清單（點選列可看合約與案場）</h2>
     <div class="filters k">
       <label class="q">搜尋<input id="kq" type="search" placeholder="客戶編號、名稱、統編、地址、窗口"></label>
       <label>範圍<select id="kScope"><option value="linked">有合約或案場的客戶</option><option value="">全部客戶</option></select></label>
@@ -151,8 +198,7 @@ tbody tr.row:hover{background:var(--soft)}
     <h1 class="title" id="cHeadline">載入中</h1>
     <p class="sub" id="cSubline"></p>
     <div class="kpis" id="cKpis"></div>
-    <p class="exhibit">EXHIBIT 1</p>
-    <h2 class="ex">合約清單（點選列可看明細）</h2>
+        <h2 class="ex">合約清單（點選列可看明細）</h2>
     <div class="filters c">
       <label class="q">搜尋<input id="cq" type="search" placeholder="合約編號、客戶、案場、保險編號"></label>
       <label>合約類型<select id="cType"></select></label>
@@ -168,8 +214,7 @@ tbody tr.row:hover{background:var(--soft)}
     <h1 class="title" id="headline">載入中</h1>
     <p class="sub" id="subline"></p>
     <div class="kpis" id="kpis"></div>
-    <p class="exhibit">EXHIBIT 1</p>
-    <h2 class="ex">案場清單（點選列可看明細）</h2>
+        <h2 class="ex">案場清單（點選列可看明細）</h2>
     <div class="filters">
       <label class="q">搜尋<input id="q" type="search" placeholder="編號、名稱、客戶、地址、電號"></label>
       <label>有效合約<select id="fContract"></select></label>
@@ -212,7 +257,19 @@ let all=[],view=[],pageNo=0,sortKey='field_no',sortDir=1,lastFocus=null;
 let cAll=[],cView=[],cPageNo=0,cSortKey='end_date',cSortDir=1,contractsOfSite={};
 const KCOLS=[['customer_no','客戶編號'],['name','客戶名稱'],['tax_id','統編'],['contract_count','合約數',1],['site_count','案場數',1],['capacity','容量 kW',1],['address','地址']];
 let kRaw=[],kAll=[],kView=[],kPageNo=0,kSortKey='contract_count',kSortDir=-1;
-let map=null,cluster=null,markers={};
+let map=null,cluster=null,markers={},filesOf={};
+function fileList(type,no){
+  const fs=filesOf[type+':'+no]||[];
+  const rows=fs.map(f=>{
+    const size=f.size_bytes?` <small>${fmt(f.size_bytes/1048576)} MB</small>`:'';
+    if(f.http_status!==200)return `<li>${esc(f.label)}${size} <small>（原系統檔案已損壞，未能複製）</small></li>`;
+    if(f.copy_error)return `<li>${esc(f.label)}${size} <small>（複製失敗）</small></li>`;
+    if(!f.copied_at)return `<li>${esc(f.label)}${size} <small>（複製中）</small></li>`;
+    const url=f.drive_url||'https://drive.google.com/drive/search?q='+encodeURIComponent(f.file_name);
+    return `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(f.label)}</a>${size}</li>`;
+  }).join('');
+  return `<h3>附件（${fs.length}）</h3>`+(rows?`<ul style="margin:0;padding-left:18px">${rows}</ul><p class="empty" style="margin-top:6px">存放於 Google 雲端硬碟，需登入有權限的帳號。</p>`:'<p class="empty">無資料</p>');
+}
 
 function showLogin(){$('loginView').hidden=false;$('appView').hidden=true}
 async function showApp(){
@@ -236,8 +293,9 @@ async function fetchAll(table,cols){
 }
 async function loadContracts(){
   try{
-    const [cs,links,ks]=await Promise.all([fetchAll('oss_contracts','*'),fetchAll('oss_contract_sites','*'),fetchAll('oss_customers','*')]);
+    const [cs,links,ks,fs]=await Promise.all([fetchAll('oss_contracts','*'),fetchAll('oss_contract_sites','*'),fetchAll('oss_customers','*'),fetchAll('oss_files','owner_type,owner_no,label,file_name,drive_url,copied_at,copy_error,size_bytes,http_status')]);
     kRaw=ks;
+    filesOf={};fs.forEach(f=>{const k=f.owner_type+':'+f.owner_no;(filesOf[k]=filesOf[k]||[]).push(f)});
     const by={};links.forEach(l=>(by[l.contract_no]=by[l.contract_no]||[]).push(l));
     contractsOfSite={};links.forEach(l=>(contractsOfSite[l.field_no]=contractsOfSite[l.field_no]||[]).push(l.contract_no));
     cAll=cs.map(c=>{const sites=by[c.contract_no]||[];return{...c,sites,site_count:sites.length,_s:[c.contract_no,c.customer,c.eli_no,c.cli_no,sites.map(s=>s.field_no+' '+s.site_name).join(' ')].join(' ').toLowerCase()}});
@@ -378,7 +436,7 @@ function openC(no){
    +'<h3>商務與保發</h3>'+dl([['收款時程',c.payment_schedule],['維運金額',c.maintenance_amount],['保發責任',c.guaranteed_liability],['保發結算時間',c.clearing_timing],['獎懲計算方式',c.calculation_type,1],['獎金定義',c.award_terms,1],['罰款定義',c.indemnity_clause,1]])
    +'<h3>保險</h3>'+dl([['雇主意外責任保險編號',c.eli_no],['到期日',c.eli_end_date],['營繕承包人保險編號',c.cli_no],['到期日',c.repair_contractor_end_date]])
    +'<h3>報告與文件</h3>'+dl([['年度維運報告書',c.anr],['繳交時程',c.anr_content],['最晚繳交日期',c.anr_last_date],['保固書開立日期',c.warranty_issue_date],['工程期滿通知書開立日期',c.pen_date]])
-   +sub('災前、災後巡檢',c.inspections)+sub('檔案清單（僅名稱）',c.files);
+   +sub('災前、災後巡檢',c.inspections)+fileList('contract',c.contract_no);
   $('drawerWrap').hidden=false;$('dTitle').focus();
 }
 function initFilters(){
@@ -428,7 +486,7 @@ function openD(no){
   const g=validXY(r)?`<p style="margin:12px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟</a></p>`:'';
   $('dBody').innerHTML=g+custLink(r.customer_no,r.customer)+'<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
    +`<h3>關聯合約</h3>`+((contractsOfSite[r.field_no]||[]).length?`<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map(n=>`<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
-   +sub('連絡人',r.contacts)+sub('E-Mail',r.emails)+sub('電號',r.electric_nos)+sub('協力與設備',r.accessories)+sub('計量硬體設備',r.devices)+sub('檔案清單（僅名稱）',r.files);
+   +sub('連絡人',r.contacts)+sub('E-Mail',r.emails)+sub('電號',r.electric_nos)+sub('協力與設備',r.accessories)+sub('計量硬體設備',r.devices)+fileList('site',r.field_no);
   $('drawerWrap').hidden=false;$('dTitle').focus();
 }
 function closeD(){$('drawerWrap').hidden=true;lastFocus&&lastFocus.focus&&lastFocus.focus()}
