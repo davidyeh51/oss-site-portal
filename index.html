@@ -7,6 +7,9 @@
 <title>案場資料庫</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <style>
 :root{--navy:#051c2c;--blue:#2251ff;--cyan:#00a9f4;--ink:#222;--mute:#6b7280;--rule:#d0d5da;--soft:#f4f6f8;--white:#fff;
 --serif:Georgia,"Noto Serif TC","Times New Roman",serif;--sans:"Noto Sans TC",Arial,sans-serif}
@@ -32,6 +35,23 @@ label input{display:block;width:100%;margin-top:4px;padding:9px 0;border:0;borde
 /* 版面 */
 .top{background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 40px}
 .top b{font:500 18px var(--serif)}
+.top nav{display:flex;gap:24px;margin:0 auto 0 40px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;color:#b8c4ce;padding:4px 0;cursor:pointer}
+.tab[aria-current=page]{color:#fff;border-bottom-color:var(--cyan)}
+.jump{background:none;border:0;padding:0;color:var(--blue);cursor:pointer;text-decoration:underline;text-align:left;font-size:13px}
+.filters.c{grid-template-columns:2fr repeat(3,1fr)}
+.filters.k{grid-template-columns:2fr 1fr}
+.mapwrap{display:grid;grid-template-columns:1fr 320px;gap:20px;height:calc(100vh - 300px);min-height:460px}
+#map{height:100%;border:1px solid var(--rule);z-index:0}
+.mlist{overflow:auto;border-top:1px solid var(--navy);margin:0;padding:0;list-style:none}
+.mlist li{border-bottom:1px solid var(--rule)}
+.mlist button{display:block;width:100%;background:none;border:0;text-align:left;padding:8px 4px;cursor:pointer;font-size:13px}
+.mlist button:hover{background:var(--soft)}
+.mlist small{display:block;color:var(--mute)}
+.pop b{display:block;color:var(--navy);font-size:14px}.pop span{display:block;color:var(--mute);margin-bottom:6px}
+.pop .jump{display:block;margin-top:4px}
+.pop a{font-size:13px}
+.scrim{z-index:2000}.drawer{z-index:2001}
 .link{background:none;border:0;color:inherit;cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
 main{max-width:1360px;margin:0 auto;padding:36px 40px 64px}
 .title{font:500 30px/1.3 var(--serif);color:var(--navy);margin:0 0 6px;max-width:32em}
@@ -73,7 +93,7 @@ tbody tr.row:hover{background:var(--soft)}
 .empty{color:var(--mute);font-size:13px;margin:0}
 @media(max-width:900px){
  .login{grid-template-columns:1fr}.login-side{padding:32px 16px}.login-side h1{font-size:30px}
- .top{padding:12px 16px}main{padding:24px 16px 48px}.title{font-size:24px}
+ .top{padding:12px 16px;flex-wrap:wrap;gap:8px}.top nav{order:3;margin:0;width:100%}.filters.c,.filters.k{grid-template-columns:1fr 1fr}.mapwrap{grid-template-columns:1fr;height:auto}#map{height:60vh}.mlist{max-height:320px}main{padding:24px 16px 48px}.title{font-size:24px}
  .kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(3){border-left:0;padding-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}
  .filters{grid-template-columns:1fr 1fr}.filters .q{grid-column:1/-1}
  .drawer{padding:24px 16px}.dl{grid-template-columns:1fr}
@@ -95,8 +115,56 @@ tbody tr.row:hover{background:var(--soft)}
 </section>
 
 <div id="appView" hidden>
-  <header class="top"><b>案場資料庫</b><button class="link" id="logout">登出</button></header>
-  <main>
+  <header class="top"><b>案場資料庫</b>
+    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button></nav>
+    <button class="link" id="logout">登出</button></header>
+  <main id="customersView" hidden>
+    <h1 class="title" id="kHeadline">載入中</h1>
+    <p class="sub" id="kSubline"></p>
+    <div class="kpis" id="kKpis"></div>
+    <p class="exhibit">EXHIBIT 1</p>
+    <h2 class="ex">客戶清單（點選列可看合約與案場）</h2>
+    <div class="filters k">
+      <label class="q">搜尋<input id="kq" type="search" placeholder="客戶編號、名稱、統編、地址、窗口"></label>
+      <label>範圍<select id="kScope"><option value="linked">有合約或案場的客戶</option><option value="">全部客戶</option></select></label>
+    </div>
+    <div class="bar"><span id="kCount"></span><button class="link" id="kCsv">匯出 CSV</button></div>
+    <div class="tw"><table><thead><tr id="kThead"></tr></thead><tbody id="kTbody"></tbody></table></div>
+    <div class="pager"><button id="kPrev">上一頁</button><span id="kPage"></span><button id="kNext">下一頁</button></div>
+    <p class="foot" id="kFoot"></p>
+  </main>
+  <main id="mapView" hidden>
+    <h1 class="title" id="mHeadline">案場地圖</h1>
+    <p class="sub" id="mSubline"></p>
+    <div class="filters">
+      <label class="q">搜尋<input id="mq" type="search" placeholder="編號、名稱、客戶、地址"></label>
+      <label>有效合約<select id="mContract"></select></label>
+      <label>屬性<select id="mSource"></select></label>
+      <label>類型<select id="mType"></select></label>
+      <label>負責工程師<select id="mEng"></select></label>
+      <label>分區<select id="mArea"></select></label>
+    </div>
+    <div class="mapwrap"><div id="map" role="application" aria-label="案場地圖"></div><ul class="mlist" id="mList"></ul></div>
+    <p class="foot" id="mFoot"></p>
+  </main>
+  <main id="contractsView" hidden>
+    <h1 class="title" id="cHeadline">載入中</h1>
+    <p class="sub" id="cSubline"></p>
+    <div class="kpis" id="cKpis"></div>
+    <p class="exhibit">EXHIBIT 1</p>
+    <h2 class="ex">合約清單（點選列可看明細）</h2>
+    <div class="filters c">
+      <label class="q">搜尋<input id="cq" type="search" placeholder="合約編號、客戶、案場、保險編號"></label>
+      <label>合約類型<select id="cType"></select></label>
+      <label>合約狀態<select id="cStatus"></select></label>
+      <label>到期<select id="cExpire"><option value="">全部</option><option value="90">90 天內到期</option><option value="180">180 天內到期</option><option value="365">一年內到期</option></select></label>
+    </div>
+    <div class="bar"><span id="cCount"></span><button class="link" id="cCsv">匯出 CSV</button></div>
+    <div class="tw"><table><thead><tr id="cThead"></tr></thead><tbody id="cTbody"></tbody></table></div>
+    <div class="pager"><button id="cPrev">上一頁</button><span id="cPage"></span><button id="cNext">下一頁</button></div>
+    <p class="foot" id="cFoot"></p>
+  </main>
+  <main id="sitesView">
     <h1 class="title" id="headline">載入中</h1>
     <p class="sub" id="subline"></p>
     <div class="kpis" id="kpis"></div>
@@ -127,6 +195,8 @@ tbody tr.row:hover{background:var(--soft)}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
 const SB_URL='https://cowljafosekwvxithwjd.supabase.co';
 const SB_KEY='sb_publishable_YP57cbbDJSP7-PvBgtKivA_25uDcp5n';
@@ -137,7 +207,12 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const fmt=n=>Number(n).toLocaleString('zh-TW',{maximumFractionDigits:1});
 const PAGE=50;
 const COLS=[['field_no','編號'],['name','案場名稱'],['capacity','容量 kW',1],['customer','客戶'],['active_contract','有效合約'],['is_high_voltage','高壓'],['engineer','工程師'],['manager','管理師'],['area','分區'],['source','屬性'],['field_type','類型']];
+const CCOLS=[['contract_no','合約編號'],['contract_type','類型'],['status','狀態'],['start_date','開始'],['end_date','結束'],['years','年限'],['customer','客戶'],['site_count','案場數',1]];
 let all=[],view=[],pageNo=0,sortKey='field_no',sortDir=1,lastFocus=null;
+let cAll=[],cView=[],cPageNo=0,cSortKey='end_date',cSortDir=1,contractsOfSite={};
+const KCOLS=[['customer_no','客戶編號'],['name','客戶名稱'],['tax_id','統編'],['contract_count','合約數',1],['site_count','案場數',1],['capacity','容量 kW',1],['address','地址']];
+let kRaw=[],kAll=[],kView=[],kPageNo=0,kSortKey='contract_count',kSortDir=-1;
+let map=null,cluster=null,markers={};
 
 function showLogin(){$('loginView').hidden=false;$('appView').hidden=true}
 async function showApp(){
@@ -147,6 +222,164 @@ async function showApp(){
   if(!data.length){$('headline').textContent='此帳號沒有讀取權限';$('subline').textContent='請確認帳號已列入管理者名單。';return}
   all=data.map(r=>({...r,_s:[r.field_no,r.name,r.customer,r.address,JSON.stringify(r.electric_nos)].join(' ').toLowerCase()}));
   initFilters();summary();apply();
+  switchTab('contracts');
+  loadContracts();
+}
+async function fetchAll(table,cols){
+  let out=[];
+  for(let i=0;;i+=1000){
+    const {data,error}=await sb.from(table).select(cols).range(i,i+999);
+    if(error)throw error;
+    out=out.concat(data);
+    if(data.length<1000)return out;
+  }
+}
+async function loadContracts(){
+  try{
+    const [cs,links,ks]=await Promise.all([fetchAll('oss_contracts','*'),fetchAll('oss_contract_sites','*'),fetchAll('oss_customers','*')]);
+    kRaw=ks;
+    const by={};links.forEach(l=>(by[l.contract_no]=by[l.contract_no]||[]).push(l));
+    contractsOfSite={};links.forEach(l=>(contractsOfSite[l.field_no]=contractsOfSite[l.field_no]||[]).push(l.contract_no));
+    cAll=cs.map(c=>{const sites=by[c.contract_no]||[];return{...c,sites,site_count:sites.length,_s:[c.contract_no,c.customer,c.eli_no,c.cli_no,sites.map(s=>s.field_no+' '+s.site_name).join(' ')].join(' ').toLowerCase()}});
+    cInitFilters();cSummary();cApply();
+    buildCustomers();
+  }catch(e){$('cHeadline').textContent='合約資料載入失敗';$('cSubline').textContent=e.message;$('kHeadline').textContent='客戶資料載入失敗'}
+}
+function switchTab(t){
+  [['sites','Sites'],['contracts','Contracts'],['customers','Customers'],['map','Map']].forEach(([v,n])=>{
+    $(v+'View').hidden=v!==t;
+    if(v===t)$('tab'+n).setAttribute('aria-current','page');else $('tab'+n).removeAttribute('aria-current');
+  });
+  if(t==='map')showMap();
+}
+function buildCustomers(){
+  const cBy={},sBy={};
+  cAll.forEach(c=>{if(c.customer_no)(cBy[c.customer_no]=cBy[c.customer_no]||[]).push(c)});
+  all.forEach(s=>{if(s.customer_no)(sBy[s.customer_no]=sBy[s.customer_no]||[]).push(s)});
+  kAll=kRaw.map(k=>{
+    const contracts=cBy[k.customer_no]||[];
+    const m=new Map();
+    (sBy[k.customer_no]||[]).forEach(s=>m.set(s.field_no,s));
+    contracts.forEach(c=>c.sites.forEach(l=>{if(!m.has(l.field_no)){const s=all.find(x=>x.field_no===l.field_no);m.set(l.field_no,s||{field_no:l.field_no,name:l.site_name})}}));
+    const sites=[...m.values()];
+    return{...k,contracts,sites,contract_count:contracts.length,site_count:sites.length,capacity:sites.reduce((a,s)=>a+(+s.capacity||0),0),
+      _s:[k.customer_no,k.name,k.tax_id,k.address,JSON.stringify(k.contacts)].join(' ').toLowerCase()};
+  });
+  const linked=kAll.filter(k=>k.contract_count||k.site_count);
+  const multi=linked.filter(k=>k.site_count>1).length;
+  $('kHeadline').textContent=`${kAll.length} 位客戶中，${linked.length} 位有合約或案場，其中 ${multi} 位擁有多個案場`;
+  $('kSubline').textContent='客戶是合約甲方；案場數合計該客戶名下與其合約關聯的案場。';
+  $('kKpis').innerHTML=[[kAll.length,'客戶總數'],[kAll.filter(k=>k.contract_count).length,'有合約客戶'],[kAll.filter(k=>k.site_count).length,'有案場客戶'],[multi,'多案場客戶']].map(([a,b])=>`<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+  $('kFoot').textContent='資料來源：維運管理系統「客戶資料」。此為複製快照，不會自動更新。';
+  kApply();
+}
+function kApply(){
+  const q=$('kq').value.trim().toLowerCase(),sc=$('kScope').value;
+  kView=kAll.filter(k=>(!q||k._s.includes(q))&&(!sc||k.contract_count||k.site_count));
+  kView.sort((a,b)=>{const x=a[kSortKey],y=b[kSortKey];if(x==null||x==='')return 1;if(y==null||y==='')return -1;
+    return kSortDir*(typeof x==='number'?(x-y):String(x).localeCompare(String(y),'zh-Hant'))});
+  kRender();
+}
+function kRender(){
+  $('kThead').innerHTML=KCOLS.map(([k,l,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${kSortKey===k?(kSortDir>0?'ascending':'descending'):'none'}">${esc(l)}${kSortKey===k?(kSortDir>0?' ▲':' ▼'):''}</th>`).join('');
+  const pages=Math.max(1,Math.ceil(kView.length/PAGE));kPageNo=Math.min(kPageNo,pages-1);
+  $('kTbody').innerHTML=kView.slice(kPageNo*PAGE,(kPageNo+1)*PAGE).map(r=>`<tr class="row" tabindex="0" data-no="${esc(r.customer_no)}">${KCOLS.map(([k,,n])=>`<td class="${n?'num':(k==='name'||k==='address'?'':'nw')}">${esc(k==='capacity'?fmt(r[k]):r[k])}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${KCOLS.length}" class="empty">沒有符合條件的客戶</td></tr>`;
+  $('kCount').textContent=`${kView.length} 筆`;
+  $('kPage').textContent=`第 ${kPageNo+1} / ${pages} 頁`;$('kPrev').disabled=!kPageNo;$('kNext').disabled=kPageNo>=pages-1;
+}
+function openK(no){
+  const k=kAll.find(x=>x.customer_no===no);if(!k)return;
+  if($('drawerWrap').hidden)lastFocus=document.activeElement;
+  $('dNo').textContent=k.customer_no;$('dTitle').textContent=k.name;
+  $('dBody').innerHTML='<h3>基本資料</h3>'+dl([['統編',k.tax_id],['案場總容量 (kW)',k.site_count?fmt(k.capacity):''],['地址',k.address,1]])
+   +`<h3>合約（${k.contracts.length}）</h3>`+(k.contracts.length?`<ul style="margin:0;padding-left:18px">${k.contracts.map(c=>`<li><button class="jump" data-contract="${esc(c.contract_no)}">${esc(c.contract_no)}　${esc(c.contract_type)}　${esc(c.status)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
+   +`<h3>案場（${k.sites.length}）</h3>`+(k.sites.length?`<ul style="margin:0;padding-left:18px">${k.sites.map(s=>`<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.name)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
+   +sub('聯絡窗口',k.contacts);
+  $('drawerWrap').hidden=false;$('dTitle').focus();
+}
+const custLink=(no,name)=>`<h3>客戶（合約甲方）</h3>`+(no?`<button class="jump" data-customer="${esc(no)}">${esc(no)}　${esc(name)}</button>`:`<p class="empty">${esc(name)||'無資料'}（未對應到客戶資料）</p>`);
+const validXY=s=>s.lat>=21&&s.lat<=27&&s.lng>=117&&s.lng<=123;
+function showMap(){
+  if(!map){
+    const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'});
+    const emap=L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',{maxZoom:19,attribution:'&copy; 內政部國土測繪中心'});
+    map=L.map('map',{layers:[osm]}).setView([23.7,120.9],8);
+    L.control.layers({'OpenStreetMap':osm,'通用版電子地圖（國土測繪中心）':emap}).addTo(map);
+    cluster=L.markerClusterGroup({maxClusterRadius:45});map.addLayer(cluster);
+    [['mContract','active_contract'],['mSource','source'],['mType','field_type'],['mEng','engineer'],['mArea','area']].forEach(([id,k])=>{
+      const v=[...new Set(all.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
+      $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
+      $(id).dataset.key=k;$(id).onchange=mApply;
+    });
+    $('mq').oninput=mApply;
+    all.filter(validXY).forEach(s=>{
+      const g=`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
+      const m=L.marker([s.lat,s.lng],{title:s.name}).bindPopup(`<div class="pop"><b>${esc(s.name)}</b><span>${esc(s.field_no)}　${s.capacity!=null?fmt(s.capacity)+' kW':''}<br>${esc(s.customer)}</span><button class="jump" data-site="${esc(s.field_no)}">查看案場資料</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟</a></div>`);
+      markers[s.field_no]=m;
+    });
+    $('map').addEventListener('click',e=>{const b=e.target.closest('.jump');if(b)openD(b.dataset.site)});
+    const bad=all.filter(s=>!validXY(s));
+    $('mFoot').innerHTML=`${bad.length} 個案場因 GPS 缺漏或格式異常未標示：`+bad.map(s=>`<button class="jump" data-site="${esc(s.field_no)}">${esc(s.name)}</button>`).join('、');
+    $('mFoot').onclick=e=>{const b=e.target.closest('.jump');if(b)openD(b.dataset.site)};
+    mApply();
+  }
+  setTimeout(()=>map.invalidateSize(),0);
+}
+function mApply(){
+  const q=$('mq').value.trim().toLowerCase();
+  const fs=['mContract','mSource','mType','mEng','mArea'].map(i=>[$(i).dataset.key,$(i).value]).filter(x=>x[1]);
+  const list=all.filter(r=>validXY(r)&&(!q||r._s.includes(q))&&fs.every(([k,v])=>r[k]===v));
+  cluster.clearLayers();cluster.addLayers(list.map(s=>markers[s.field_no]));
+  const cap=list.reduce((a,s)=>a+(+s.capacity||0),0);
+  $('mHeadline').textContent=`地圖標示 ${list.length} 個案場，合計 ${fmt(cap/1000)} MW`;
+  $('mSubline').textContent='點標記可看摘要並連到案場資料；右側清單可直接定位。';
+  $('mList').innerHTML=list.slice(0,300).map(s=>`<li><button data-no="${esc(s.field_no)}">${esc(s.name)}<small>${esc(s.field_no)}　${esc(s.customer)}</small></button></li>`).join('')+(list.length>300?`<li class="empty" style="padding:8px 4px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>`:'');
+}
+const daysLeft=c=>c.end_date?Math.ceil((new Date(c.end_date)-new Date())/864e5):null;
+function cInitFilters(){
+  [['cType','contract_type'],['cStatus','status']].forEach(([id,k])=>{
+    const v=[...new Set(cAll.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
+    $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
+    $(id).onchange=()=>{cPageNo=0;cApply()};
+  });
+  $('cExpire').onchange=()=>{cPageNo=0;cApply()};
+}
+function cSummary(){
+  const on=cAll.filter(c=>c.status==='進行中');
+  const soon=on.filter(c=>{const d=daysLeft(c);return d!=null&&d>=0&&d<=90});
+  $('cHeadline').textContent=`${cAll.length} 份合約中，${on.length} 份進行中，其中 ${soon.length} 份將在 90 天內到期`;
+  $('cSubline').textContent=`維運合約 ${cAll.filter(c=>c.contract_type==='維運合約').length} 份，工程合約 ${cAll.filter(c=>c.contract_type==='工程合約').length} 份`;
+  $('cKpis').innerHTML=[[cAll.length,'合約總數'],[on.length,'進行中'],[soon.length,'90 天內到期'],[cAll.filter(c=>c.status==='已到期').length,'已到期']].map(([a,b])=>`<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+  const t=cAll.map(r=>r.synced_at).sort().pop();
+  $('cFoot').textContent=`資料來源：維運管理系統「合約資料」；同步時間 ${new Date(t).toLocaleString('zh-TW')}。此為複製快照，不會自動更新。`;
+}
+function cApply(){
+  const q=$('cq').value.trim().toLowerCase(),ty=$('cType').value,st=$('cStatus').value,ex=+$('cExpire').value;
+  cView=cAll.filter(c=>{const d=daysLeft(c);return(!q||c._s.includes(q))&&(!ty||c.contract_type===ty)&&(!st||c.status===st)&&(!ex||(d!=null&&d>=0&&d<=ex))});
+  cView.sort((a,b)=>{const x=a[cSortKey],y=b[cSortKey];if(x==null||x==='')return 1;if(y==null||y==='')return -1;
+    return cSortDir*(cSortKey==='site_count'?(x-y):String(x).localeCompare(String(y),'zh-Hant'))});
+  cRender();
+}
+function cRender(){
+  $('cThead').innerHTML=CCOLS.map(([k,l,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${cSortKey===k?(cSortDir>0?'ascending':'descending'):'none'}">${esc(l)}${cSortKey===k?(cSortDir>0?' ▲':' ▼'):''}</th>`).join('');
+  const pages=Math.max(1,Math.ceil(cView.length/PAGE));cPageNo=Math.min(cPageNo,pages-1);
+  $('cTbody').innerHTML=cView.slice(cPageNo*PAGE,(cPageNo+1)*PAGE).map(r=>`<tr class="row" tabindex="0" data-no="${esc(r.contract_no)}">${CCOLS.map(([k,,n])=>`<td class="${n?'num':(k==='customer'?'':'nw')}">${esc(r[k])}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${CCOLS.length}" class="empty">沒有符合條件的合約</td></tr>`;
+  $('cCount').textContent=`${cView.length} 筆`;
+  $('cPage').textContent=`第 ${cPageNo+1} / ${pages} 頁`;$('cPrev').disabled=!cPageNo;$('cNext').disabled=cPageNo>=pages-1;
+}
+function openC(no){
+  const c=cAll.find(x=>x.contract_no===no);if(!c)return;
+  if($('drawerWrap').hidden)lastFocus=document.activeElement;
+  $('dNo').textContent=c.contract_type||'合約';$('dTitle').textContent=c.contract_no;
+  const sites=c.sites.length?c.sites.map(s=>`<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.site_name)}</button></li>`).join(''):'';
+  $('dBody').innerHTML=custLink(c.customer_no,c.customer)+'<h3>基本資料</h3>'+dl([['合約狀態',c.status],['合約開始',c.start_date],['合約結束',c.end_date],['年限',c.years]])
+   +`<h3>關聯案場（${c.sites.length}）</h3>`+(sites?`<ul style="margin:0;padding-left:18px">${sites}</ul>`:'<p class="empty">無資料</p>')
+   +'<h3>服務條件</h3>'+dl([['查檢到場時限（小時）',c.inspection_dl],['修復零件更換時限（小時）',c.repair_dl],['巡檢週期（天）',c.inspection_cycle],['高壓週期（天）',c.hv_cycle],['清洗週期（天）',c.clean_cycle],['環境整理週期（天）',c.weeding_cycle]])
+   +'<h3>商務與保發</h3>'+dl([['收款時程',c.payment_schedule],['維運金額',c.maintenance_amount],['保發責任',c.guaranteed_liability],['保發結算時間',c.clearing_timing],['獎懲計算方式',c.calculation_type,1],['獎金定義',c.award_terms,1],['罰款定義',c.indemnity_clause,1]])
+   +'<h3>保險</h3>'+dl([['雇主意外責任保險編號',c.eli_no],['到期日',c.eli_end_date],['營繕承包人保險編號',c.cli_no],['到期日',c.repair_contractor_end_date]])
+   +'<h3>報告與文件</h3>'+dl([['年度維運報告書',c.anr],['繳交時程',c.anr_content],['最晚繳交日期',c.anr_last_date],['保固書開立日期',c.warranty_issue_date],['工程期滿通知書開立日期',c.pen_date]])
+   +sub('災前、災後巡檢',c.inspections)+sub('檔案清單（僅名稱）',c.files);
+  $('drawerWrap').hidden=false;$('dTitle').focus();
 }
 function initFilters(){
   [['fContract','active_contract'],['fSource','source'],['fType','field_type'],['fEng','engineer'],['fArea','area']].forEach(([id,k])=>{
@@ -190,17 +423,19 @@ function sub(title,rows){
 }
 function openD(no){
   const r=all.find(x=>x.field_no===no);if(!r)return;
-  lastFocus=document.activeElement;
+  if($('drawerWrap').hidden)lastFocus=document.activeElement;
   $('dNo').textContent=r.field_no;$('dTitle').textContent=r.name;
-  $('dBody').innerHTML='<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['客戶',r.customer],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
+  const g=validXY(r)?`<p style="margin:12px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟</a></p>`:'';
+  $('dBody').innerHTML=g+custLink(r.customer_no,r.customer)+'<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
+   +`<h3>關聯合約</h3>`+((contractsOfSite[r.field_no]||[]).length?`<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map(n=>`<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
    +sub('連絡人',r.contacts)+sub('E-Mail',r.emails)+sub('電號',r.electric_nos)+sub('協力與設備',r.accessories)+sub('計量硬體設備',r.devices)+sub('檔案清單（僅名稱）',r.files);
   $('drawerWrap').hidden=false;$('dTitle').focus();
 }
 function closeD(){$('drawerWrap').hidden=true;lastFocus&&lastFocus.focus&&lastFocus.focus()}
-function csv(){
+function csv(cols,list,name){
   const q=v=>{let s=String(v??'');if(/^[=+\-@]/.test(s))s="'"+s;return `"${s.replace(/"/g,'""')}"`};
-  const rows=[COLS.map(c=>q(c[1])).join(','),...view.map(r=>COLS.map(c=>q(r[c[0]])).join(','))];
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\r\n')],{type:'text/csv'}));a.download='案場資料.csv';a.click();URL.revokeObjectURL(a.href);
+  const rows=[cols.map(c=>q(c[1])).join(','),...list.map(r=>cols.map(c=>q(r[c[0]])).join(','))];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\r\n')],{type:'text/csv'}));a.download=name;a.click();URL.revokeObjectURL(a.href);
 }
 $('loginForm').onsubmit=async e=>{
   e.preventDefault();$('loginErr').textContent='';$('loginBtn').disabled=true;
@@ -216,7 +451,24 @@ $('thead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if
 $('tbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)};
 $('tbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)}};
 $('prev').onclick=()=>{pageNo--;render()};$('next').onclick=()=>{pageNo++;render()};
-$('csv').onclick=csv;$('dClose').onclick=closeD;$('scrim').onclick=closeD;
+$('csv').onclick=()=>csv(COLS,view,'案場資料.csv');
+$('tabSites').onclick=()=>switchTab('sites');$('tabContracts').onclick=()=>switchTab('contracts');
+$('cq').oninput=()=>{cPageNo=0;cApply()};
+$('cThead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(cSortKey===k)cSortDir=-cSortDir;else{cSortKey=k;cSortDir=1}cApply()};
+$('cTbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openC(t.dataset.no)};
+$('cTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openC(t.dataset.no)}};
+$('cPrev').onclick=()=>{cPageNo--;cRender()};$('cNext').onclick=()=>{cPageNo++;cRender()};
+$('cCsv').onclick=()=>csv(CCOLS,cView,'合約資料.csv');
+$('dBody').onclick=e=>{const b=e.target.closest('.jump');if(!b)return;if(b.dataset.site)openD(b.dataset.site);else if(b.dataset.customer)openK(b.dataset.customer);else openC(b.dataset.contract)};
+$('tabCustomers').onclick=()=>switchTab('customers');$('tabMap').onclick=()=>switchTab('map');
+$('kq').oninput=()=>{kPageNo=0;kApply()};$('kScope').onchange=()=>{kPageNo=0;kApply()};
+$('kThead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(kSortKey===k)kSortDir=-kSortDir;else{kSortKey=k;kSortDir=1}kApply()};
+$('kTbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openK(t.dataset.no)};
+$('kTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openK(t.dataset.no)}};
+$('kPrev').onclick=()=>{kPageNo--;kRender()};$('kNext').onclick=()=>{kPageNo++;kRender()};
+$('kCsv').onclick=()=>csv(KCOLS,kView,'客戶資料.csv');
+$('mList').onclick=e=>{const b=e.target.closest('button');if(!b)return;const m=markers[b.dataset.no];cluster.zoomToShowLayer(m,()=>m.openPopup())};
+$('dClose').onclick=closeD;$('scrim').onclick=closeD;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('drawerWrap').hidden)closeD()});
 sb.auth.getSession().then(({data})=>data.session?showApp():showLogin());
 </script>
