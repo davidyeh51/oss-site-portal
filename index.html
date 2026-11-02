@@ -104,6 +104,7 @@ label input{border:0;border-radius:10px;background:var(--soft);padding:12px 14px
 .tab:hover{background:#e3e3e3}
 .tab[aria-current=page]{background:var(--navy);color:#fff}
 .top nav{gap:6px}
+.dl-tab{text-decoration:none;display:inline-flex;align-items:center}
 .title{font-weight:300;font-size:40px;line-height:1.25}
 .sub{font-size:16px}
 .kpis{background:var(--navy);border:0;border-radius:24px;padding:12px 32px;color:#fff}
@@ -164,7 +165,7 @@ tbody tr.row:hover{background:var(--warm)}
 
 <div id="appView" hidden>
   <header class="top"><b>案場資料庫</b>
-    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button></nav>
+    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button><a class="tab dl-tab" href="https://drive.google.com/drive/folders/1E79klqsGGVgJU1J204UhHR1TG4RDuaQM" target="_blank" rel="noopener">資料庫下載</a></nav>
     <button class="link" id="logout">登出</button></header>
   <main id="customersView" hidden>
     <h1 class="title" id="kHeadline">載入中</h1>
