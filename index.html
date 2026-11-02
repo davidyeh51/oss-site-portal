@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>案場資料庫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#051c2c;--blue:#2251ff;--cyan:#00a9f4;--ink:#222;--mute:#6b7280;--rule:#d0d5da;--soft:#f4f6f8;--white:#fff;
+--serif:Georgia,"Noto Serif TC","Times New Roman",serif;--sans:"Noto Sans TC",Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font:15px/1.6 var(--sans)}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+/* 登入 */
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.login-side{background:var(--navy);color:#fff;padding:64px;display:flex;flex-direction:column;justify-content:flex-end}
+.login-side h1{font:500 44px/1.2 var(--serif);margin:0 0 16px}
+.login-side p{color:#b8c4ce;margin:0;max-width:30em}
+.login-form{display:flex;align-items:center;justify-content:center;padding:32px 16px}
+.login-form form{width:100%;max-width:340px}
+.login-form h2{font:500 26px var(--serif);color:var(--navy);margin:0 0 28px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:18px}
+label input{display:block;width:100%;margin-top:4px;padding:9px 0;border:0;border-bottom:1px solid var(--navy);background:none;font-size:16px;color:var(--ink)}
+.btn{background:var(--navy);color:#fff;border:0;padding:11px 22px;cursor:pointer;font-weight:500}
+.btn:hover{background:var(--blue)}
+.login-form .btn{width:100%;margin-top:8px}
+.err{color:#b42318;font-size:13px;min-height:20px;margin:10px 0 0}
+/* 版面 */
+.top{background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 40px}
+.top b{font:500 18px var(--serif)}
+.link{background:none;border:0;color:inherit;cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
+main{max-width:1360px;margin:0 auto;padding:36px 40px 64px}
+.title{font:500 30px/1.3 var(--serif);color:var(--navy);margin:0 0 6px;max-width:32em}
+.sub{color:var(--mute);margin:0 0 28px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--navy);border-bottom:1px solid var(--rule);margin-bottom:32px}
+.kpi{padding:16px 20px 16px 0}
+.kpi+.kpi{border-left:1px solid var(--rule);padding-left:20px}
+.kpi strong{display:block;font:500 32px/1.2 var(--serif);color:var(--navy)}
+.kpi span{font-size:13px;color:var(--mute)}
+.exhibit{font-size:12px;letter-spacing:.08em;color:var(--blue);font-weight:700;margin:0}
+h2.ex{font:500 19px var(--serif);color:var(--navy);margin:2px 0 14px}
+.filters{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:12px;margin-bottom:14px}
+.filters label{margin:0;font-size:12px}
+.filters input,.filters select{display:block;width:100%;margin-top:2px;padding:7px 4px;border:0;border-bottom:1px solid var(--rule);background:#fff;font-size:14px;min-width:0}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);margin-bottom:6px;gap:12px}
+.tw{overflow-x:auto;border-top:1px solid var(--navy)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{font-weight:700;color:var(--navy);text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--navy);white-space:nowrap;cursor:pointer;font-size:13px}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+tbody tr.row{cursor:pointer}
+tbody tr.row:hover{background:var(--soft)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.nw{white-space:nowrap}
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:14px;font-size:13px}
+.pager button{background:none;border:1px solid var(--rule);padding:4px 12px;cursor:pointer}
+.pager button:disabled{opacity:.4;cursor:default}
+.foot{margin-top:28px;font-size:12px;color:var(--mute);border-top:1px solid var(--rule);padding-top:10px}
+/* 明細 */
+.scrim{position:fixed;inset:0;background:rgba(5,28,44,.45)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(720px,100%);background:#fff;overflow:auto;padding:32px 36px 48px}
+.drawer h2{font:500 26px/1.3 var(--serif);color:var(--navy);margin:0}
+.drawer h3{font:700 13px var(--sans);color:var(--blue);letter-spacing:.04em;margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--navy)}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.dl div{padding:7px 0;border-bottom:1px solid var(--rule);min-width:0;overflow-wrap:anywhere}
+.dl dt{font-size:12px;color:var(--mute)}
+.dl dd{margin:0}
+.dl .full{grid-column:1/-1}
+.drawer table{font-size:13px}
+.empty{color:var(--mute);font-size:13px;margin:0}
+@media(max-width:900px){
+ .login{grid-template-columns:1fr}.login-side{padding:32px 16px}.login-side h1{font-size:30px}
+ .top{padding:12px 16px}main{padding:24px 16px 48px}.title{font-size:24px}
+ .kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(3){border-left:0;padding-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}
+ .filters{grid-template-columns:1fr 1fr}.filters .q{grid-column:1/-1}
+ .drawer{padding:24px 16px}.dl{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<section class="login" id="loginView" hidden>
+  <div class="login-side"><h1>案場資料庫</h1><p>維運案場的基本資料、聯絡窗口與電號。僅限授權管理者使用。</p></div>
+  <div class="login-form">
+    <form id="loginForm">
+      <h2>管理者登入</h2>
+      <label>帳號<input id="user" autocomplete="username" required></label>
+      <label>密碼<input id="pass" type="password" autocomplete="current-password" required></label>
+      <button class="btn" id="loginBtn">登入</button>
+      <p class="err" id="loginErr" role="alert"></p>
+    </form>
+  </div>
+</section>
+
+<div id="appView" hidden>
+  <header class="top"><b>案場資料庫</b><button class="link" id="logout">登出</button></header>
+  <main>
+    <h1 class="title" id="headline">載入中</h1>
+    <p class="sub" id="subline"></p>
+    <div class="kpis" id="kpis"></div>
+    <p class="exhibit">EXHIBIT 1</p>
+    <h2 class="ex">案場清單（點選列可看明細）</h2>
+    <div class="filters">
+      <label class="q">搜尋<input id="q" type="search" placeholder="編號、名稱、客戶、地址、電號"></label>
+      <label>有效合約<select id="fContract"></select></label>
+      <label>屬性<select id="fSource"></select></label>
+      <label>類型<select id="fType"></select></label>
+      <label>負責工程師<select id="fEng"></select></label>
+      <label>分區<select id="fArea"></select></label>
+    </div>
+    <div class="bar"><span id="count"></span><button class="link" id="csv">匯出 CSV</button></div>
+    <div class="tw"><table><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div>
+    <div class="pager"><button id="prev">上一頁</button><span id="page"></span><button id="next">下一頁</button></div>
+    <p class="foot" id="foot"></p>
+  </main>
+</div>
+
+<div id="drawerWrap" hidden>
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <div class="bar"><span id="dNo"></span><button class="link" id="dClose">關閉</button></div>
+    <h2 id="dTitle" tabindex="-1"></h2>
+    <div id="dBody"></div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL='https://cowljafosekwvxithwjd.supabase.co';
+const SB_KEY='sb_publishable_YP57cbbDJSP7-PvBgtKivA_25uDcp5n';
+const LOGIN_DOMAIN='@acme-oss.example'; // 登入帳號對應 Supabase Auth 的 email
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n).toLocaleString('zh-TW',{maximumFractionDigits:1});
+const PAGE=50;
+const COLS=[['field_no','編號'],['name','案場名稱'],['capacity','容量 kW',1],['customer','客戶'],['active_contract','有效合約'],['is_high_voltage','高壓'],['engineer','工程師'],['manager','管理師'],['area','分區'],['source','屬性'],['field_type','類型']];
+let all=[],view=[],pageNo=0,sortKey='field_no',sortDir=1,lastFocus=null;
+
+function showLogin(){$('loginView').hidden=false;$('appView').hidden=true}
+async function showApp(){
+  $('loginView').hidden=true;$('appView').hidden=false;
+  const {data,error}=await sb.from('oss_sites').select('*').order('field_no');
+  if(error){$('headline').textContent='資料載入失敗';$('subline').textContent=error.message;return}
+  if(!data.length){$('headline').textContent='此帳號沒有讀取權限';$('subline').textContent='請確認帳號已列入管理者名單。';return}
+  all=data.map(r=>({...r,_s:[r.field_no,r.name,r.customer,r.address,JSON.stringify(r.electric_nos)].join(' ').toLowerCase()}));
+  initFilters();summary();apply();
+}
+function initFilters(){
+  [['fContract','active_contract'],['fSource','source'],['fType','field_type'],['fEng','engineer'],['fArea','area']].forEach(([id,k])=>{
+    const v=[...new Set(all.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
+    $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
+    $(id).dataset.key=k;$(id).onchange=()=>{pageNo=0;apply()};
+  });
+}
+function summary(){
+  const cap=all.reduce((s,r)=>s+(+r.capacity||0),0);
+  const act=all.filter(r=>r.active_contract==='有');
+  const actCap=act.reduce((s,r)=>s+(+r.capacity||0),0);
+  const hv=all.filter(r=>r.is_high_voltage==='是'||r.is_high_voltage==='有').length;
+  $('headline').textContent=`${all.length} 個案場中，${act.length} 個有有效合約，涵蓋 ${fmt(actCap/1000)} MW`;
+  $('subline').textContent=`有效合約案場占總容量 ${Math.round(actCap/cap*100)}%`;
+  $('kpis').innerHTML=[[all.length,'案場總數'],[fmt(cap/1000)+' MW','總容量'],[act.length,'有效合約案場'],[hv,'高壓案場']].map(([a,b])=>`<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+  const t=all.map(r=>r.synced_at).sort().pop();
+  $('foot').textContent=`資料來源：維運管理系統「案場資料」；同步時間 ${new Date(t).toLocaleString('zh-TW')}。此為複製快照，不會自動更新。`;
+}
+function apply(){
+  const q=$('q').value.trim().toLowerCase();
+  const fs=['fContract','fSource','fType','fEng','fArea'].map(i=>[$(i).dataset.key,$(i).value]).filter(x=>x[1]);
+  view=all.filter(r=>(!q||r._s.includes(q))&&fs.every(([k,v])=>r[k]===v));
+  view.sort((a,b)=>{const x=a[sortKey],y=b[sortKey];if(x==null||x==='')return 1;if(y==null||y==='')return -1;
+    return sortDir*(sortKey==='capacity'?(x-y):String(x).localeCompare(String(y),'zh-Hant'))});
+  render();
+}
+function render(){
+  $('thead').innerHTML=COLS.map(([k,l,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${sortKey===k?(sortDir>0?'ascending':'descending'):'none'}">${esc(l)}${sortKey===k?(sortDir>0?' ▲':' ▼'):''}</th>`).join('');
+  const pages=Math.max(1,Math.ceil(view.length/PAGE));pageNo=Math.min(pageNo,pages-1);
+  $('tbody').innerHTML=view.slice(pageNo*PAGE,(pageNo+1)*PAGE).map(r=>`<tr class="row" tabindex="0" data-no="${esc(r.field_no)}">${COLS.map(([k,,n])=>`<td class="${n?'num':(k==='name'||k==='customer'?'':'nw')}">${esc(n&&r[k]!=null?fmt(r[k]):r[k])}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${COLS.length}" class="empty">沒有符合條件的案場</td></tr>`;
+  const cap=view.reduce((s,r)=>s+(+r.capacity||0),0);
+  $('count').textContent=`${view.length} 筆，合計 ${fmt(cap)} kW`;
+  $('page').textContent=`第 ${pageNo+1} / ${pages} 頁`;$('prev').disabled=!pageNo;$('next').disabled=pageNo>=pages-1;
+}
+function dl(items){return `<dl class="dl">${items.map(([l,v,f])=>`<div class="${f?'full':''}"><dt>${esc(l)}</dt><dd>${esc(v)||'—'}</dd></div>`).join('')}</dl>`}
+function sub(title,rows){
+  if(!rows||!rows.length)return `<h3>${esc(title)}</h3><p class="empty">無資料</p>`;
+  const hs=[...new Set(rows.flatMap(Object.keys))];
+  return `<h3>${esc(title)}</h3><div class="tw" style="border:0"><table><thead><tr>${hs.map(h=>`<th style="cursor:default">${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${hs.map(h=>`<td>${esc(r[h])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function openD(no){
+  const r=all.find(x=>x.field_no===no);if(!r)return;
+  lastFocus=document.activeElement;
+  $('dNo').textContent=r.field_no;$('dTitle').textContent=r.name;
+  $('dBody').innerHTML='<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['客戶',r.customer],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
+   +sub('連絡人',r.contacts)+sub('E-Mail',r.emails)+sub('電號',r.electric_nos)+sub('協力與設備',r.accessories)+sub('計量硬體設備',r.devices)+sub('檔案清單（僅名稱）',r.files);
+  $('drawerWrap').hidden=false;$('dTitle').focus();
+}
+function closeD(){$('drawerWrap').hidden=true;lastFocus&&lastFocus.focus&&lastFocus.focus()}
+function csv(){
+  const q=v=>{let s=String(v??'');if(/^[=+\-@]/.test(s))s="'"+s;return `"${s.replace(/"/g,'""')}"`};
+  const rows=[COLS.map(c=>q(c[1])).join(','),...view.map(r=>COLS.map(c=>q(r[c[0]])).join(','))];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\r\n')],{type:'text/csv'}));a.download='案場資料.csv';a.click();URL.revokeObjectURL(a.href);
+}
+$('loginForm').onsubmit=async e=>{
+  e.preventDefault();$('loginErr').textContent='';$('loginBtn').disabled=true;
+  const u=$('user').value.trim();
+  const {error}=await sb.auth.signInWithPassword({email:u.includes('@')?u:u+LOGIN_DOMAIN,password:$('pass').value});
+  $('loginBtn').disabled=false;$('pass').value='';
+  if(error){$('loginErr').textContent='帳號或密碼不正確';return}
+  showApp();
+};
+$('logout').onclick=async()=>{await sb.auth.signOut();all=[];showLogin()};
+$('q').oninput=()=>{pageNo=0;apply()};
+$('thead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=1}apply()};
+$('tbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)};
+$('tbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)}};
+$('prev').onclick=()=>{pageNo--;render()};$('next').onclick=()=>{pageNo++;render()};
+$('csv').onclick=csv;$('dClose').onclick=closeD;$('scrim').onclick=closeD;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('drawerWrap').hidden)closeD()});
+sb.auth.getSession().then(({data})=>data.session?showApp():showLogin());
+</script>
+</body>
+</html>
