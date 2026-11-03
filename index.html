@@ -52,6 +52,33 @@ label input{display:block;width:100%;margin-top:4px;padding:9px 0;border:0;borde
 .pop .jump{display:block;margin-top:4px}
 .pop a{font-size:13px}
 .scrim{z-index:2000}.drawer{z-index:2001}
+.riskbox{background:var(--warm);border-radius:20px;padding:18px 22px;margin-bottom:18px}
+.riskbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.seg{display:inline-flex;background:#fff;border-radius:999px;padding:3px}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--navy);color:#fff}
+.riskmeta{font-size:12px;color:var(--mute)}.riskact{margin-left:auto;display:flex;gap:12px}
+.risknote{background:#fff4d6;border-radius:10px;padding:8px 12px;font-size:13px;margin:0 0 10px}.risknote.drill{background:var(--cyan);color:var(--navy);font-weight:500}
+.riskgrid{display:grid;grid-template-columns:1.1fr 1.2fr .9fr;gap:22px}
+.rh{font-size:12px;font-weight:500;color:var(--mute);margin:0 0 6px}
+.storm{background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:8px}.storm b{font:400 20px var(--serif);color:var(--navy)}.storm small{color:var(--mute)}
+.storm dl{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:8px 0 4px;font-size:13px}.storm dt{font-size:11px;color:var(--mute)}.storm dd{margin:0}
+.lv{display:grid;grid-template-columns:128px 1fr 104px;gap:8px;align-items:center;font-size:12px;padding:3px 0}
+.lvbar{height:8px;background:#e2ddd5;border-radius:4px;overflow:hidden}.lvbar i{display:block;height:100%}
+.lvval{text-align:right;color:var(--mute);white-space:nowrap}
+.engrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:5px 0;border-bottom:1px solid var(--rule)}.engrow small{display:block;color:var(--mute);font-size:11px}
+.warnbox{margin-top:12px;font-size:13px}.warnbox details{background:#fff;border-radius:10px;padding:6px 12px;margin-top:6px}.warnbox details.ty{outline:2px solid var(--t-danger)}.warnbox p{white-space:pre-line;color:var(--mute);margin:6px 0}
+.warnhead{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.warnhead a{margin-left:auto;color:var(--blue)}
+:root{--t-danger:#c0392b;--t-warning:#e08a1e;--t-possible:#c2ab1f;--t-normal:#197a56;--t-incomplete:#9aa0a6;--t-plain:#0c2b15}
+.t-danger{background:var(--t-danger)}.t-warning{background:var(--t-warning)}.t-possible{background:var(--t-possible)}.t-normal{background:var(--t-normal)}.t-incomplete{background:var(--t-incomplete)}.t-plain{background:var(--t-plain)}
+.dotk{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.tag{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;color:#fff}
+.smk{display:block;width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.ccl{display:grid;place-items:center;border-radius:50%;color:#fff;font-size:12px;font-weight:700;border:3px solid rgba(255,255,255,.85);box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.ty-eye{font-size:26px;line-height:30px;display:block;text-align:center}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:10px}
+.riskblk{background:var(--warm);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:13px}.riskblk div{margin-top:4px;color:var(--mute)}
+.mlist .tag{margin-top:3px}
 .link{background:none;border:0;color:inherit;cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
 main{max-width:1360px;margin:0 auto;padding:36px 40px 64px}
 .title{font:500 30px/1.3 var(--serif);color:var(--navy);margin:0 0 6px;max-width:32em}
@@ -142,7 +169,7 @@ tbody tr.row:hover{background:var(--warm)}
  .title{font-size:28px}.kpis{padding:8px 20px}.kpi strong{font-size:30px}
  .drawer{border-radius:0}
  .login{grid-template-columns:1fr}.login-side{padding:32px 16px}.login-side h1{font-size:30px}
- .top{padding:12px 16px;flex-wrap:wrap;gap:8px}.top nav{order:3;margin:0;width:100%}.filters.c,.filters.k{grid-template-columns:1fr 1fr}.mapwrap{grid-template-columns:1fr;height:auto}#map{height:60vh}.mlist{max-height:320px}main{padding:24px 16px 48px}.title{font-size:24px}
+ .top{padding:12px 16px;flex-wrap:wrap;gap:8px}.top nav{order:3;margin:0;width:100%}.riskgrid{grid-template-columns:1fr}.riskact{margin-left:0}.lv{grid-template-columns:112px 1fr 92px}.filters.c,.filters.k{grid-template-columns:1fr 1fr}.mapwrap{grid-template-columns:1fr;height:auto}#map{height:60vh}.mlist{max-height:320px}main{padding:24px 16px 48px}.title{font-size:24px}
  .kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(3){border-left:0;padding-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}
  .filters{grid-template-columns:1fr 1fr}.filters .q{grid-column:1/-1}
  .drawer{padding:24px 16px}.dl{grid-template-columns:1fr}
@@ -184,6 +211,21 @@ tbody tr.row:hover{background:var(--warm)}
   <main id="mapView" hidden>
     <h1 class="title" id="mHeadline">案場地圖</h1>
     <p class="sub" id="mSubline"></p>
+    <section class="riskbox" aria-labelledby="mRiskHead">
+      <div class="riskbar">
+        <div class="seg" role="group" aria-label="地圖著色"><button id="modeTy" aria-pressed="false">颱風風險</button><button id="modeWx" aria-pressed="true">即時風雨</button><button id="modeNone" aria-pressed="false">不著色</button></div>
+        <span class="riskmeta" id="mRiskMeta">讀取風雨資料中…</span>
+        <span class="riskact"><button class="link" id="mFitTy" hidden>看颱風路徑</button><button class="link" id="mDrill" aria-pressed="false">演練情境</button></span>
+      </div>
+      <p class="risknote" id="mRiskNote" hidden role="status"></p>
+      <h2 class="ex" id="mRiskHead">讀取颱風資料中…</h2>
+      <div class="riskgrid">
+        <div id="mStorms"></div>
+        <div><h3 class="rh">案場分級（依目前篩選）</h3><div id="mLevels"></div></div>
+        <div><h3 class="rh">工程師負載</h3><div id="mEngLoad"></div></div>
+      </div>
+      <div id="mWarn" class="warnbox"></div>
+    </section>
     <div class="filters">
       <label class="q">搜尋<input id="mq" type="search" placeholder="編號、名稱、客戶、地址"></label>
       <label>有效合約<select id="mContract"></select></label>
@@ -193,6 +235,7 @@ tbody tr.row:hover{background:var(--warm)}
       <label>分區<select id="mArea"></select></label>
     </div>
     <div class="mapwrap"><div id="map" role="application" aria-label="案場地圖"></div><ul class="mlist" id="mList"></ul></div>
+    <div class="legend" id="mLegend"></div>
     <p class="foot" id="mFoot"></p>
   </main>
   <main id="contractsView" hidden>
@@ -282,6 +325,7 @@ async function showApp(){
   initFilters();summary();apply();
   switchTab('contracts');
   loadContracts();
+  loadRisk();
 }
 async function fetchAll(table,cols){
   let out=[];
@@ -364,7 +408,9 @@ function showMap(){
     const emap=L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',{maxZoom:19,attribution:'&copy; 內政部國土測繪中心'});
     map=L.map('map',{layers:[osm]}).setView([23.7,120.9],8);
     L.control.layers({'OpenStreetMap':osm,'通用版電子地圖（國土測繪中心）':emap}).addTo(map);
-    cluster=L.markerClusterGroup({maxClusterRadius:45});map.addLayer(cluster);
+    // 群聚圓點顯示群內最嚴重的顏色，避免高風險案場被群聚蓋掉
+    cluster=L.markerClusterGroup({maxClusterRadius:45,iconCreateFunction:c=>{const ts=c.getAllChildMarkers().map(m=>m.options.tone);const t=TONE_ORDER.find(x=>ts.includes(x))||'plain';const n=c.getChildCount(),s=n<10?30:n<100?36:42;return L.divIcon({className:'',html:`<span class="ccl t-${t}" style="width:${s}px;height:${s}px">${n}</span>`,iconSize:[s,s]});}});map.addLayer(cluster);
+    tyLayer=L.layerGroup().addTo(map);
     [['mContract','active_contract'],['mSource','source'],['mType','field_type'],['mEng','engineer'],['mArea','area']].forEach(([id,k])=>{
       const v=[...new Set(all.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
       $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
@@ -373,27 +419,117 @@ function showMap(){
     $('mq').oninput=mApply;
     all.filter(validXY).forEach(s=>{
       const g=`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
-      const m=L.marker([s.lat,s.lng],{title:s.name}).bindPopup(`<div class="pop"><b>${esc(s.name)}</b><span>${esc(s.field_no)}　${s.capacity!=null?fmt(s.capacity)+' kW':''}<br>${esc(s.customer)}</span><button class="jump" data-site="${esc(s.field_no)}">查看案場資料</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟</a></div>`);
+      const m=L.marker([s.lat,s.lng],{title:s.name,icon:siteIcon('plain'),tone:'plain'}).bindPopup(()=>`<div class="pop"><b>${esc(s.name)}</b><span>${esc(s.field_no)}　${s.capacity!=null?fmt(s.capacity)+' kW':''}<br>${esc(s.customer)}</span>${riskLines(s.field_no)}<button class="jump" data-site="${esc(s.field_no)}">查看案場資料</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟</a></div>`);
       markers[s.field_no]=m;
     });
+    $('modeTy').onclick=()=>setMode('typhoon');$('modeWx').onclick=()=>setMode('weather');$('modeNone').onclick=()=>setMode('none');
+    $('mDrill').onclick=()=>{if(!risk.mods)return;drill=drill?null:risk.mods.ty.drillStorm(Date.now());modeTouched=false;computeRisk();mApply();if(drill)fitTyphoon();};
+    $('mFitTy').onclick=fitTyphoon;
     $('map').addEventListener('click',e=>{const b=e.target.closest('.jump');if(b)openD(b.dataset.site)});
     const bad=all.filter(s=>!validXY(s));
     $('mFoot').innerHTML=`${bad.length} 個案場因 GPS 缺漏或格式異常未標示：`+bad.map(s=>`<button class="jump" data-site="${esc(s.field_no)}">${esc(s.name)}</button>`).join('、');
     $('mFoot').onclick=e=>{const b=e.target.closest('.jump');if(b)openD(b.dataset.site)};
     mApply();
+    if(!risk.loadedAt)loadRisk();
   }
   setTimeout(()=>map.invalidateSize(),0);
 }
 function mApply(){
   const q=$('mq').value.trim().toLowerCase();
   const fs=['mContract','mSource','mType','mEng','mArea'].map(i=>[$(i).dataset.key,$(i).value]).filter(x=>x[1]);
-  const list=all.filter(r=>validXY(r)&&(!q||r._s.includes(q))&&fs.every(([k,v])=>r[k]===v));
+  const filtered=all.filter(r=>(!q||r._s.includes(q))&&fs.every(([k,v])=>r[k]===v));
+  const list=filtered.filter(validXY);
+  if(risk.by&&mode==='typhoon')list.sort((a,b)=>risk.mods.ty.compareTyphoon(risk.by[a.field_no],risk.by[b.field_no]));
+  if(risk.by&&mode==='weather')list.sort((a,b)=>(risk.by[b.field_no].weather.score??-1)-(risk.by[a.field_no].weather.score??-1));
+  list.forEach(s=>{const m=markers[s.field_no],t=toneOf(s.field_no);if(m.options.tone!==t){m.options.tone=t;m.setIcon(siteIcon(t));}});
   cluster.clearLayers();cluster.addLayers(list.map(s=>markers[s.field_no]));
   const cap=list.reduce((a,s)=>a+(+s.capacity||0),0);
   $('mHeadline').textContent=`地圖標示 ${list.length} 個案場，合計 ${fmt(cap/1000)} MW`;
-  $('mSubline').textContent='點標記可看摘要並連到案場資料；右側清單可直接定位。';
-  $('mList').innerHTML=list.slice(0,300).map(s=>`<li><button data-no="${esc(s.field_no)}">${esc(s.name)}<small>${esc(s.field_no)}　${esc(s.customer)}</small></button></li>`).join('')+(list.length>300?`<li class="empty" style="padding:8px 4px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>`:'');
+  $('mSubline').textContent='點標記可看摘要並連到案場資料；右側清單依目前著色的風險排序，可直接定位。';
+  $('mList').innerHTML=list.slice(0,300).map(s=>`<li><button data-no="${esc(s.field_no)}">${esc(s.name)}<small>${esc(s.field_no)}　${esc(s.customer)}</small>${listTag(s.field_no)}</button></li>`).join('')+(list.length>300?`<li class="empty" style="padding:8px 4px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>`:'');
+  renderRisk(filtered);
 }
+// ── 風雨戰情：颱風判定與測站配對共用 taiwan-weather-ops 的模組，兩站邏輯一致 ──
+const WX_BASE='https://davidyeh51.github.io/taiwan-weather-ops/';
+const TONE_ORDER=['danger','warning','possible','normal','incomplete','plain'];
+const WX_LABEL={normal:'監測中',warning:'注意',danger:'警戒',incomplete:'資料不足',unknown:'無有效觀測',location_missing:'待定位'};
+let risk={},drill=null,mode='weather',modeTouched=false,tyLayer=null;
+const siteIcon=t=>L.divIcon({className:'',html:`<span class="smk t-${t}"></span>`,iconSize:[16,16],iconAnchor:[8,8]});
+const wxTone=s=>s==='danger'?'danger':s==='warning'?'warning':s==='normal'?'normal':'incomplete';
+function toneOf(no){const r=risk.by?.[no];if(!r||mode==='none')return 'plain';return mode==='typhoon'?risk.mods.ty.LEVELS[r.typhoon.level].tone:wxTone(r.weather.status);}
+const twTime=v=>new Date(v).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+const etaText=t=>{if(t==null)return '—';const h=Math.round((t-Date.now())/36e5);return twTime(t)+(h>0?`（約 ${h} 小時後）`:'');};
+function tyEta(r){if(['now25','now15'].includes(r.level))return '現在';const e=risk.mods.ty.firstEta(r);return e?etaText(e):'—';}
+const tag=(tone,text)=>`<span class="tag t-${tone}">${esc(text)}</span>`;
+function listTag(no){const r=risk.by?.[no];if(!r||mode==='none')return '';const L_=risk.mods.ty.LEVELS;return mode==='typhoon'?`<small>${tag(L_[r.typhoon.level].tone,L_[r.typhoon.level].label)} ${esc(tyEta(r.typhoon))}</small>`:`<small>${tag(wxTone(r.weather.status),WX_LABEL[r.weather.status]||r.weather.status)} ${r.weather.score??'—'} 分</small>`;}
+function riskLines(no){const r=risk.by?.[no];if(!r)return '';const l=risk.mods.ty.LEVELS[r.typhoon.level];return `<span>颱風：${esc(l.label)}${risk.mods.ty.firstEta(r.typhoon)?'　'+esc(tyEta(r.typhoon)):''}<br>即時風雨：${esc(WX_LABEL[r.weather.status]||r.weather.status)}${r.weather.score!=null?'　'+r.weather.score+' 分':''}</span>`;}
+function siteRiskHtml(no){
+  const r=risk.by?.[no];
+  if(!r)return risk.error?`<div class="riskblk">風雨資料讀取失敗：${esc(risk.error)}</div>`:'';
+  const ty=r.typhoon,l=risk.mods.ty.LEVELS[ty.level],M=risk.mods.dm.METRICS;
+  const cells=Object.entries(M).map(([k,m])=>{const c=r.weather.readings[k];return `${esc(m.label)} ${c.value==null?'—':fmt(c.value)} ${esc(m.unit)}${c.station?`（${esc(c.station.name)}，${fmt(c.distance)} km）`:''}${c.valid?'':'　'+esc(c.status==='far'?'測站過遠':c.status==='stale'?'資料延遲':c.status==='missing'?'缺值':c.status)}`;}).join('<br>');
+  return `<div class="riskblk"><b>颱風風險</b>　${tag(l.tone,l.label)}<div>${ty.storm?`${esc(ty.storm.name_zh||ty.storm.name)}　現在距離 ${fmt(ty.distanceNow)} km　預報最近 ${fmt(ty.minDistance)} km（${esc(twTime(ty.minAt))}）<br>進七級風圈 ${esc(etaText(ty.eta15))}　進十級風圈 ${esc(etaText(ty.eta25))}`:'目前沒有相關颱風資料'}</div></div>`
+   +`<div class="riskblk"><b>即時風雨（鄰近測站）</b>　${tag(wxTone(r.weather.status),WX_LABEL[r.weather.status]||r.weather.status)}${r.weather.score!=null?'　'+r.weather.score+' 分':''}<div>${cells}</div><div>測站觀測非案場實測；風取 20 km、雨取 10 km 內測站。</div></div>`;
+}
+async function loadRisk(){
+  try{
+    if(!risk.mods){const [ty,pd,dm]=await Promise.all(['typhoon-domain.mjs','portfolio-domain.mjs','domain.mjs'].map(f=>import(WX_BASE+f)));risk.mods={ty,pd,dm};}
+    const rows=[];for(let i=0;;i+=1000){const {data,error}=await sb.from('wx_latest').select('*').order('station_id').order('kind').range(i,i+999);if(error)throw error;rows.push(...data);if(data.length<1000)break;}
+    const st=await sb.from('wx_typhoon_state').select('*').maybeSingle();if(st.error)throw st.error;
+    risk.state=st.data;risk.weather=rows;risk.error=null;risk.loadedAt=Date.now();
+  }catch(e){risk.error=e.message||'無法連線';}
+  computeRisk();if(map)mApply();
+}
+function computeRisk(){
+  if(!risk.mods||!risk.weather){risk.by=null;return;}
+  const {ty,pd}=risk.mods,now=Date.now(),fresh=drill?'ok':ty.freshness(risk.state,now),usable=drill||(fresh!=='pending'&&risk.state?.ok_at),storms=drill?[drill]:(risk.state?.storms||[]);
+  const index=pd.weatherIndex(risk.weather,now);risk.by={};risk.fresh=fresh;risk.storms=storms;
+  for(const s of all){
+    const site={site_id:s.field_no,name:s.name,latitude:validXY(s)?s.lat:null,longitude:validXY(s)?s.lng:null,capacity_kw:+s.capacity||0,engineer_name:s.engineer};
+    let t=usable?ty.assessTyphoon(site,storms,now):{level:pd.hasLocation(site)?'unavailable':'location_missing',minDistance:null};
+    if(fresh==='stale'&&t.level==='clear')t={...t,level:'unavailable'};
+    risk.by[s.field_no]={site,typhoon:t,weather:pd.assessSite(site,index)};
+  }
+  if(!modeTouched)mode=Object.values(risk.by).some(r=>ty.LEVELS[r.typhoon.level].rank>=2)?'typhoon':'weather';
+}
+function setMode(m){mode=m;modeTouched=true;mApply();}
+function fitTyphoon(){const pts=(risk.storms||[]).flatMap(s=>risk.mods.ty.trackPoints(s).map(p=>[p.latitude,p.longitude]));if(map&&pts.length)map.fitBounds([...pts,[21.9,120],[25.3,122]],{padding:[30,30],maxZoom:9});}
+function drawTyphoonLayer(){
+  if(!tyLayer)return;tyLayer.clearLayers();if(!risk.mods)return;const {ty}=risk.mods,now=Date.now();
+  for(const storm of risk.storms||[]){
+    const pts=ty.trackPoints(storm);if(!pts.length)continue;
+    const cur=ty.positionAt(pts,Math.max(now,pts[0].t))||pts.at(-1);
+    L.polyline(pts.map(p=>[p.latitude,p.longitude]),{color:'#0c2b15',weight:2,dashArray:'6 6',interactive:false}).addTo(tyLayer);
+    for(const p of pts.slice(1)){
+      if(p.p70)L.circle([p.latitude,p.longitude],{radius:p.p70*1000,color:'#197a56',weight:1,opacity:.5,fillOpacity:.06,interactive:false}).addTo(tyLayer);
+      L.circleMarker([p.latitude,p.longitude],{radius:4,color:'#0c2b15',fillColor:'#fff',fillOpacity:1,weight:2}).bindTooltip(`${esc(twTime(p.at))}<br>七級 ${p.r15??'—'} km · 十級 ${p.r25??'—'} km<br>70% 機率半徑 ${p.p70??'—'} km`).addTo(tyLayer);
+    }
+    if(cur.r15)L.circle([cur.latitude,cur.longitude],{radius:cur.r15*1000,color:'#e08a1e',weight:2,fillOpacity:.12,interactive:false}).addTo(tyLayer);
+    if(cur.r25)L.circle([cur.latitude,cur.longitude],{radius:cur.r25*1000,color:'#c0392b',weight:2,fillOpacity:.18,interactive:false}).addTo(tyLayer);
+    L.marker([cur.latitude,cur.longitude],{icon:L.divIcon({className:'',html:'<span class="ty-eye">🌀</span>',iconSize:[30,30],iconAnchor:[15,15]})}).bindTooltip(esc(storm.name_zh||storm.name)).addTo(tyLayer);
+  }
+}
+function renderRisk(rows){
+  ['Ty','Wx','None'].forEach(k=>$('mode'+k).setAttribute('aria-pressed',mode===({Ty:'typhoon',Wx:'weather',None:'none'})[k]));
+  $('mDrill').textContent=drill?'結束演練':'演練情境';$('mDrill').setAttribute('aria-pressed',!!drill);
+  if(!risk.by){$('mRiskHead').textContent=risk.error?'風雨資料讀取失敗':'讀取颱風資料中…';$('mRiskMeta').textContent=risk.error?'錯誤：'+risk.error:'';$('mLegend').innerHTML='';return;}
+  const {ty}=risk.mods,L_=ty.LEVELS,rs=rows.map(s=>risk.by[s.field_no]),{levels,engineers}=ty.summarize(rs),fresh=risk.fresh,storms=risk.storms;
+  const note=drill?'演練情境：這是模擬路徑，不是真實颱風，也沒有寫入資料庫。':fresh==='pending'?'颱風資料尚未取得，無法判定案場風險。':fresh==='stale'?'颱風資料已超過 1 小時未更新，以下為上次成功資料，不代表沒有颱風。請以氣象署公布為準。':fresh==='failed'?`最近一次颱風資料更新失敗（${risk.state?.message||'原因未明'}），以下為上次成功資料。`:risk.error?'風雨資料更新失敗，顯示上次讀取結果：'+risk.error:'';
+  $('mRiskNote').hidden=!note;$('mRiskNote').textContent=note;$('mRiskNote').classList.toggle('drill',!!drill);
+  $('mRiskMeta').textContent=(drill?'演練中':risk.state?.issued_at?'氣象署颱風資料 '+twTime(risk.state.issued_at):'')+(risk.loadedAt?'　讀取 '+twTime(risk.loadedAt):'');
+  $('mFitTy').hidden=!storms.length;
+  const hit=rs.filter(r=>L_[r.typhoon.level].rank>=2),kw=hit.reduce((a,r)=>a+r.site.capacity_kw,0),near=rs.filter(r=>Number.isFinite(r.typhoon.minDistance)).sort((a,b)=>a.typhoon.minDistance-b.typhoon.minDistance)[0],first=hit.map(r=>ty.firstEta(r.typhoon)).filter(Boolean).sort((a,b)=>a-b)[0];
+  $('mRiskHead').textContent=fresh==='pending'?'尚未取得颱風資料。':fresh==='stale'&&!hit.length?'颱風資料中斷，目前無法確認案場是否受影響。':!storms.length?`氣象署目前沒有發布颱風，${rows.length} 個案場未受颱風影響。`:hit.length?`${hit.length} 個案場（${fmt(kw/1000)} MW）可能受颱風影響${first?'，最早 '+etaText(first)+' 進入影響範圍':'，已在風圈內'}。`:`目前沒有案場落入颱風影響範圍${near?`；預報期間離案場最近約 ${fmt(near.typhoon.minDistance)} 公里`:''}。`;
+  $('mStorms').innerHTML=storms.map(s=>{const a=s.analysis;return `<div class="storm"><b>${esc(s.name_zh||s.name)}</b> <small>${esc(s.category_zh||'')} · ${esc(s.name)}</small><dl><div><dt>中心位置</dt><dd>${fmt(a.latitude)}°N ${fmt(a.longitude)}°E</dd></div><div><dt>移動</dt><dd>${esc(a.move?.direction||'—')} ${a.move?.speed??'—'} km/h</dd></div><div><dt>最大風速／陣風</dt><dd>${a.wind??'—'}／${a.gust??'—'} m/s</dd></div><div><dt>七級／十級半徑</dt><dd>${a.r15??'—'}／${a.r25??'—'} km</dd></div></dl><small>資料時間 ${esc(twTime(a.at))}</small></div>`;}).join('')||`<p class="empty">${fresh==='pending'?'尚未取得颱風資料。':'氣象署目前沒有發布颱風。'}</p>`;
+  const total=rows.length||1;
+  $('mLevels').innerHTML=Object.entries(L_).filter(([k,l])=>levels[k].count||l.rank>=2).map(([k,l])=>`<div class="lv"><span><i class="dotk t-${l.tone}"></i>${esc(l.label)}</span><span class="lvbar"><i class="t-${l.tone}" style="width:${(levels[k].count/total*100).toFixed(1)}%"></i></span><span class="lvval">${levels[k].count} 個 · ${fmt(levels[k].kw/1000)} MW</span></div>`).join('');
+  $('mEngLoad').innerHTML=engineers.slice(0,8).map(e=>`<div class="engrow"><span>${esc(e.name)}<small>${e.count} 個 · ${fmt(e.kw/1000)} MW</small></span><span>${e.earliest?esc(twTime(e.earliest)):'已在範圍內'}</span></div>`).join('')||'<p class="empty">目前沒有工程師負責受影響案場。</p>';
+  const ws=drill?[]:risk.state?.warnings||[],tw=ws.filter(w=>w.title.includes('颱風'));
+  $('mWarn').innerHTML=`<div class="warnhead"><b>氣象署警報</b><span class="empty">${drill?'演練中不顯示。':risk.state?.warning_status&&risk.state.warning_status!=='ok'?'警報讀取失敗，請直接查氣象署。':tw.length?'':'目前沒有海上或陸上颱風警報。'}</span><a href="https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html" target="_blank" rel="noopener">氣象署颱風消息 ↗</a></div>`+ws.map(w=>`<details class="${w.title.includes('颱風')?'ty':''}"><summary>${esc(w.title)} <small>${esc(w.issued)}${w.validto?' 至 '+esc(w.validto):''}</small></summary><p>${esc(w.content)}</p></details>`).join('');
+  $('mLegend').innerHTML=mode==='typhoon'?['danger:十級風圈','warning:七級風圈','possible:路徑偏移可能影響','normal:未受影響','incomplete:待定位或無資料'].map(x=>{const [t,l]=x.split(':');return `<span><i class="dotk t-${t}"></i>${l}</span>`;}).join('')+'<span>颱風判定屬風圈幾何計算，未計入地形；以氣象署警報為準。</span>':mode==='weather'?['danger:警戒 ≥90','warning:注意 ≥60','normal:監測中','incomplete:資料不足'].map(x=>{const [t,l]=x.split(':');return `<span><i class="dotk t-${t}"></i>${l}</span>`;}).join('')+'<span>鄰近測站觀測，非案場實測。</span>':'';
+  drawTyphoonLayer();
+}
+setInterval(()=>{if(!document.hidden&&all.length)loadRisk();},10*60*1000);
 const daysLeft=c=>c.end_date?Math.ceil((new Date(c.end_date)-new Date())/864e5):null;
 function cInitFilters(){
   [['cType','contract_type'],['cStatus','status']].forEach(([id,k])=>{
@@ -485,7 +621,7 @@ function openD(no){
   if($('drawerWrap').hidden)lastFocus=document.activeElement;
   $('dNo').textContent=r.field_no;$('dTitle').textContent=r.name;
   const g=validXY(r)?`<p style="margin:12px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟</a></p>`:'';
-  $('dBody').innerHTML=g+custLink(r.customer_no,r.customer)+'<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
+  $('dBody').innerHTML=g+siteRiskHtml(r.field_no)+custLink(r.customer_no,r.customer)+'<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
    +`<h3>關聯合約</h3>`+((contractsOfSite[r.field_no]||[]).length?`<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map(n=>`<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
    +sub('連絡人',r.contacts)+sub('E-Mail',r.emails)+sub('電號',r.electric_nos)+sub('協力與設備',r.accessories)+sub('計量硬體設備',r.devices)+fileList('site',r.field_no);
   $('drawerWrap').hidden=false;$('dTitle').focus();
