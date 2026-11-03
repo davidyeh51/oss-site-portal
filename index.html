@@ -79,6 +79,7 @@ label input{display:block;width:100%;margin-top:4px;padding:9px 0;border:0;borde
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:10px}
 .riskblk{background:var(--warm);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:13px}.riskblk div{margin-top:4px;color:var(--mute)}
 .mlist .tag{margin-top:3px}
+.etable .etype{color:var(--t-danger)}.etable th{cursor:default}
 .link{background:none;border:0;color:inherit;cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
 main{max-width:1360px;margin:0 auto;padding:36px 40px 64px}
 .title{font:500 30px/1.3 var(--serif);color:var(--navy);margin:0 0 6px;max-width:32em}
@@ -192,8 +193,23 @@ tbody tr.row:hover{background:var(--warm)}
 
 <div id="appView" hidden>
   <header class="top"><b>案場資料庫</b>
-    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button><a class="tab dl-tab" href="https://drive.google.com/drive/folders/1E79klqsGGVgJU1J204UhHR1TG4RDuaQM" target="_blank" rel="noopener">資料庫下載</a></nav>
+    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabExpiry">合約到期</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button><a class="tab dl-tab" href="https://drive.google.com/drive/folders/1E79klqsGGVgJU1J204UhHR1TG4RDuaQM" target="_blank" rel="noopener">資料庫下載</a></nav>
     <button class="link" id="logout">登出</button></header>
+  <main id="expiryView" hidden>
+    <h1 class="title" id="eHeadline">載入中</h1>
+    <p class="sub" id="eSubline">比照維運系統「合約到期提醒通知」：列出期限內到期的合約與關聯案場。</p>
+    <div class="kpis" id="eKpis"></div>
+    <h2 class="ex">到期清單（點選列可看合約明細）</h2>
+    <div class="filters c">
+      <label class="q">搜尋<input id="eq" type="search" placeholder="案場編號、案場名稱、合約編號、客戶"></label>
+      <label>期限<select id="eWindow"><option value="7">7 天內到期</option><option value="30" selected>30 天內到期</option><option value="60">60 天內到期</option><option value="90">90 天內到期</option><option value="180">180 天內到期</option><option value="-30">近 30 天已到期</option></select></label>
+      <label>合約類型<select id="eType"></select></label>
+      <label>合約狀態<select id="eStatus"></select></label>
+    </div>
+    <div class="bar"><span id="eCount"></span><span><button class="link" id="eCopy">複製通知內容</button>　<button class="link" id="eCsv">匯出 CSV</button></span></div>
+    <div class="tw"><table class="etable"><thead><tr><th>案場編號</th><th>案場名稱</th><th>合約編號</th><th>合約類型</th><th>合約結束日期</th><th class="num">剩餘天數</th><th>客戶</th><th>狀態</th></tr></thead><tbody id="eTbody"></tbody></table></div>
+    <p class="foot" id="eFoot">到期日以維運系統快照為準；快照之後的續約或延期不會反映在這裡。</p>
+  </main>
   <main id="customersView" hidden>
     <h1 class="title" id="kHeadline">載入中</h1>
     <p class="sub" id="kSubline"></p>
@@ -346,10 +362,11 @@ async function loadContracts(){
     cAll=cs.map(c=>{const sites=by[c.contract_no]||[];return{...c,sites,site_count:sites.length,_s:[c.contract_no,c.customer,c.eli_no,c.cli_no,sites.map(s=>s.field_no+' '+s.site_name).join(' ')].join(' ').toLowerCase()}});
     cInitFilters();cSummary();cApply();
     buildCustomers();
+    eInit();
   }catch(e){$('cHeadline').textContent='合約資料載入失敗';$('cSubline').textContent=e.message;$('kHeadline').textContent='客戶資料載入失敗'}
 }
 function switchTab(t){
-  [['sites','Sites'],['contracts','Contracts'],['customers','Customers'],['map','Map']].forEach(([v,n])=>{
+  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map']].forEach(([v,n])=>{
     $(v+'View').hidden=v!==t;
     if(v===t)$('tab'+n).setAttribute('aria-current','page');else $('tab'+n).removeAttribute('aria-current');
   });
@@ -539,6 +556,33 @@ function cInitFilters(){
   });
   $('cExpire').onchange=()=>{cPageNo=0;cApply()};
 }
+// ── 合約到期提醒：每個「合約 × 關聯案場」一列，沒有關聯案場的合約也列出 ──
+let eRows=[];
+const dayTone=d=>d<0?'incomplete':d<=7?'danger':d<=30?'warning':'normal';
+function eInit(){
+  const opt=(id,k)=>{const v=[...new Set(cAll.map(c=>c[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));$(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');};
+  opt('eType','contract_type');opt('eStatus','status');
+  const at=(lo,hi)=>cAll.filter(c=>{const d=daysLeft(c);return d!=null&&d>=lo&&d<=hi;});
+  const k=[[at(0,7),'7 天內到期'],[at(0,30),'30 天內到期'],[at(0,90),'90 天內到期'],[at(-30,-1),'近 30 天已到期']];
+  $('eKpis').innerHTML=k.map(([l,t])=>`<div class="kpi"><strong>${l.length}</strong><span>${esc(t)}（份）</span></div>`).join('');
+  eApply();
+}
+function eApply(){
+  const w=+$('eWindow').value,q=$('eq').value.trim().toLowerCase(),ty=$('eType').value,st=$('eStatus').value;
+  const inWin=d=>d!=null&&(w<0?d<0&&d>=w:d>=0&&d<=w);
+  const cs=cAll.filter(c=>inWin(daysLeft(c))&&(!ty||c.contract_type===ty)&&(!st||c.status===st));
+  eRows=cs.flatMap(c=>{const ls=c.sites.length?c.sites:[{field_no:'',site_name:''}];return ls.map(l=>({field_no:l.field_no,site_name:(all.find(s=>s.field_no===l.field_no)||{}).name||l.site_name,contract_no:c.contract_no,contract_type:c.contract_type,end_date:c.end_date,days:daysLeft(c),customer:c.customer,status:c.status}));})
+    .filter(r=>!q||[r.field_no,r.site_name,r.contract_no,r.customer].join(' ').toLowerCase().includes(q))
+    .sort((a,b)=>(w<0?b.days-a.days:a.days-b.days)||a.contract_no.localeCompare(b.contract_no)||a.field_no.localeCompare(b.field_no));
+  const nC=new Set(eRows.map(r=>r.contract_no)).size,nS=new Set(eRows.filter(r=>r.field_no).map(r=>r.field_no)).size,label=$('eWindow').selectedOptions[0].text;
+  $('eHeadline').textContent=w<0?`近 30 天有 ${nC} 份合約已到期，請確認是否續約`:nC?`${label}的合約有 ${nC} 份，涉及 ${nS} 個案場`:`${label}的合約：目前沒有`;
+  $('eCount').textContent=`${eRows.length} 列（${nC} 份合約）`;
+  $('eTbody').innerHTML=eRows.map(r=>`<tr class="row" tabindex="0" data-contract="${esc(r.contract_no)}"><td class="nw">${r.field_no?`<button class="jump" data-site="${esc(r.field_no)}">${esc(r.field_no)}</button>`:'—'}</td><td>${esc(r.site_name)||'<span class="empty">未關聯案場</span>'}</td><td class="nw">${esc(r.contract_no)}</td><td class="nw etype">${esc(r.contract_type)}</td><td class="nw">${esc(r.end_date)}</td><td class="num">${tag(dayTone(r.days),r.days<0?`已過 ${-r.days} 天`:`${r.days} 天`)}</td><td>${esc(r.customer)}</td><td class="nw">${esc(r.status)}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">期限內沒有到期的合約</td></tr>';
+}
+function eText(){
+  const today=new Date().toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
+  return [`合約到期提醒通知-${today} (共計${eRows.length}筆)`,'','案場編號\t案場名稱\t合約編號\t合約類型\t合約結束日期',...eRows.map(r=>[r.field_no,r.site_name,r.contract_no,r.contract_type,r.end_date].join('\t'))].join('\n');
+}
 function cSummary(){
   const on=cAll.filter(c=>c.status==='進行中');
   const soon=on.filter(c=>{const d=daysLeft(c);return d!=null&&d>=0&&d<=90});
@@ -655,7 +699,13 @@ $('cTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row')
 $('cPrev').onclick=()=>{cPageNo--;cRender()};$('cNext').onclick=()=>{cPageNo++;cRender()};
 $('cCsv').onclick=()=>csv(CCOLS,cView,'合約資料.csv');
 $('dBody').onclick=e=>{const b=e.target.closest('.jump');if(!b)return;if(b.dataset.site)openD(b.dataset.site);else if(b.dataset.customer)openK(b.dataset.customer);else openC(b.dataset.contract)};
-$('tabCustomers').onclick=()=>switchTab('customers');$('tabMap').onclick=()=>switchTab('map');
+$('tabCustomers').onclick=()=>switchTab('customers');$('tabExpiry').onclick=()=>switchTab('expiry');
+['eWindow','eType','eStatus'].forEach(i=>$(i).onchange=eApply);$('eq').oninput=eApply;
+$('eTbody').onclick=e=>{const b=e.target.closest('.jump');if(b){openD(b.dataset.site);return;}const t=e.target.closest('tr.row');if(t)openC(t.dataset.contract)};
+$('eTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openC(t.dataset.contract)}};
+$('eCsv').onclick=()=>csv([['field_no','案場編號'],['site_name','案場名稱'],['contract_no','合約編號'],['contract_type','合約類型'],['end_date','合約結束日期'],['days','剩餘天數'],['customer','客戶'],['status','狀態']],eRows,'合約到期清單.csv');
+$('eCopy').onclick=async()=>{try{await navigator.clipboard.writeText(eText());$('eCopy').textContent='已複製';}catch{$('eCopy').textContent='無法複製，請改用 CSV';}setTimeout(()=>$('eCopy').textContent='複製通知內容',2000)};
+$('tabMap').onclick=()=>switchTab('map');
 $('kq').oninput=()=>{kPageNo=0;kApply()};$('kScope').onchange=()=>{kPageNo=0;kApply()};
 $('kThead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(kSortKey===k)kSortDir=-kSortDir;else{kSortKey=k;kSortDir=1}kApply()};
 $('kTbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openK(t.dataset.no)};
