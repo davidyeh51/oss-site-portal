@@ -79,7 +79,9 @@ label input{display:block;width:100%;margin-top:4px;padding:9px 0;border:0;borde
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:10px}
 .riskblk{background:var(--warm);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:13px}.riskblk div{margin-top:4px;color:var(--mute)}
 .mlist .tag{margin-top:3px}
-.etable .etype{color:var(--t-danger)}.etable th{cursor:default}
+.etable .etype{color:var(--t-danger)}
+.acform{display:grid;grid-template-columns:2fr 1.3fr auto auto;gap:14px;align-items:end;background:var(--warm);border-radius:20px;padding:16px 20px;margin-bottom:8px}.acform label{margin:0}.acform .chk{display:flex;gap:6px;align-items:center;color:var(--ink);font-size:13px;padding-bottom:12px}.acform .chk input{width:auto;margin:0}.acform .btn{padding:11px 20px}
+@media(max-width:900px){.acform{grid-template-columns:1fr}}.etable th{cursor:default}
 .link{background:none;border:0;color:inherit;cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
 main{max-width:1360px;margin:0 auto;padding:36px 40px 64px}
 .title{font:500 30px/1.3 var(--serif);color:var(--navy);margin:0 0 6px;max-width:32em}
@@ -193,7 +195,7 @@ tbody tr.row:hover{background:var(--warm)}
 
 <div id="appView" hidden>
   <header class="top"><b>案場資料庫</b>
-    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabExpiry">合約到期</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button><a class="tab dl-tab" href="https://drive.google.com/drive/folders/1E79klqsGGVgJU1J204UhHR1TG4RDuaQM" target="_blank" rel="noopener">資料庫下載</a></nav>
+    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabExpiry">合約到期</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button><button class="tab" id="tabAccounts" hidden>帳號管理</button><a class="tab dl-tab" href="https://drive.google.com/drive/folders/1E79klqsGGVgJU1J204UhHR1TG4RDuaQM" target="_blank" rel="noopener">資料庫下載</a></nav>
     <button class="link" id="logout">登出</button></header>
   <main id="expiryView" hidden>
     <h1 class="title" id="eHeadline">載入中</h1>
@@ -209,6 +211,19 @@ tbody tr.row:hover{background:var(--warm)}
     <div class="bar"><span id="eCount"></span><span><button class="link" id="eCopy">複製通知內容</button>　<button class="link" id="eCsv">匯出 CSV</button></span></div>
     <div class="tw"><table class="etable"><thead><tr><th>案場編號</th><th>案場名稱</th><th>合約編號</th><th>合約類型</th><th>合約結束日期</th><th class="num">剩餘天數</th><th>客戶</th><th>狀態</th></tr></thead><tbody id="eTbody"></tbody></table></div>
     <p class="foot" id="eFoot">到期日以維運系統快照為準；快照之後的續約或延期不會反映在這裡。</p>
+  </main>
+  <main id="accountsView" hidden>
+    <h1 class="title" id="aHeadline">帳號管理</h1>
+    <p class="sub">名單內的人才能讀取案場資料庫。登入帳號與風雨戰情站共用；從名單移除不會刪除登入帳號。</p>
+    <form class="acform" id="aForm" autocomplete="off">
+      <label>電子郵件<input id="aEmail" type="email" required placeholder="name@acmepointes.com"></label>
+      <label>初始密碼<input id="aPass" type="password" autocomplete="new-password" minlength="8" placeholder="已有登入帳號可留空"></label>
+      <label class="chk"><input id="aWx" type="checkbox" checked>同時開通風雨戰情站（唯讀）</label>
+      <button class="btn" id="aAdd">新增使用者</button>
+    </form>
+    <p class="err" id="aMsg" role="status"></p>
+    <div class="tw"><table><thead><tr><th>電子郵件</th><th>角色</th><th>登入帳號</th><th>最後登入</th><th>風雨戰情站</th><th>操作</th></tr></thead><tbody id="aTbody"></tbody></table></div>
+    <p class="foot">密碼至少 8 個字元，建議每人不同並請本人首次登入後更換。帳號以完整電子郵件登入。</p>
   </main>
   <main id="customersView" hidden>
     <h1 class="title" id="kHeadline">載入中</h1>
@@ -341,6 +356,7 @@ async function showApp(){
   initFilters();summary();apply();
   switchTab('contracts');
   loadContracts();
+  sb.rpc('oss_is_owner').then(({data})=>{$('tabAccounts').hidden=data!==true;});
   loadRisk();
 }
 async function fetchAll(table,cols){
@@ -366,7 +382,7 @@ async function loadContracts(){
   }catch(e){$('cHeadline').textContent='合約資料載入失敗';$('cSubline').textContent=e.message;$('kHeadline').textContent='客戶資料載入失敗'}
 }
 function switchTab(t){
-  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map']].forEach(([v,n])=>{
+  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map'],['accounts','Accounts']].forEach(([v,n])=>{
     $(v+'View').hidden=v!==t;
     if(v===t)$('tab'+n).setAttribute('aria-current','page');else $('tab'+n).removeAttribute('aria-current');
   });
@@ -583,6 +599,20 @@ function eText(){
   const today=new Date().toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
   return [`合約到期提醒通知-${today} (共計${eRows.length}筆)`,'','案場編號\t案場名稱\t合約編號\t合約類型\t合約結束日期',...eRows.map(r=>[r.field_no,r.site_name,r.contract_no,r.contract_type,r.end_date].join('\t'))].join('\n');
 }
+// ── 帳號管理：所有寫入都經 oss-account-admin 函式（伺服器端再驗證擁有者身分） ──
+async function acct(body){
+  const {data:{session}}=await sb.auth.getSession();
+  const r=await fetch(SB_URL+'/functions/v1/oss-account-admin',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+(session?.access_token||'')},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({error:'回應格式錯誤'}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j;
+}
+const aMsg=(t,ok)=>{$('aMsg').textContent=t;$('aMsg').style.color=ok?'var(--t-normal)':'';};
+async function aLoad(){
+  try{
+    const {me,members}=await acct({action:'list'});
+    $('aHeadline').textContent=`案場資料庫共 ${members.length} 位使用者，${members.filter(m=>!m.account).length} 位尚未建立登入帳號`;
+    $('aTbody').innerHTML=members.map(m=>`<tr><td>${esc(m.email)}${m.email===me?' <small>（你）</small>':''}</td><td class="nw">${m.role==='owner'?'擁有者':'成員'}</td><td class="nw">${m.account?(m.confirmed?tag('normal','已建立'):tag('warning','未驗證')):tag('incomplete','未建立')}</td><td class="nw">${m.last_sign_in_at?esc(twTime(m.last_sign_in_at)):'—'}</td><td class="nw">${m.wx_role?esc({admin:'管理者',viewer:'唯讀',engineer:'工程師'}[m.wx_role]||m.wx_role):'—'}</td><td class="nw">${m.account?`<button class="link" data-pw="${esc(m.email)}">重設密碼</button>`:''}${m.role==='owner'?'':` <button class="link" data-rm="${esc(m.email)}">移除</button>`}</td></tr>`).join('');
+  }catch(e){aMsg('讀取帳號清單失敗：'+e.message);}
+}
 function cSummary(){
   const on=cAll.filter(c=>c.status==='進行中');
   const soon=on.filter(c=>{const d=daysLeft(c);return d!=null&&d>=0&&d<=90});
@@ -684,7 +714,7 @@ $('loginForm').onsubmit=async e=>{
   if(error){$('loginErr').textContent='帳號或密碼不正確';return}
   showApp();
 };
-$('logout').onclick=async()=>{await sb.auth.signOut();all=[];showLogin()};
+$('logout').onclick=async()=>{$('tabAccounts').hidden=true;$('aTbody').textContent='';await sb.auth.signOut();all=[];showLogin()};
 $('q').oninput=()=>{pageNo=0;apply()};
 $('thead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=1}apply()};
 $('tbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)};
@@ -699,7 +729,16 @@ $('cTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row')
 $('cPrev').onclick=()=>{cPageNo--;cRender()};$('cNext').onclick=()=>{cPageNo++;cRender()};
 $('cCsv').onclick=()=>csv(CCOLS,cView,'合約資料.csv');
 $('dBody').onclick=e=>{const b=e.target.closest('.jump');if(!b)return;if(b.dataset.site)openD(b.dataset.site);else if(b.dataset.customer)openK(b.dataset.customer);else openC(b.dataset.contract)};
-$('tabCustomers').onclick=()=>switchTab('customers');$('tabExpiry').onclick=()=>switchTab('expiry');
+$('tabCustomers').onclick=()=>switchTab('customers');$('tabAccounts').onclick=()=>{switchTab('accounts');aMsg('');aLoad();};
+$('aForm').onsubmit=async e=>{e.preventDefault();$('aAdd').disabled=true;aMsg('處理中…',true);
+  try{const r=await acct({action:'add',email:$('aEmail').value,password:$('aPass').value,wx_viewer:$('aWx').checked});aMsg(r.created?'已建立登入帳號並加入名單。':r.password_ignored?'此信箱原本就有登入帳號，已加入名單；密碼未變更，如需更換請用「重設密碼」。':'已加入名單。',true);$('aEmail').value='';}
+  catch(err){aMsg(err.message);}finally{$('aPass').value='';$('aAdd').disabled=false;aLoad();}};
+$('aTbody').onclick=async e=>{const pw=e.target.closest('[data-pw]'),rm=e.target.closest('[data-rm]');
+  try{
+    if(pw){const v=prompt('輸入 '+pw.dataset.pw+' 的新密碼（至少 8 個字元）');if(!v)return;await acct({action:'password',email:pw.dataset.pw,password:v});aMsg('密碼已更新。',true);}
+    if(rm){if(!confirm('從案場資料庫移除 '+rm.dataset.rm+'？登入帳號會保留，風雨戰情站權限也會一併停用。'))return;await acct({action:'remove',email:rm.dataset.rm,wx_also:true});aMsg('已移除。',true);aLoad();}
+  }catch(err){aMsg(err.message);}};
+$('tabExpiry').onclick=()=>switchTab('expiry');
 ['eWindow','eType','eStatus'].forEach(i=>$(i).onchange=eApply);$('eq').oninput=eApply;
 $('eTbody').onclick=e=>{const b=e.target.closest('.jump');if(b){openD(b.dataset.site);return;}const t=e.target.closest('tr.row');if(t)openC(t.dataset.contract)};
 $('eTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openC(t.dataset.contract)}};
