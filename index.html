@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
-<meta name="referrer" content="no-referrer">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>ACMEPOINT 進金生能源｜維運資產與合約決策平台</title>
 <link rel="icon" type="image/png" href="./assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +56,7 @@ a:hover{text-decoration:underline}
 /* ── Top Brand Accent Strip ── */
 .brand-stripe{height:4px;background:linear-gradient(90deg,var(--navy) 0%,var(--acme-blue) 68%,var(--acme-lime) 100%);width:100%}
 
-/* ── Dual-Layer Access Gate & Sign-In Screen (Zero Public Business Data) ── */
+/* ── Unified Single-Step Access Key Unlock Screen ── */
 .gate-shell{min-height:100vh;display:grid;grid-template-columns:1.15fr 1fr;background:var(--canvas)}
 .gate-brand{
   background:var(--navy);
@@ -105,14 +105,9 @@ a:hover{text-decoration:underline}
 
 .gate-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 36px;background:var(--surface)}
 .gate-card{width:100%;max-width:420px;background:var(--canvas);border:1px solid var(--rule);border-top:3px solid var(--navy);padding:38px 36px 34px;box-shadow:0 12px 32px rgba(5,28,44,.06)}
-.step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
-.step-dot{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--rule);background:var(--surface);font-weight:600}
-.step-dot.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.step-dot.done{background:#ECFDF3;color:var(--acme-emerald);border-color:#A6F4C5}
-.gate-card h2{font:600 25px/1.3 var(--serif);color:var(--navy);margin:0 0 8px}
+.gate-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--navy);background:var(--navy);color:var(--acme-lime);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+.gate-card h2{font:600 26px/1.3 var(--serif);color:var(--navy);margin:0 0 8px}
 .gate-desc{font-size:13.5px;color:var(--mute);margin:0 0 24px;line-height:1.6}
-.gate-verified-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F1F8E9;border-left:3px solid var(--acme-emerald);padding:9px 12px;margin-bottom:20px;font-size:12.5px;color:#14532D}
-.gate-verified-bar button{background:none;border:0;color:var(--acme-blue-dark);cursor:pointer;text-decoration:underline;font-size:12px;padding:0;white-space:nowrap}
 
 .field{display:block;margin-bottom:18px}
 .field .lbl{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--navy);margin-bottom:6px;text-transform:uppercase}
@@ -136,8 +131,6 @@ a:hover{text-decoration:underline}
 .btn-accent:hover:not(:disabled){background:var(--acme-blue-dark);border-color:var(--acme-blue-dark)}
 .btn-ghost{background:var(--canvas);color:var(--navy);border:1px solid var(--rule)}
 .btn-ghost:hover:not(:disabled){background:var(--surface);border-color:var(--navy)}
-.btn-danger{background:var(--canvas);color:var(--t-danger);border:1px solid #F1C2BE}
-.btn-danger:hover:not(:disabled){background:#FEF3F2;border-color:var(--t-danger)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
 
 .err{color:var(--t-danger);font-size:13px;min-height:20px;margin:12px 0 0;font-weight:500}
@@ -158,29 +151,39 @@ a:hover{text-decoration:underline}
 .tab{
   position:relative;display:inline-flex;align-items:center;gap:6px;
   background:none;border:0;border-bottom:3px solid transparent;
-  color:var(--ink-2);padding:0 14px;cursor:pointer;font-size:13.5px;font-weight:500;
+  color:var(--ink-2);padding:0 15px;cursor:pointer;font-size:13.5px;font-weight:500;
   white-space:nowrap;text-decoration:none;transition:color .15s,border-color .15s,background .15s
 }
 .tab:hover{color:var(--navy);background:var(--surface);text-decoration:none}
 .tab[aria-current=page]{color:var(--navy);font-weight:700;border-bottom-color:var(--acme-blue)}
 .tab[aria-current=page]::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:3px;background:linear-gradient(90deg,var(--navy),var(--acme-blue) 75%,var(--acme-lime))}
-.tab-admin{color:var(--acme-deep)}
 .dl-tab{color:var(--acme-blue-dark);font-weight:600}
 
 .user-bar{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.user-chip{display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--surface);border:1px solid var(--rule);font-size:12.5px}
-.user-chip .u-email{color:var(--navy);font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.role-badge{display:inline-block;padding:2px 7px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:2px}
-.role-owner{background:var(--navy);color:var(--acme-lime)}
-.role-admin{background:var(--acme-blue);color:#fff}
-.role-member{background:var(--acme-sky);color:var(--acme-deep)}
-.role-viewer{background:#F1F5F9;color:#475569;border:1px solid var(--rule)}
-.hdr-link{background:none;border:0;color:var(--ink-2);cursor:pointer;font-size:12.5px;font-weight:500;padding:5px 8px;border-radius:2px}
-.hdr-link:hover{background:var(--surface);color:var(--navy)}
+.key-cycle-chip{
+  display:inline-flex;align-items:center;gap:8px;padding:5px 11px;
+  background:var(--surface);border:1px solid var(--rule);font-size:12px;color:var(--navy);font-weight:600
+}
+.key-cycle-chip.warn{background:#FEF9E7;border-color:#F5CBA7;color:#935116}
+.key-cycle-chip.overdue{background:#FEF3F2;border-color:#F1C2BE;color:var(--t-danger)}
+.key-dot{width:8px;height:8px;border-radius:50%;background:var(--acme-emerald);display:inline-block}
+.key-cycle-chip.warn .key-dot{background:var(--t-warning)}
+.key-cycle-chip.overdue .key-dot{background:var(--t-danger)}
+.hdr-link{background:none;border:1px solid var(--rule);color:var(--navy);cursor:pointer;font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:2px;background:var(--canvas)}
+.hdr-link:hover{background:var(--surface);border-color:var(--navy)}
 
-.notice-bar{background:var(--navy);color:#DCE7F2;font-size:12.5px;padding:7px 36px;border-bottom:2px solid var(--acme-lime)}
+.notice-bar{background:var(--navy);color:#DCE7F2;font-size:12.5px;padding:8px 36px;border-bottom:2px solid var(--acme-lime)}
 .notice-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .notice-tag{color:var(--acme-lime);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-right:10px;font-size:11px}
+
+.rotation-alert{
+  max-width:1440px;margin:18px auto 0;padding:0 36px;
+}
+.rotation-alert-box{
+  background:#FEF9E7;border:1px solid #F5CBA7;border-left:4px solid var(--t-warning);
+  padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13.5px;color:#7D4E00
+}
+.rotation-alert-box.overdue{background:#FEF3F2;border-color:#F1C2BE;border-left-color:var(--t-danger);color:#912018}
 
 /* ── Main McKinsey Exhibit Workspace ── */
 main{max-width:1440px;margin:0 auto;padding:34px 36px 56px}
@@ -245,7 +248,6 @@ tbody tr.row:hover{background:var(--acme-sky)}
 .nw{white-space:nowrap}
 .etable th{cursor:default}
 .etable .etype{color:var(--t-danger);font-weight:600}
-.masked-val{display:inline-block;font-size:12px;color:var(--mute);background:var(--surface-alt);border:1px dashed var(--rule);padding:2px 8px}
 
 .pager{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:16px;font-size:13px;color:var(--mute)}
 .pager button{background:var(--canvas);border:1px solid var(--navy);padding:5px 14px;cursor:pointer;color:var(--navy);font-weight:600;font-size:12.5px;border-radius:2px}
@@ -256,12 +258,12 @@ tbody tr.row:hover{background:var(--acme-sky)}
 
 /* ── Map & Typhoon Risk Ops ── */
 .riskbox{background:var(--surface);border:1px solid var(--rule);border-top:2.5px solid var(--navy);padding:20px 24px;margin-bottom:20px}
-.riskbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.riskbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .seg{display:inline-flex;background:var(--canvas);border:1px solid var(--rule);padding:2px;border-radius:2px}
-.seg button{border:0;background:none;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.seg button{border:0;background:none;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink-2)}
 .seg button[aria-pressed=true]{background:var(--navy);color:#fff}
 .riskmeta{font-size:12px;color:var(--mute)}
-.riskact{margin-left:auto;display:flex;gap:14px}
+.riskact{margin-left:auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .risknote{background:#FEF9E7;border-left:3px solid var(--t-warning);padding:9px 14px;font-size:13px;margin:0 0 12px;color:#7D4E00}
 .risknote.drill{background:#EFF8DF;border-left-color:var(--acme-lime-dark);color:var(--navy);font-weight:600}
 .riskgrid{display:grid;grid-template-columns:1.1fr 1.2fr .9fr;gap:24px}
@@ -288,51 +290,37 @@ tbody tr.row:hover{background:var(--acme-sky)}
 .t-danger{background:var(--t-danger)}.t-warning{background:var(--t-warning)}.t-possible{background:var(--t-possible)}.t-normal{background:var(--t-normal)}.t-incomplete{background:var(--t-incomplete)}.t-plain{background:var(--t-plain)}
 .dotk{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .tag{display:inline-block;border-radius:2px;padding:2px 8px;font-size:11.5px;font-weight:600;color:#fff;letter-spacing:.02em}
-.smk{display:block;width:15px;height:15px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(5,28,44,.35)}
-.ccl{display:grid;place-items:center;border-radius:50%;color:#fff;font-size:12px;font-weight:700;border:2.5px solid rgba(255,255,255,.92);box-shadow:0 2px 6px rgba(5,28,44,.28)}
+.smk{display:block;width:16px;height:16px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(5,28,44,.45)}
+.ccl{display:grid;place-items:center;border-radius:50%;color:#fff;font-size:12px;font-weight:700;border:2.5px solid rgba(255,255,255,.95);box-shadow:0 2px 6px rgba(5,28,44,.32)}
 .ty-eye{font-size:26px;line-height:30px;display:block;text-align:center}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:12px}
 .riskblk{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--acme-blue);padding:12px 14px;margin-top:14px;font-size:13px}
 .riskblk div{margin-top:5px;color:var(--ink-2)}
 
-.mapwrap{display:grid;grid-template-columns:1fr 330px;gap:20px;height:calc(100vh - 300px);min-height:480px}
-#map{height:100%;border:1px solid var(--rule);z-index:0}
+.map-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  background:var(--surface);border:1px solid var(--rule);border-bottom:0;padding:10px 14px
+}
+.map-toolbar .lbl-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;font-weight:600;color:var(--navy)}
+.mapwrap{display:grid;grid-template-columns:1fr 340px;gap:18px;height:calc(100vh - 280px);min-height:520px}
+#map{height:100%;border:1px solid var(--rule);border-top:2px solid var(--navy);z-index:0;background:#E8EEF3}
 .mlist{overflow:auto;border:1px solid var(--rule);border-top:2px solid var(--navy);margin:0;padding:0;list-style:none;background:var(--canvas)}
 .mlist li{border-bottom:1px solid var(--rule-light)}
 .mlist button{display:block;width:100%;background:none;border:0;text-align:left;padding:10px 12px;cursor:pointer;font-size:13px}
 .mlist button:hover{background:var(--acme-sky)}
 .mlist small{display:block;color:var(--mute);margin-top:2px}
 .mlist .tag{margin-top:4px}
-.pop b{display:block;color:var(--navy);font-size:14px;font-family:var(--serif)}
-.pop span{display:block;color:var(--mute);margin-bottom:6px;font-size:12.5px}
-.pop .jump{display:block;margin-top:4px}
-.pop a{font-size:12.5px;color:var(--acme-blue-dark)}
+.pop b{display:block;color:var(--navy);font-size:14.5px;font-family:var(--serif);margin-bottom:3px}
+.pop span{display:block;color:var(--mute);margin-bottom:6px;font-size:12.5px;line-height:1.5}
+.pop .jump{display:block;margin-top:6px;font-weight:600}
+.pop a{font-size:12.5px;color:var(--acme-blue-dark);font-weight:600}
+.site-tt{
+  background:rgba(5,28,44,.92)!important;color:#fff!important;border:1px solid var(--acme-lime)!important;
+  border-radius:2px!important;padding:3px 8px!important;font:600 11.5px var(--sans)!important;
+  box-shadow:0 2px 6px rgba(0,0,0,.22)!important;white-space:nowrap
+}
+.site-tt::before{display:none!important}
 
-/* ── Admin Backstage Console (Governance, RBAC, Access Keys, Audit) ── */
-.subtabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:24px;overflow-x:auto}
-.subtab{
-  background:none;border:0;border-bottom:2.5px solid transparent;
-  padding:10px 20px;font-size:13.5px;font-weight:600;color:var(--mute);cursor:pointer;white-space:nowrap
-}
-.subtab:hover{color:var(--navy);background:var(--surface)}
-.subtab[aria-selected=true]{color:var(--navy);border-bottom-color:var(--navy);background:var(--surface)}
-.admin-card{background:var(--surface);border:1px solid var(--rule);border-top:2.5px solid var(--navy);padding:20px 24px;margin-bottom:22px}
-.admin-card h3{font:600 16px var(--serif);color:var(--navy);margin:0 0 6px}
-.admin-card p.hint{font-size:13px;color:var(--mute);margin:0 0 16px}
-.acform-grid{display:grid;grid-template-columns:1.6fr 1.1fr 1fr 1.1fr;gap:14px;align-items:end}
-.acform-opts{display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule-light)}
-.chk-inline{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);cursor:pointer}
-.chk-inline input{width:15px;height:15px;accent-color:var(--navy);margin:0}
-.key-reveal{
-  background:#051C2C;color:#fff;padding:18px 22px;margin:0 0 20px;
-  border-left:4px solid var(--acme-lime);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap
-}
-.key-reveal code{font:700 18px var(--mono);color:var(--acme-lime);letter-spacing:.08em;display:block;margin-top:4px}
-.key-reveal small{color:#B8CBE0;display:block;font-size:12px}
-.keyform-grid{display:grid;grid-template-columns:1.6fr 1.4fr 1fr auto;gap:14px;align-items:end}
-.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.perm-select{padding:4px 8px;border:1px solid var(--rule);background:var(--canvas);font-size:12.5px;border-radius:2px}
-.perm-chk{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
 .mono-code{font-family:var(--mono);font-size:12.5px;background:var(--surface-alt);padding:2px 7px;border:1px solid var(--rule-light);color:var(--navy)}
 
 /* ── Detail Drawer & Modal ── */
@@ -349,9 +337,11 @@ tbody tr.row:hover{background:var(--acme-sky)}
 .empty{color:var(--mute);font-size:13px;margin:0}
 
 .modal-wrap{position:fixed;inset:0;z-index:2200;display:grid;place-items:center;padding:20px}
-.modal-card{position:relative;z-index:2201;width:100%;max-width:440px;background:var(--canvas);border:1px solid var(--rule);border-top:3px solid var(--navy);padding:28px 30px;box-shadow:0 20px 50px rgba(5,28,44,.24)}
-.modal-card h3{font:600 20px var(--serif);color:var(--navy);margin:0 0 6px}
+.modal-card{position:relative;z-index:2201;width:100%;max-width:480px;background:var(--canvas);border:1px solid var(--rule);border-top:3px solid var(--navy);padding:28px 30px;box-shadow:0 20px 50px rgba(5,28,44,.24)}
+.modal-card h3{font:600 21px var(--serif);color:var(--navy);margin:0 0 6px}
 .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.cycle-meta-box{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--acme-blue);padding:11px 14px;margin-bottom:18px;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.cycle-meta-box strong{color:var(--navy)}
 
 /* ── ACMEPOINT Brand Footer ── */
 .site-footer{background:var(--navy);color:#B8C9DA;border-top:3px solid var(--acme-lime);margin-top:40px}
@@ -373,6 +363,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
   .top nav{order:3;width:100%;height:auto;margin:6px 0 0;overflow-x:auto;padding-bottom:2px}
   .tab{padding:9px 12px}
   main{padding:24px 18px 44px}
+  .rotation-alert{padding:0 18px}
   .title{font-size:24px}
   .kpis{grid-template-columns:1fr 1fr}
   .kpi:nth-child(3){border-left:0;padding-left:0}
@@ -380,10 +371,10 @@ tbody tr.row:hover{background:var(--acme-sky)}
   .filters{grid-template-columns:1fr 1fr}
   .filters .q{grid-column:1/-1}
   .filters.c,.filters.k{grid-template-columns:1fr 1fr}
-  .riskgrid,.mapwrap,.acform-grid,.keyform-grid,.cfg-grid,.footer-inner{grid-template-columns:1fr}
+  .riskgrid,.mapwrap,.footer-inner{grid-template-columns:1fr}
   .footer-meta{text-align:left}
   .mapwrap{height:auto}
-  #map{height:58vh}
+  #map{height:60vh}
   .mlist{max-height:320px}
   .drawer{padding:24px 18px}
   .dl{grid-template-columns:1fr}
@@ -394,7 +385,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
 <div class="brand-stripe" aria-hidden="true"></div>
 
 <!-- ====================================================================== -->
-<!-- LAYER 1 & 2: CONFIDENTIAL ACCESS GATE + AUTHORIZED SIGN-IN             -->
+<!-- UNIFIED SINGLE-STEP ACCESS KEY UNLOCK GATE                             -->
 <!-- Zero internal business data or Drive URLs exist in public HTML.        -->
 <!-- ====================================================================== -->
 <section class="gate-shell" id="authShell" hidden>
@@ -408,7 +399,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
     <div class="gate-mid">
       <p class="gate-kicker">ACMEPOINT EXECUTIVE ASSET INTELLIGENCE</p>
       <h1>維運資產與合約<br>決策管理平台</h1>
-      <p class="gate-lead">進金生能源服務股份有限公司（ACMEPOINT Energy Services）內部專用決策系統。整合全台太陽光電與儲能案場資產、合約履約預警、客戶圖譜與即時颱風風險戰情，全面落實雙重安全存取控管。</p>
+      <p class="gate-lead">進金生能源服務股份有限公司（ACMEPOINT Energy Services）內部專用決策系統。整合全台太陽光電與儲能案場資產、合約履約預警、客戶圖譜與即時颱風風險戰情，採統一金鑰加密解鎖與 60 天定期變更機制。</p>
       <div class="pillars">
         <span class="pillar"><strong>01</strong>太陽光電 Solar PV</span>
         <span class="pillar"><strong>02</strong>儲能與微電網 BESS</span>
@@ -418,7 +409,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
       </div>
       <div class="cred-grid">
         <div class="cred-item"><small>品質與維運標竿</small><span>德國萊因 TÜV 太陽光電維運 AAA 級認證</span></div>
-        <div class="cred-item"><small>資訊安全分級</small><span>CONFIDENTIAL · 金鑰門禁 ＋ RBAC 權限控管</span></div>
+        <div class="cred-item"><small>資訊安全規範</small><span>CONFIDENTIAL · 金鑰加密解鎖 ＋ 60 天定期變更</span></div>
       </div>
     </div>
     <div class="gate-bot">
@@ -429,54 +420,20 @@ tbody tr.row:hover{background:var(--acme-sky)}
 
   <div class="gate-panel">
     <div class="gate-card">
-      <div class="step-indicator" id="stepIndicator">
-        <span class="step-dot active" id="step1Badge">STEP 1 · 存取金鑰</span>
-        <span>→</span>
-        <span class="step-dot" id="step2Badge">STEP 2 · 帳號驗證</span>
-      </div>
-
-      <!-- STEP 1: Server-Verified Access Key Gate -->
-      <div id="gateStep" hidden>
-        <h2>系統存取金鑰驗證</h2>
-        <p class="gate-desc">為防止內部案場與合約資訊公開外流，進入系統前須先通過後端加密雜湊驗證之「系統存取金鑰（Access Key）」。</p>
-        <form id="gateForm" autocomplete="off">
-          <label class="field">
-            <span class="lbl">存取金鑰（Access Key）</span>
-            <input id="gateKeyInput" class="mono" type="password" placeholder="請輸入授權通行金鑰（例如 ACME-XXXX-XXXX）" required autocomplete="off">
-          </label>
-          <button class="btn btn-full" id="gateBtn" type="submit">驗證存取金鑰並繼續</button>
-          <p class="err" id="gateErr" role="alert"></p>
-        </form>
-        <div class="sec-note">
-          <span>🔒</span>
-          <span><b>零前端明碼儲存：</b>所有存取金鑰皆以加鹽 SHA-256 儲存於後端資料庫並由伺服器簽發時效憑證，系統擁有者可隨時於後台輪替或即時撤銷。</span>
-        </div>
-      </div>
-
-      <!-- STEP 2: Supabase Auth Authorized Account Sign-In -->
-      <div id="loginStep" hidden>
-        <div class="gate-verified-bar" id="gateVerifiedBar" hidden>
-          <span>✓ 門禁金鑰已通過：<strong id="gateKeyLabel">授權通行</strong></span>
-          <button type="button" id="resetGateBtn">重新輸入金鑰</button>
-        </div>
-        <h2>授權人員登入</h2>
-        <p class="gate-desc">請使用進金生能源核准之帳號與密碼登入。系統將依您的角色權限（擁有者／管理員／成員／唯讀訪客）動態控管資料範圍。</p>
-        <form id="loginForm">
-          <label class="field">
-            <span class="lbl">電子郵件帳號</span>
-            <input id="user" autocomplete="username" placeholder="name@acmepointes.com" required>
-          </label>
-          <label class="field">
-            <span class="lbl">登入密碼</span>
-            <input id="pass" type="password" autocomplete="current-password" placeholder="請輸入密碼" required>
-          </label>
-          <button class="btn btn-full" id="loginBtn" type="submit">安全登入系統</button>
-          <p class="err" id="loginErr" role="alert"></p>
-        </form>
-        <div class="sec-note">
-          <span>🛡️</span>
-          <span><b>最小權限原則：</b>所有業務查詢皆受資料庫行級安全（RLS）強制保護；未列入授權名單或已停用之帳號將自動拒絕存取。</span>
-        </div>
+      <span class="gate-badge">CONFIDENTIAL ACCESS KEY GATE</span>
+      <h2>系統存取金鑰解鎖</h2>
+      <p class="gate-desc">為防止內部案場、客戶與合約資訊公開外流，請輸入進金生能源授權之「系統存取金鑰（Access Key）」直接解鎖進入平台。</p>
+      <form id="gateForm" autocomplete="off">
+        <label class="field">
+          <span class="lbl">存取金鑰（Access Key）</span>
+          <input id="gateKeyInput" class="mono" type="password" placeholder="請輸入授權通行金鑰（例如 ACME-XXXX-XXXX）" required autocomplete="off">
+        </label>
+        <button class="btn btn-full" id="gateBtn" type="submit">驗證金鑰並解鎖系統</button>
+        <p class="err" id="gateErr" role="alert"></p>
+      </form>
+      <div class="sec-note">
+        <span>🔒</span>
+        <span><b>60 天金鑰定期變更規範：</b>金鑰以加鹽 SHA-256 加密儲存於後端並強制每 60 天定期輪替提醒；未通過金鑰驗證前，資料庫行級安全（RLS）將阻斷一切查詢。</span>
       </div>
     </div>
   </div>
@@ -502,23 +459,31 @@ tbody tr.row:hover{background:var(--acme-sky)}
         <button class="tab" id="tabSites">案場資料庫</button>
         <button class="tab" id="tabCustomers">客戶圖譜</button>
         <button class="tab" id="tabMap">風雨戰情地圖</button>
-        <button class="tab tab-admin" id="tabAccounts" hidden>後台與權限管理</button>
         <a class="tab dl-tab" id="driveLink" href="#" target="_blank" rel="noopener" hidden>雲端資料庫 ↗</a>
       </nav>
       <div class="user-bar">
-        <div class="user-chip" id="userChip">
-          <span class="role-badge role-member" id="myRoleBadge">MEMBER</span>
-          <span class="u-email" id="myEmailText">—</span>
+        <div class="key-cycle-chip" id="keyCycleChip" title="每 60 天定期變更存取金鑰">
+          <i class="key-dot"></i>
+          <span id="keyCycleText">60 天變更週期：檢查中</span>
         </div>
-        <button class="hdr-link" id="openPwModal" type="button">修改密碼</button>
-        <button class="hdr-link" id="logout" type="button">登出</button>
+        <button class="hdr-link" id="openRotateModal" type="button">變更金鑰</button>
+        <button class="hdr-link" id="logout" type="button">鎖定離開</button>
       </div>
     </header>
   </div>
-  <div class="notice-bar" id="noticeBar" hidden>
+
+  <div class="notice-bar" id="noticeBar">
     <div class="notice-inner">
-      <div><span class="notice-tag">CONFIDENTIAL</span><span id="noticeText"></span></div>
-      <div id="gateStatusPill" style="font-size:11.5px;color:#9AB1C7"></div>
+      <div><span class="notice-tag">CONFIDENTIAL</span><span id="noticeText">進金生能源服務內部維運資產與合約機密資料庫（CONFIDENTIAL）。未經授權禁止存取、截圖或轉載。</span></div>
+      <div id="rotationScheduleText" style="font-size:12px;color:#BFD8F0"></div>
+    </div>
+  </div>
+
+  <!-- 60-Day Key Rotation Reminder Banner (shown when approaching/overdue or toggled) -->
+  <div class="rotation-alert" id="rotationAlertWrap" hidden>
+    <div class="rotation-alert-box" id="rotationAlertBox">
+      <div id="rotationAlertMsg"></div>
+      <button class="btn btn-sm" id="alertRotateBtn" type="button">立即變更金鑰（重設 60 天週期）</button>
     </div>
   </div>
 
@@ -605,7 +570,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
     <p class="foot" id="kFoot"></p>
   </main>
 
-  <!-- EXHIBIT 05: 風雨戰情地圖 -->
+  <!-- EXHIBIT 05: 風雨戰情地圖 (Google Maps & Open Map Platforms) -->
   <main id="mapView" hidden>
     <div class="exhibit-head">
       <p class="exhibit">EXHIBIT 05 · GEOSPATIAL &amp; TYPHOON RISK OPERATIONS</p>
@@ -615,14 +580,14 @@ tbody tr.row:hover{background:var(--acme-sky)}
     <section class="riskbox" aria-labelledby="mRiskHead">
       <div class="riskbar">
         <div class="seg" role="group" aria-label="地圖著色模式">
-          <button id="modeTy" aria-pressed="false">颱風風險</button>
-          <button id="modeWx" aria-pressed="true">即時風雨</button>
-          <button id="modeNone" aria-pressed="false">標準檢視</button>
+          <button id="modeTy" aria-pressed="false" type="button">颱風風險</button>
+          <button id="modeWx" aria-pressed="true" type="button">即時風雨</button>
+          <button id="modeNone" aria-pressed="false" type="button">標準案場標示</button>
         </div>
         <span class="riskmeta" id="mRiskMeta">讀取氣象署觀測資料中…</span>
         <span class="riskact">
-          <button class="link" id="mFitTy" hidden>聚焦颱風路徑</button>
-          <button class="link" id="mDrill" aria-pressed="false">啟動颱風演練</button>
+          <button class="link" id="mFitTy" hidden type="button">聚焦颱風路徑</button>
+          <button class="link" id="mDrill" aria-pressed="false" type="button">啟動颱風演練</button>
         </span>
       </div>
       <p class="risknote" id="mRiskNote" hidden role="status"></p>
@@ -634,6 +599,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
       </div>
       <div id="mWarn" class="warnbox"></div>
     </section>
+
     <div class="filters">
       <label class="q">關鍵字檢索<input id="mq" type="search" placeholder="編號、名稱、客戶、地址"></label>
       <label>有效合約<select id="mContract"></select></label>
@@ -642,179 +608,29 @@ tbody tr.row:hover{background:var(--acme-sky)}
       <label>負責工程師<select id="mEng"></select></label>
       <label>維運分區<select id="mArea"></select></label>
     </div>
+
+    <!-- Map Platform Switcher & Site Label Controls -->
+    <div class="map-toolbar">
+      <div class="lbl-group">
+        <span>地圖底圖平台：</span>
+        <div class="seg" role="group" aria-label="切換地圖平台">
+          <button type="button" data-base="gStreets" aria-pressed="true">Google 地圖</button>
+          <button type="button" data-base="gHybrid" aria-pressed="false">Google 衛星混合</button>
+          <button type="button" data-base="nlsc" aria-pressed="false">國土測繪電子地圖</button>
+          <button type="button" data-base="carto" aria-pressed="false">開放型高清地圖 (Carto)</button>
+          <button type="button" data-base="osm" aria-pressed="false">OpenStreetMap</button>
+        </div>
+      </div>
+      <div class="lbl-group">
+        <button class="btn btn-ghost btn-sm" id="toggleLabelsBtn" type="button" aria-pressed="false">顯示案場名稱標籤</button>
+        <button class="btn btn-ghost btn-sm" id="toggleClusterBtn" type="button" aria-pressed="true">展開全部案場點位</button>
+        <button class="btn btn-ghost btn-sm" id="fitAllSitesBtn" type="button">重設全台視角</button>
+      </div>
+    </div>
+
     <div class="mapwrap"><div id="map" role="application" aria-label="案場地圖"></div><ul class="mlist" id="mList"></ul></div>
     <div class="legend" id="mLegend"></div>
     <p class="foot" id="mFoot"></p>
-  </main>
-
-  <!-- EXHIBIT 06: 後台與權限管理中心 (Owner / Admin Only) -->
-  <main id="accountsView" hidden>
-    <div class="exhibit-head">
-      <p class="exhibit">EXHIBIT 06 · GOVERNANCE, RBAC &amp; ACCESS KEY CONTROL</p>
-      <h1 class="title" id="aHeadline">後台權限與存取金鑰治理中心</h1>
-      <p class="sub">集中管控授權名單、角色層級（擁有者／管理員／成員／唯讀訪客）、商務金額與匯出權限、系統存取密碼 Key 及安全稽核軌跡。</p>
-    </div>
-
-    <div class="subtabs" role="tablist">
-      <button class="subtab" id="subMembers" role="tab" aria-selected="true">成員與角色權限</button>
-      <button class="subtab" id="subKeys" role="tab" aria-selected="false" hidden>存取密碼 Key 門禁</button>
-      <button class="subtab" id="subConfig" role="tab" aria-selected="false" hidden>系統機密設定</button>
-      <button class="subtab" id="subAudit" role="tab" aria-selected="false">安全稽核日誌</button>
-    </div>
-
-    <p class="err" id="aMsg" role="status" style="margin:0 0 16px"></p>
-
-    <!-- Sub-Panel A: Members & RBAC -->
-    <section id="panelMembers">
-      <div class="admin-card">
-        <h3>新增授權使用者</h3>
-        <p class="hint">名單內且狀態為「啟用」的人員才可讀取資料庫；「唯讀訪客 (Viewer)」將自動遮罩商務金額條款並禁止匯出或存取雲端資料庫。</p>
-        <form id="aForm" autocomplete="off">
-          <div class="acform-grid">
-            <label class="field" style="margin:0"><span class="lbl">電子郵件（登入帳號）</span><input id="aEmail" type="email" required placeholder="name@acmepointes.com"></label>
-            <label class="field" style="margin:0"><span class="lbl">顯示名稱／部門</span><input id="aName" type="text" placeholder="選填，例如：王小明（維運部）"></label>
-            <label class="field" style="margin:0"><span class="lbl">權限角色</span>
-              <select id="aRole">
-                <option value="member">一般成員 (Member)</option>
-                <option value="viewer">唯讀訪客 (Viewer·遮罩機敏)</option>
-                <option value="admin" id="optRoleAdmin">管理員 (Admin)</option>
-                <option value="owner" id="optRoleOwner">系統擁有者 (Owner)</option>
-              </select>
-            </label>
-            <label class="field" style="margin:0"><span class="lbl">初始密碼（新帳號必填）</span><input id="aPass" type="password" autocomplete="new-password" minlength="8" placeholder="至少 8 碼；已有帳號可留空"></label>
-          </div>
-          <div class="acform-opts">
-            <label class="chk-inline"><input id="aCommercial" type="checkbox" checked>允許檢視商務與保發金額</label>
-            <label class="chk-inline"><input id="aExport" type="checkbox" checked>允許匯出 CSV 與雲端下載</label>
-            <label class="chk-inline"><input id="aWx" type="checkbox" checked>同步開通風雨戰情站（唯讀）</label>
-            <button class="btn" id="aAdd" type="submit" style="margin-left:auto">新增並授權</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>帳號與名稱</th>
-              <th>角色層級</th>
-              <th>啟用</th>
-              <th>商務金額</th>
-              <th>匯出下載</th>
-              <th>認證狀態</th>
-              <th>最後登入</th>
-              <th>風雨站</th>
-              <th>管理操作</th>
-            </tr>
-          </thead>
-          <tbody id="aTbody"></tbody>
-        </table>
-      </div>
-      <p class="foot">權限即時生效：停用帳號後，Supabase 行級安全（RLS）將立即阻斷該帳號之所有資料表查詢。</p>
-    </section>
-
-    <!-- Sub-Panel B: Access Keys Management (Owner Only) -->
-    <section id="panelKeys" hidden>
-      <div class="key-reveal" id="keyRevealBox" hidden>
-        <div>
-          <small>✓ 新存取金鑰已建立並以加鹽 SHA-256 加密儲存（此明碼僅顯示一次，請立即妥善保存）</small>
-          <code id="keyRevealCode">—</code>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-accent btn-sm" id="copyNewKeyBtn" type="button">複製金鑰</button>
-          <button class="btn btn-ghost btn-sm" id="dismissKeyReveal" type="button">我已複製</button>
-        </div>
-      </div>
-
-      <div class="admin-card">
-        <h3>發行新存取金鑰（Access Key / 系統通行碼）</h3>
-        <p class="hint">訪客開啟網頁時須先通過有效金鑰驗證，才能進入登入畫面。建議按季度輪替或依部門／專案發行獨立金鑰，離職或專案結束時可一鍵停用。</p>
-        <form id="keyForm" autocomplete="off">
-          <div class="keyform-grid">
-            <label class="field" style="margin:0"><span class="lbl">金鑰用途名稱</span><input id="kLabel" required placeholder="例如：2026 Q4 維運團隊通行碼"></label>
-            <label class="field" style="margin:0"><span class="lbl">自訂密碼 Key（留空自動產生）</span><input id="kCustom" class="mono" minlength="8" placeholder="選填，至少 8 碼；留空自動產生強金鑰"></label>
-            <label class="field" style="margin:0"><span class="lbl">有效期限（選填）</span><input id="kExpires" type="date"></label>
-            <button class="btn" id="kCreateBtn" type="submit">建立存取金鑰</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>用途名稱</th>
-              <th>金鑰識別碼</th>
-              <th>狀態</th>
-              <th class="num">驗證次數</th>
-              <th>最後使用</th>
-              <th>到期時間</th>
-              <th>建立者</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="kKeysTbody"></tbody>
-        </table>
-      </div>
-      <p class="foot">安全機制：停用任一金鑰後，原持該金鑰登入之裝置在下次頁面載入或操作時將立即失效並被要求重新驗證。</p>
-    </section>
-
-    <!-- Sub-Panel C: Protected System Config (Owner Only) -->
-    <section id="panelConfig" hidden>
-      <div class="admin-card">
-        <h3>安全門禁與機密連結設定</h3>
-        <p class="hint">原公開寫死於靜態網頁中的雲端硬碟連結已遷移至此處受後端資料庫保護，僅具備「匯出下載權限」之已登入使用者才會取得連結。</p>
-        <form id="cfgForm">
-          <div class="cfg-grid">
-            <div>
-              <label class="field">
-                <span class="lbl">Google Drive 資料庫下載網址（受保護）</span>
-                <input id="cfgDriveUrl" type="url" placeholder="https://drive.google.com/drive/folders/...">
-              </label>
-              <label class="field">
-                <span class="lbl">頂部機密公告橫幅文字</span>
-                <input id="cfgNotice" type="text" placeholder="顯示於已登入頁面上方之機密提醒">
-              </label>
-            </div>
-            <div>
-              <div style="background:var(--canvas);border:1px solid var(--rule);padding:16px 18px;margin-bottom:14px">
-                <label class="chk-inline" style="font-weight:700;color:var(--navy)">
-                  <input id="cfgRequireKey" type="checkbox" checked>
-                  強制啟用「存取金鑰（密碼 Key）」前置門禁
-                </label>
-                <p style="font-size:12.5px;color:var(--mute);margin:8px 0 0;line-height:1.6">開啟時，任何未持有有效門禁憑證的瀏覽器都必須先輸入正確 Access Key，才能看見帳號登入表單或載入資料。</p>
-              </div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <button class="btn" id="cfgSaveBtn" type="submit">儲存系統設定</button>
-                <button class="btn btn-danger" id="rotateSecretBtn" type="button">強制所有裝置重新驗證金鑰</button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- Sub-Panel D: Security Audit Logs -->
-    <section id="panelAudit" hidden>
-      <div class="bar">
-        <span>顯示最近 80 筆安全門禁、帳號權限與資料匯出稽核紀錄</span>
-        <button class="link" id="refreshAuditBtn" type="button">重新整理日誌</button>
-      </div>
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>時間（台灣）</th>
-              <th>執行者</th>
-              <th>事件類型</th>
-              <th>對象</th>
-              <th>摘要明細</th>
-            </tr>
-          </thead>
-          <tbody id="auditTbody"></tbody>
-        </table>
-      </div>
-    </section>
   </main>
 
   <!-- Executive Brand Footer -->
@@ -833,7 +649,7 @@ tbody tr.row:hover{background:var(--acme-sky)}
       <div class="footer-meta">
         <span class="conf">CONFIDENTIAL · INTERNAL</span>
         <a href="https://www.acmepointes.com/zh-tw" target="_blank" rel="noopener">進金生能源官方網站 ↗</a>
-        <span style="font-size:11.5px;color:#89A3BC">受 RLS 行級安全與存取金鑰雙重保護</span>
+        <span style="font-size:11.5px;color:#89A3BC">統一金鑰加密解鎖 · 60 天定期變更提醒</span>
       </div>
     </div>
   </footer>
@@ -849,19 +665,33 @@ tbody tr.row:hover{background:var(--acme-sky)}
   </aside>
 </div>
 
-<!-- Self-Service Change Password Modal -->
-<div class="modal-wrap" id="pwModal" hidden>
-  <div class="scrim" id="pwScrim"></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
-    <h3 id="pwModalTitle">變更個人登入密碼</h3>
-    <p class="gate-desc" style="margin-bottom:18px">新密碼長度至少需 8 個字元，建議混合英數字以強化帳號安全。</p>
-    <form id="pwModalForm">
-      <label class="field"><span class="lbl">新密碼</span><input id="newPw1" type="password" minlength="8" required autocomplete="new-password"></label>
-      <label class="field"><span class="lbl">再次確認新密碼</span><input id="newPw2" type="password" minlength="8" required autocomplete="new-password"></label>
-      <p class="err" id="pwModalErr" role="alert"></p>
+<!-- 60-Day Access Key Rotation Modal -->
+<div class="modal-wrap" id="rotateModal" hidden>
+  <div class="scrim" id="rotateScrim"></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rotateModalTitle">
+    <h3 id="rotateModalTitle">變更系統存取金鑰（60 天定期輪替）</h3>
+    <p class="gate-desc" style="margin-bottom:14px">依資安管理規範，系統存取金鑰每 60 天應定期變更一次。變更完成後將立即重設 60 天倒數計時，舊金鑰將同步失效。</p>
+    <div class="cycle-meta-box" id="rotateMetaBox">載入目前金鑰週期資訊中…</div>
+    <form id="rotateModalForm" autocomplete="off">
+      <label class="field">
+        <span class="lbl">目前存取金鑰（驗證身分）</span>
+        <input id="curKeyInput" class="mono" type="password" required placeholder="請輸入目前使用中的金鑰" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="lbl" style="display:flex;justify-content:space-between;align-items:center">
+          <span>新存取金鑰（至少 8 碼）</span>
+          <button class="link" id="genRandomKeyBtn" type="button" style="font-size:11.5px">自動產生強金鑰</button>
+        </span>
+        <input id="newKeyInput1" class="mono" type="text" minlength="8" required placeholder="例如 ACME-2027-XXXX" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="lbl">確認新存取金鑰</span>
+        <input id="newKeyInput2" class="mono" type="text" minlength="8" required placeholder="請再次輸入新存取金鑰" autocomplete="off">
+      </label>
+      <p class="err" id="rotateModalErr" role="alert"></p>
       <div class="modal-actions">
-        <button class="btn btn-ghost btn-sm" id="pwModalCancel" type="button">取消</button>
-        <button class="btn btn-sm" id="pwModalSubmit" type="submit">確認更新</button>
+        <button class="btn btn-ghost btn-sm" id="rotateModalCancel" type="button">取消</button>
+        <button class="btn btn-sm" id="rotateModalSubmit" type="submit">確認變更並重設 60 天週期</button>
       </div>
     </form>
   </div>
@@ -873,12 +703,11 @@ tbody tr.row:hover{background:var(--acme-sky)}
 <script>
 // =============================================================================
 // ACMEPOINT Energy Services — OSS Executive Portal
-// Security: Publishable Client Key ONLY + Server-Verified Access Key Gate + RLS
+// Unified Single-Step Access Key Unlock + 60-Day Rotation Reminder + Google/Open Maps
 // =============================================================================
 const SB_URL = 'https://cowljafosekwvxithwjd.supabase.co';
 const SB_KEY = 'sb_publishable_YP57cbbDJSP7-PvBgtKivA_25uDcp5n';
-const LOGIN_DOMAIN = '@acme-oss.example';
-const GATE_STORAGE_KEY = 'ACME_OSS_GATE_TOKEN_V2';
+const GATE_STORAGE_KEY = 'ACME_OSS_GATE_TOKEN_V3';
 const WX_BASE = 'https://davidyeh51.github.io/taiwan-weather-ops/';
 
 const sb = supabase.createClient(SB_URL, SB_KEY);
@@ -886,42 +715,21 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (n) => Number(n).toLocaleString('zh-TW', { maximumFractionDigits: 1 });
 const twTime = (v) => new Date(v).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+const twDate = (v) => new Date(v).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' });
 const twFull = (v) => new Date(v).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
 
 const PAGE = 50;
-const ROLE_META = {
-  owner: { label: '擁有者', badge: 'OWNER', cls: 'role-owner' },
-  admin: { label: '管理員', badge: 'ADMIN', cls: 'role-admin' },
-  member: { label: '一般成員', badge: 'MEMBER', cls: 'role-member' },
-  viewer: { label: '唯讀訪客', badge: 'VIEWER', cls: 'role-viewer' },
-};
-const AUDIT_LABELS = {
-  gate_verified: '金鑰驗證通過',
-  gate_failed: '金鑰驗證失敗',
-  member_added: '新增授權成員',
-  member_updated: '異動成員權限',
-  member_removed: '移除成員授權',
-  password_reset: '管理員重設密碼',
-  self_password_changed: '使用者變更密碼',
-  access_key_created: '發行存取金鑰',
-  access_key_enabled: '啟用存取金鑰',
-  access_key_disabled: '停用存取金鑰',
-  access_key_deleted: '刪除存取金鑰',
-  config_updated: '更新系統設定',
-  data_exported: '匯出報表檔案',
-};
-
 const COLS = [['field_no','編號'],['name','案場名稱'],['capacity','容量 kW',1],['customer','客戶'],['active_contract','有效合約'],['is_high_voltage','高壓'],['engineer','工程師'],['manager','管理師'],['area','分區'],['source','屬性'],['field_type','類型']];
 const CCOLS = [['contract_no','合約編號'],['contract_type','類型'],['status','狀態'],['start_date','開始'],['end_date','結束'],['years','年限'],['customer','客戶'],['site_count','案場數',1]];
 const KCOLS = [['customer_no','客戶編號'],['name','客戶名稱'],['tax_id','統編'],['contract_count','合約數',1],['site_count','案場數',1],['capacity','容量 kW',1],['address','地址']];
 
-let currentUser = null;
 let portalConfig = {};
-let gateState = { required: true, valid: false, label: null };
+let keyRotation = null;
 let all = [], view = [], pageNo = 0, sortKey = 'field_no', sortDir = 1, lastFocus = null;
 let cAll = [], cView = [], cPageNo = 0, cSortKey = 'end_date', cSortDir = 1, contractsOfSite = {};
 let kRaw = [], kAll = [], kView = [], kPageNo = 0, kSortKey = 'contract_count', kSortDir = -1;
-let map = null, cluster = null, markers = {}, filesOf = {};
+let map = null, cluster = null, plainGroup = null, markers = {}, filesOf = {};
+let baseLayers = {}, activeBaseKey = 'gStreets', showSiteLabels = false, useClustering = true;
 let eRows = [];
 let risk = {}, drill = null, mode = 'weather', modeTouched = false, tyLayer = null;
 
@@ -931,15 +739,10 @@ function setGateToken(tok) {
   else { sessionStorage.removeItem(GATE_STORAGE_KEY); localStorage.removeItem(GATE_STORAGE_KEY); }
 }
 
-// ── Unified Edge Function Caller ──
-async function apiCall(body, requireAuth = true) {
-  const hdrs = { 'Content-Type': 'application/json', apikey: SB_KEY };
+async function apiCall(body) {
   const gt = getGateToken();
+  const hdrs = { 'Content-Type': 'application/json', apikey: SB_KEY };
   if (gt) hdrs['x-oss-gate'] = gt;
-  if (requireAuth) {
-    const { data: { session } } = await sb.auth.getSession();
-    hdrs.Authorization = 'Bearer ' + (session?.access_token || '');
-  }
   const r = await fetch(SB_URL + '/functions/v1/oss-account-admin', {
     method: 'POST',
     headers: hdrs,
@@ -950,116 +753,73 @@ async function apiCall(body, requireAuth = true) {
   return j;
 }
 
-// ── Gate & Auth Screen Orchestration ──
-function renderAuthStep(step) {
+// ── 60-Day Key Rotation UI & Reminder Renderer ──
+function renderRotationStatus(rot) {
+  if (!rot) return;
+  keyRotation = rot;
+  const chip = $('keyCycleChip');
+  const txt = $('keyCycleText');
+  const sched = $('rotationScheduleText');
+  const alertWrap = $('rotationAlertWrap');
+  const alertBox = $('rotationAlertBox');
+  const alertMsg = $('rotationAlertMsg');
+
+  const rotatedDate = twDate(rot.rotated_at);
+  const dueDate = twDate(rot.due_at);
+  const rem = rot.days_remaining;
+
+  sched.textContent = `🔑 60 天定期變更提醒：上次變更 ${rotatedDate} · 下次變更日 ${dueDate}（尚餘 ${Math.max(0, rem)} 天）`;
+
+  if (rot.is_overdue) {
+    chip.className = 'key-cycle-chip overdue';
+    txt.textContent = `🚨 金鑰已逾 60 天週期（逾期 ${Math.abs(rem)} 天）`;
+    alertBox.className = 'rotation-alert-box overdue';
+    alertMsg.innerHTML = `<strong>⚠️ 60 天金鑰定期變更提醒（已屆期）：</strong>目前存取金鑰自 ${esc(rotatedDate)} 啟用至今已超過 60 天變更週期（應於 ${esc(dueDate)} 變更）。請立即更新存取金鑰以確保資安合規。`;
+    alertWrap.hidden = false;
+  } else if (rot.should_remind) {
+    chip.className = 'key-cycle-chip warn';
+    txt.textContent = `⚠️ 距離 60 天變更尚餘 ${rem} 天`;
+    alertBox.className = 'rotation-alert-box';
+    alertMsg.innerHTML = `<strong>🔔 60 天金鑰定期變更提醒：</strong>目前存取金鑰將於 <strong>${esc(dueDate)}</strong> 屆滿 60 天週期（僅剩 <strong>${rem} 天</strong>）。建議提前點選右側按鈕完成金鑰輪替。`;
+    alertWrap.hidden = false;
+  } else {
+    chip.className = 'key-cycle-chip';
+    txt.textContent = `60 天變更倒數：尚餘 ${rem} 天`;
+    alertWrap.hidden = true;
+  }
+
+  $('rotateMetaBox').innerHTML = `
+    <div><strong>目前金鑰識別：</strong><span class="mono-code">${esc(rot.key_hint)}</span>（${esc(rot.label)}）</div>
+    <div><strong>上次變更日期：</strong>${esc(rotatedDate)}（已使用 ${rot.days_elapsed} 天）</div>
+    <div><strong>60 天定期變更到期日：</strong>${esc(dueDate)}（尚餘 <strong>${rem} 天</strong>）</div>
+  `;
+}
+
+function showGateScreen(errMsg = '') {
   $('authShell').hidden = false;
   $('appView').hidden = true;
-  if (step === 'gate') {
-    $('gateStep').hidden = false;
-    $('loginStep').hidden = true;
-    $('stepIndicator').hidden = false;
-    $('step1Badge').className = 'step-dot active';
-    $('step2Badge').className = 'step-dot';
-    $('gateKeyInput').focus();
-  } else {
-    $('gateStep').hidden = true;
-    $('loginStep').hidden = false;
-    $('stepIndicator').hidden = !gateState.required;
-    $('step1Badge').className = 'step-dot done';
-    $('step2Badge').className = 'step-dot active';
-    $('gateVerifiedBar').hidden = !gateState.required;
-    $('gateKeyLabel').textContent = gateState.label || '已通過驗證';
-    $('user').focus();
-  }
+  $('gateErr').textContent = errMsg;
+  setTimeout(() => $('gateKeyInput')?.focus(), 50);
 }
 
-async function bootstrap() {
-  try {
-    const st = await apiCall({ action: 'gate_status' }, false);
-    gateState = { required: !!st.require_access_key, valid: !!st.gate_valid, label: st.key_label || null };
-  } catch (e) {
-    // Fail-closed: if gate status check fails, require key entry
-    gateState = { required: true, valid: false, label: null };
+async function enterPortalWithResponse(res) {
+  if (res.gate_token) setGateToken(res.gate_token);
+  if (res.session?.access_token && res.session?.refresh_token) {
+    await sb.auth.setSession({
+      access_token: res.session.access_token,
+      refresh_token: res.session.refresh_token,
+    });
   }
-
-  if (gateState.required && !gateState.valid) {
-    setGateToken('');
-    renderAuthStep('gate');
-    return;
-  }
-
-  const { data } = await sb.auth.getSession();
-  if (data?.session) {
-    await showApp();
-  } else {
-    renderAuthStep('login');
-  }
-}
-
-function applyRoleUI() {
-  const u = currentUser;
-  const rm = ROLE_META[u.role] || ROLE_META.member;
-  $('myRoleBadge').textContent = rm.badge;
-  $('myRoleBadge').className = 'role-badge ' + rm.cls;
-  $('myEmailText').textContent = u.display_name ? `${u.display_name} (${u.email})` : u.email;
-  $('myEmailText').title = u.email;
-
-  const isManager = u.role === 'owner' || u.role === 'admin';
-  const isOwner = u.role === 'owner';
-  $('tabAccounts').hidden = !isManager;
-  $('subKeys').hidden = !isOwner;
-  $('subConfig').hidden = !isOwner;
-  $('optRoleAdmin').hidden = !isOwner;
-  $('optRoleOwner').hidden = !isOwner;
-
-  // Protected Drive link: only visible if backend returned it (can_export = true)
-  if (portalConfig.drive_folder_url && u.can_export) {
+  portalConfig = res.config || {};
+  if (portalConfig.drive_folder_url) {
     $('driveLink').href = portalConfig.drive_folder_url;
     $('driveLink').hidden = false;
-  } else {
-    $('driveLink').hidden = true;
-    $('driveLink').href = '#';
   }
-
-  // Export button visibility based on RBAC
-  ['cCsv', 'eCsv', 'eCopy', 'csv', 'kCsv'].forEach((id) => {
-    $(id).hidden = !u.can_export;
-  });
-
-  // Top confidential notice banner
   if (portalConfig.portal_notice) {
     $('noticeText').textContent = portalConfig.portal_notice;
-    $('gateStatusPill').textContent = gateState.required
-      ? `雙重門禁啟用中${gateState.label ? ' · 金鑰：' + gateState.label : ''}`
-      : '帳號權限驗證中';
-    $('noticeBar').hidden = false;
-  } else {
-    $('noticeBar').hidden = true;
   }
-}
-
-async function showApp() {
-  try {
-    const res = await apiCall({ action: 'me' }, true);
-    gateState.required = !!res.require_access_key;
-    gateState.valid = !!res.gate_valid;
-    gateState.label = res.key_label || gateState.label;
-
-    if (gateState.required && !gateState.valid) {
-      setGateToken('');
-      renderAuthStep('gate');
-      $('gateErr').textContent = '原存取金鑰憑證已失效或遭撤銷，請重新輸入有效金鑰。';
-      return;
-    }
-
-    currentUser = res.me;
-    portalConfig = res.config || {};
-    applyRoleUI();
-  } catch (err) {
-    await sb.auth.signOut();
-    renderAuthStep(gateState.required && !gateState.valid ? 'gate' : 'login');
-    $('loginErr').textContent = err.message || '此帳號沒有讀取權限。';
-    return;
+  if (res.rotation) {
+    renderRotationStatus(res.rotation);
   }
 
   $('authShell').hidden = true;
@@ -1072,20 +832,32 @@ async function showApp() {
     $('subline').textContent = error.message;
     return;
   }
-  if (!data.length) {
-    switchTab('sites');
-    $('headline').textContent = '此帳號沒有讀取權限';
-    $('subline').textContent = '請確認帳號已列入授權名單且處於啟用狀態。';
-    return;
-  }
-
-  all = data.map((r) => ({ ...r, _s: [r.field_no, r.name, r.customer, r.address, JSON.stringify(r.electric_nos)].join(' ').toLowerCase() }));
+  all = (data || []).map((r) => ({ ...r, _s: [r.field_no, r.name, r.customer, r.address, JSON.stringify(r.electric_nos)].join(' ').toLowerCase() }));
   initFilters();
   summary();
   apply();
   switchTab('contracts');
   loadContracts();
   loadRisk();
+}
+
+async function bootstrap() {
+  const tok = getGateToken();
+  if (!tok) {
+    showGateScreen();
+    return;
+  }
+  try {
+    const st = await apiCall({ action: 'gate_status' });
+    if (st.gate_valid && st.session) {
+      await enterPortalWithResponse(st);
+      return;
+    }
+  } catch (e) {
+    console.warn('Gate validation fallback:', e);
+  }
+  setGateToken('');
+  showGateScreen();
 }
 
 async function fetchAll(table, cols) {
@@ -1135,7 +907,7 @@ async function loadContracts() {
 }
 
 function switchTab(t) {
-  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map'],['accounts','Accounts']].forEach(([v, n]) => {
+  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map']].forEach(([v, n]) => {
     $(v + 'View').hidden = v !== t;
     if (v === t) $('tab' + n).setAttribute('aria-current', 'page');
     else $('tab' + n).removeAttribute('aria-current');
@@ -1143,12 +915,8 @@ function switchTab(t) {
   if (t === 'map') showMap();
 }
 
-// ── File Attachment Renderer (respects can_export) ──
 function fileList(type, no) {
   const fs = filesOf[type + ':' + no] || [];
-  if (!currentUser?.can_export) {
-    return `<h3>附件文件（${fs.length}）</h3><p class="empty"><span class="masked-val">您的角色權限為唯讀，未開放雲端附件下載</span></p>`;
-  }
   const rows = fs.map((f) => {
     const size = f.size_bytes ? ` <small>${fmt(f.size_bytes / 1048576)} MB</small>` : '';
     if (f.http_status !== 200) return `<li>${esc(f.label)}${size} <small>（原系統檔案已損壞，未能複製）</small></li>`;
@@ -1224,23 +992,20 @@ function openK(no) {
   if ($('drawerWrap').hidden) lastFocus = document.activeElement;
   $('dNo').textContent = k.customer_no;
   $('dTitle').textContent = k.name;
-  const contactsHtml = currentUser?.can_view_commercial
-    ? sub('聯絡窗口', k.contacts)
-    : `<h3>聯絡窗口</h3><p class="empty"><span class="masked-val">唯讀權限已遮罩客戶窗口聯絡資訊</span></p>`;
   $('dBody').innerHTML = '<h3>基本資料</h3>' + dl([['統一編號', k.tax_id], ['案場總容量 (kW)', k.site_count ? fmt(k.capacity) : ''], ['公司地址', k.address, 1]])
     + `<h3>關聯合約（${k.contracts.length}）</h3>` + (k.contracts.length ? `<ul style="margin:0;padding-left:18px">${k.contracts.map((c) => `<li><button class="jump" data-contract="${esc(c.contract_no)}">${esc(c.contract_no)}　${esc(c.contract_type)}　${esc(c.status)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
     + `<h3>關聯案場（${k.sites.length}）</h3>` + (k.sites.length ? `<ul style="margin:0;padding-left:18px">${k.sites.map((s) => `<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.name)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
-    + contactsHtml;
+    + sub('聯絡窗口', k.contacts);
   $('drawerWrap').hidden = false;
   $('dTitle').focus();
 }
 const custLink = (no, name) => `<h3>客戶（合約甲方）</h3>` + (no ? `<button class="jump" data-customer="${esc(no)}">${esc(no)}　${esc(name)}</button>` : `<p class="empty">${esc(name) || '無資料'}（未對應到客戶資料）</p>`);
 
-// ── Geospatial Map & Weather/Typhoon Risk Engine ──
+// ── Geospatial Map (Google Maps & Open Map Platforms) & Weather/Typhoon Risk ──
 const validXY = (s) => s.lat >= 21 && s.lat <= 27 && s.lng >= 117 && s.lng <= 123;
 const TONE_ORDER = ['danger', 'warning', 'possible', 'normal', 'incomplete', 'plain'];
 const WX_LABEL = { normal: '監測中', warning: '注意', danger: '警戒', incomplete: '資料不足', unknown: '無有效觀測', location_missing: '待定位' };
-const siteIcon = (t) => L.divIcon({ className: '', html: `<span class="smk t-${t}"></span>`, iconSize: [15, 15], iconAnchor: [7.5, 7.5] });
+const siteIcon = (t) => L.divIcon({ className: '', html: `<span class="smk t-${t}"></span>`, iconSize: [16, 16], iconAnchor: [8, 8] });
 const wxTone = (s) => s === 'danger' ? 'danger' : s === 'warning' ? 'warning' : s === 'normal' ? 'normal' : 'incomplete';
 function toneOf(no) {
   const r = risk.by?.[no];
@@ -1273,25 +1038,99 @@ function siteRiskHtml(no) {
     return `${esc(m.label)} ${c.value == null ? '—' : fmt(c.value)} ${esc(m.unit)}${c.station ? `（${esc(c.station.name)}，${fmt(c.distance)} km）` : ''}${c.valid ? '' : '　' + esc(c.status === 'far' ? '測站過遠' : c.status === 'stale' ? '資料延遲' : c.status === 'missing' ? '缺值' : c.status)}`;
   }).join('<br>');
   return `<div class="riskblk"><b>颱風風險評估</b>　${tag(l.tone, l.label)}<div>${ty.storm ? `${esc(ty.storm.name_zh || ty.storm.name)}　目前距離 ${fmt(ty.distanceNow)} km　預報最近 ${fmt(ty.minDistance)} km（${esc(twTime(ty.minAt))}）<br>進七級風圈 ${esc(etaText(ty.eta15))}　進十級風圈 ${esc(etaText(ty.eta25))}` : '目前沒有相關颱風威脅'}</div></div>`
-    + `<div class="riskblk"><b>即時風雨觀測（鄰近測站）</b>　${tag(wxTone(r.weather.status), WX_LABEL[r.weather.status] || r.weather.status)}${r.weather.score != null ? '　' + r.weather.score + ' 分' : ''}<div>${cells}</div><div>測站觀測非案場實測；風取 20 km、雨取 10 km 內測站。</div></div>`;
+    + `<div class="riskblk"><b>風雨觀測（鄰近測站）</b>　${tag(wxTone(r.weather.status), WX_LABEL[r.weather.status] || r.weather.status)}${r.weather.score != null ? '　' + r.weather.score + ' 分' : ''}<div>${cells}</div><div>測站觀測非案場實測；風取 20 km、雨取 10 km 內測站。</div></div>`;
 }
+
+function switchBaseMap(key) {
+  if (!map || !baseLayers[key]) return;
+  Object.entries(baseLayers).forEach(([k, layer]) => {
+    if (k === key) {
+      if (!map.hasLayer(layer)) map.addLayer(layer);
+    } else if (map.hasLayer(layer)) {
+      map.removeLayer(layer);
+    }
+  });
+  activeBaseKey = key;
+  document.querySelectorAll('[data-base]').forEach((btn) => {
+    btn.setAttribute('aria-pressed', btn.dataset.base === key ? 'true' : 'false');
+  });
+}
+
+function syncMarkerTooltips() {
+  Object.values(markers).forEach((m) => {
+    const s = m._siteData;
+    if (!s) return;
+    const labelHtml = `${esc(s.name)}${s.capacity != null ? ' · ' + fmt(s.capacity) + ' kW' : ''}`;
+    m.unbindTooltip();
+    m.bindTooltip(labelHtml, {
+      permanent: showSiteLabels,
+      direction: 'top',
+      offset: [0, -8],
+      className: 'site-tt',
+    });
+  });
+}
+
 function showMap() {
   if (!map) {
-    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' });
-    const emap = L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}', { maxZoom: 19, attribution: '&copy; 內政部國土測繪中心' });
-    map = L.map('map', { layers: [osm] }).setView([23.7, 120.9], 8);
-    L.control.layers({ 'OpenStreetMap': osm, '通用版電子地圖（國土測繪中心）': emap }).addTo(map);
+    // 5 High-Availability Map Platforms (Google Maps Default + Google Hybrid + NLSC + CartoDB + OSM)
+    baseLayers = {
+      gStreets: L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=zh-TW', {
+        maxZoom: 20,
+        attribution: '&copy; Google Maps',
+      }),
+      gHybrid: L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}&hl=zh-TW', {
+        maxZoom: 20,
+        attribution: '&copy; Google Maps Satellite',
+      }),
+      nlsc: L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: '&copy; 內政部國土測繪中心 NLSC',
+      }),
+      carto: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20,
+        subdomains: 'abcd',
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+      }),
+      osm: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors',
+      }),
+    };
+
+    map = L.map('map', { layers: [baseLayers.gStreets] }).setView([23.68, 120.95], 8);
+    L.control.layers({
+      'Google 地圖（標準街道）': baseLayers.gStreets,
+      'Google 衛星混合圖（空拍＋路網）': baseLayers.gHybrid,
+      '內政部國土測繪中心（通用電子地圖）': baseLayers.nlsc,
+      'CartoDB 開放型高清地圖': baseLayers.carto,
+      'OpenStreetMap 開放街圖': baseLayers.osm,
+    }).addTo(map);
+
+    map.on('baselayerchange', (e) => {
+      const found = Object.entries(baseLayers).find(([, l]) => l === e.layer);
+      if (found) {
+        activeBaseKey = found[0];
+        document.querySelectorAll('[data-base]').forEach((btn) => {
+          btn.setAttribute('aria-pressed', btn.dataset.base === activeBaseKey ? 'true' : 'false');
+        });
+      }
+    });
+
     cluster = L.markerClusterGroup({
-      maxClusterRadius: 45,
+      maxClusterRadius: 42,
+      showCoverageOnHover: false,
       iconCreateFunction: (c) => {
         const ts = c.getAllChildMarkers().map((m) => m.options.tone);
         const t = TONE_ORDER.find((x) => ts.includes(x)) || 'plain';
-        const n = c.getChildCount(), s = n < 10 ? 30 : n < 100 ? 36 : 42;
+        const n = c.getChildCount(), s = n < 10 ? 32 : n < 100 ? 38 : 44;
         return L.divIcon({ className: '', html: `<span class="ccl t-${t}" style="width:${s}px;height:${s}px">${n}</span>`, iconSize: [s, s] });
       },
     });
+    plainGroup = L.layerGroup();
     map.addLayer(cluster);
     tyLayer = L.layerGroup().addTo(map);
+
     [['mContract','active_contract'],['mSource','source'],['mType','field_type'],['mEng','engineer'],['mArea','area']].forEach(([id, k]) => {
       const v = [...new Set(all.map((r) => r[k]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
       $(id).innerHTML = '<option value="">全部</option>' + v.map((x) => `<option>${esc(x)}</option>`).join('');
@@ -1299,12 +1138,16 @@ function showMap() {
       $(id).onchange = mApply;
     });
     $('mq').oninput = mApply;
+
     all.filter(validXY).forEach((s) => {
       const g = `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
       const m = L.marker([s.lat, s.lng], { title: s.name, icon: siteIcon('plain'), tone: 'plain' })
-        .bindPopup(() => `<div class="pop"><b>${esc(s.name)}</b><span>${esc(s.field_no)}　${s.capacity != null ? fmt(s.capacity) + ' kW' : ''}<br>${esc(s.customer)}</span>${riskLines(s.field_no)}<button class="jump" data-site="${esc(s.field_no)}">展開案場明細</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟 ↗</a></div>`);
+        .bindPopup(() => `<div class="pop"><b>${esc(s.name)}</b><span>編號：${esc(s.field_no)} · 容量：${s.capacity != null ? fmt(s.capacity) + ' kW' : '—'}<br>客戶：${esc(s.customer || '—')}<br>分區：${esc(s.area || '—')} · 工程師：${esc(s.engineer || '—')}<br>地址：${esc(s.address || '—')}</span>${riskLines(s.field_no)}<button class="jump" data-site="${esc(s.field_no)}">查看完整案場資料 →</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟定位與導航 ↗</a></div>`);
+      m._siteData = s;
       markers[s.field_no] = m;
     });
+    syncMarkerTooltips();
+
     $('modeTy').onclick = () => setMode('typhoon');
     $('modeWx').onclick = () => setMode('weather');
     $('modeNone').onclick = () => setMode('none');
@@ -1318,14 +1161,36 @@ function showMap() {
     };
     $('mFitTy').onclick = fitTyphoon;
     $('map').addEventListener('click', (e) => { const b = e.target.closest('.jump'); if (b) openD(b.dataset.site); });
+
+    // Toolbar controls
+    document.querySelectorAll('[data-base]').forEach((btn) => {
+      btn.onclick = () => switchBaseMap(btn.dataset.base);
+    });
+    $('toggleLabelsBtn').onclick = () => {
+      showSiteLabels = !showSiteLabels;
+      $('toggleLabelsBtn').setAttribute('aria-pressed', showSiteLabels ? 'true' : 'false');
+      $('toggleLabelsBtn').textContent = showSiteLabels ? '隱藏案場名稱標籤' : '顯示案場名稱標籤';
+      syncMarkerTooltips();
+    };
+    $('toggleClusterBtn').onclick = () => {
+      useClustering = !useClustering;
+      $('toggleClusterBtn').setAttribute('aria-pressed', useClustering ? 'true' : 'false');
+      $('toggleClusterBtn').textContent = useClustering ? '展開全部案場點位' : '啟用群聚收合模式';
+      mApply();
+    };
+    $('fitAllSitesBtn').onclick = () => {
+      map.setView([23.68, 120.95], 8);
+    };
+
     const bad = all.filter((s) => !validXY(s));
     $('mFoot').innerHTML = `${bad.length} 個案場因 GPS 缺漏或格式異常未標示：` + bad.map((s) => `<button class="jump" data-site="${esc(s.field_no)}">${esc(s.name)}</button>`).join('、');
     $('mFoot').onclick = (e) => { const b = e.target.closest('.jump'); if (b) openD(b.dataset.site); };
     mApply();
     if (!risk.loadedAt) loadRisk();
   }
-  setTimeout(() => map.invalidateSize(), 0);
+  setTimeout(() => map.invalidateSize(), 50);
 }
+
 function mApply() {
   const q = $('mq').value.trim().toLowerCase();
   const fs = ['mContract','mSource','mType','mEng','mArea'].map((i) => [$(i).dataset.key, $(i).value]).filter((x) => x[1]);
@@ -1337,14 +1202,26 @@ function mApply() {
     const m = markers[s.field_no], t = toneOf(s.field_no);
     if (m.options.tone !== t) { m.options.tone = t; m.setIcon(siteIcon(t)); }
   });
+
   cluster.clearLayers();
-  cluster.addLayers(list.map((s) => markers[s.field_no]));
+  plainGroup.clearLayers();
+  if (useClustering) {
+    if (map.hasLayer(plainGroup)) map.removeLayer(plainGroup);
+    if (!map.hasLayer(cluster)) map.addLayer(cluster);
+    cluster.addLayers(list.map((s) => markers[s.field_no]));
+  } else {
+    if (map.hasLayer(cluster)) map.removeLayer(cluster);
+    if (!map.hasLayer(plainGroup)) map.addLayer(plainGroup);
+    list.forEach((s) => plainGroup.addLayer(markers[s.field_no]));
+  }
+
   const cap = list.reduce((a, s) => a + (+s.capacity || 0), 0);
-  $('mHeadline').textContent = `全台地圖標示 ${list.length} 座案場，總裝置容量 ${fmt(cap / 1000)} MW`;
-  $('mSubline').textContent = '點選標記檢視摘要與風雨評分；右側清單依即時風險高低自動排序，可快速定位。';
-  $('mList').innerHTML = list.slice(0, 300).map((s) => `<li><button data-no="${esc(s.field_no)}">${esc(s.name)}<small>${esc(s.field_no)}　${esc(s.customer)}</small>${listTag(s.field_no)}</button></li>`).join('') + (list.length > 300 ? `<li class="empty" style="padding:10px 12px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>` : '');
+  $('mHeadline').textContent = `全台地圖標明 ${list.length} 座案場位置，總裝置容量 ${fmt(cap / 1000)} MW`;
+  $('mSubline').textContent = '支援 Google 地圖、衛星混合圖、國土測繪電子地圖與開放街圖一鍵切換；點選地圖點位或右側清單可直接定位案場並開啟 Google 導航。';
+  $('mList').innerHTML = list.slice(0, 300).map((s) => `<li><button data-no="${esc(s.field_no)}"><b>${esc(s.name)}</b><small>${esc(s.field_no)} · ${s.capacity != null ? fmt(s.capacity) + ' kW' : ''} · ${esc(s.customer)}</small>${listTag(s.field_no)}</button></li>`).join('') + (list.length > 300 ? `<li class="empty" style="padding:10px 12px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>` : '');
   renderRisk(filtered);
 }
+
 async function loadRisk() {
   try {
     if (!risk.mods) {
@@ -1370,13 +1247,25 @@ async function loadRisk() {
   computeRisk();
   if (map) mApply();
 }
+
 function computeRisk() {
   if (!risk.mods || !risk.weather) { risk.by = null; return; }
   const { ty, pd } = risk.mods, now = Date.now();
   const fresh = drill ? 'ok' : ty.freshness(risk.state, now);
   const usable = drill || (fresh !== 'pending' && risk.state?.ok_at);
   const storms = drill ? [drill] : (risk.state?.storms || []);
-  const index = pd.weatherIndex(risk.weather, now);
+
+  // Anchor weather observation evaluation to latest valid station snapshot if upstream feed is delayed
+  let latestObsMs = 0;
+  for (const r of risk.weather) {
+    const t = Date.parse(r.observed_at || '');
+    if (Number.isFinite(t) && t > latestObsMs) latestObsMs = t;
+  }
+  const wxRefTime = latestObsMs && (now - latestObsMs > 60 * 60 * 1000) ? latestObsMs : now;
+  risk.latestWxAt = latestObsMs || null;
+  risk.wxSnapshotMode = wxRefTime !== now;
+
+  const index = pd.weatherIndex(risk.weather, wxRefTime);
   risk.by = {}; risk.fresh = fresh; risk.storms = storms;
   for (const s of all) {
     const site = { site_id: s.field_no, name: s.name, latitude: validXY(s) ? s.lat : null, longitude: validXY(s) ? s.lng : null, capacity_kw: +s.capacity || 0, engineer_name: s.engineer };
@@ -1386,6 +1275,7 @@ function computeRisk() {
   }
   if (!modeTouched) mode = Object.values(risk.by).some((r) => ty.LEVELS[r.typhoon.level].rank >= 2) ? 'typhoon' : 'weather';
 }
+
 function setMode(m) { mode = m; modeTouched = true; mApply(); }
 function fitTyphoon() {
   const pts = (risk.storms || []).flatMap((s) => risk.mods.ty.trackPoints(s).map((p) => [p.latitude, p.longitude]));
@@ -1425,7 +1315,7 @@ function renderRisk(rows) {
   $('mRiskNote').hidden = !note;
   $('mRiskNote').textContent = note;
   $('mRiskNote').classList.toggle('drill', !!drill);
-  $('mRiskMeta').textContent = (drill ? '演練模式' : risk.state?.issued_at ? '氣象署資料 ' + twTime(risk.state.issued_at) : '') + (risk.loadedAt ? '　更新於 ' + twTime(risk.loadedAt) : '');
+  $('mRiskMeta').textContent = (drill ? '演練模式' : risk.state?.issued_at ? '氣象署颱風資料 ' + twTime(risk.state.issued_at) : '') + (risk.latestWxAt ? '　測站觀測基準 ' + twTime(risk.latestWxAt) : '');
   $('mFitTy').hidden = !storms.length;
   const hit = rs.filter((r) => L_[r.typhoon.level].rank >= 2), kw = hit.reduce((a, r) => a + r.site.capacity_kw, 0);
   const near = rs.filter((r) => Number.isFinite(r.typhoon.minDistance)).sort((a, b) => a.typhoon.minDistance - b.typhoon.minDistance)[0];
@@ -1440,7 +1330,7 @@ function renderRisk(rows) {
   $('mEngLoad').innerHTML = engineers.slice(0, 8).map((e) => `<div class="engrow"><span>${esc(e.name)}<small>${e.count} 座 · ${fmt(e.kw / 1000)} MW</small></span><span>${e.earliest ? esc(twTime(e.earliest)) : '已在範圍內'}</span></div>`).join('') || '<p class="empty">目前沒有工程師負責受影響案場。</p>';
   const ws = drill ? [] : risk.state?.warnings || [], tw = ws.filter((w) => w.title.includes('颱風'));
   $('mWarn').innerHTML = `<div class="warnhead"><b>中央氣象署特報</b><span class="empty">${drill ? '演練模式不顯示即時警報。' : risk.state?.warning_status && risk.state.warning_status !== 'ok' ? '警報讀取失敗，請直接查閱氣象署官網。' : tw.length ? '' : '目前無海上或陸上颱風警報。'}</span><a href="https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html" target="_blank" rel="noopener">氣象署颱風消息 ↗</a></div>` + ws.map((w) => `<details class="${w.title.includes('颱風') ? 'ty' : ''}"><summary>${esc(w.title)} <small>${esc(w.issued)}${w.validto ? ' 至 ' + esc(w.validto) : ''}</small></summary><p>${esc(w.content)}</p></details>`).join('');
-  $('mLegend').innerHTML = mode === 'typhoon' ? ['danger:十級風圈','warning:七級風圈','possible:路徑偏移可能影響','normal:未受影響','incomplete:待定位或無資料'].map((x) => { const [t, l] = x.split(':'); return `<span><i class="dotk t-${t}"></i>${l}</span>`; }).join('') + '<span>註：風圈幾何估算未計入地形，請以氣象署警報為準。</span>' : mode === 'weather' ? ['danger:警戒 ≥90','warning:注意 ≥60','normal:監測中','incomplete:資料不足'].map((x) => { const [t, l] = x.split(':'); return `<span><i class="dotk t-${t}"></i>${l}</span>`; }).join('') + '<span>註：採鄰近測站觀測資料，非案場現場實測。</span>' : '';
+  $('mLegend').innerHTML = mode === 'typhoon' ? ['danger:十級風圈','warning:七級風圈','possible:路徑偏移可能影響','normal:未受影響','incomplete:待定位或無資料'].map((x) => { const [t, l] = x.split(':'); return `<span><i class="dotk t-${t}"></i>${l}</span>`; }).join('') + '<span>註：風圈幾何估算未計入地形，請以氣象署警報為準。</span>' : mode === 'weather' ? ['danger:警戒 ≥90','warning:注意 ≥60','normal:監測中','incomplete:資料不足'].map((x) => { const [t, l] = x.split(':'); return `<span><i class="dotk t-${t}"></i>${l}</span>`; }).join('') + '<span>註：採鄰近測站觀測資料，非案場現場實測。</span>' : '<span><i class="dotk t-plain"></i>標準案場位置標示（點選點位可檢視案場規格與 Google 地圖導航）</span>';
   drawTyphoonLayer();
 }
 setInterval(() => { if (!document.hidden && all.length) loadRisk(); }, 10 * 60 * 1000);
@@ -1496,7 +1386,7 @@ function cSummary() {
   const on = cAll.filter((c) => c.status === '進行中');
   const soon = on.filter((c) => { const d = daysLeft(c); return d != null && d >= 0 && d <= 90; });
   $('cHeadline').textContent = `納管 ${cAll.length} 份合約中，${on.length} 份履約進行中，${soon.length} 份將於 90 天內到期`;
-  $('cSubline').textContent = `涵蓋維運合約 ${cAll.filter((c) => c.contract_type === '維運合約').length} 份、工程合約 ${cAll.filter((c) => c.contract_type === '工程合約').length} 份；所有查詢均受角色權限與 RLS 保護。`;
+  $('cSubline').textContent = `涵蓋維運合約 ${cAll.filter((c) => c.contract_type === '維運合約').length} 份、工程合約 ${cAll.filter((c) => c.contract_type === '工程合約').length} 份；所有查詢均受存取金鑰與 RLS 保護。`;
   $('cKpis').innerHTML = [
     [cAll.length, '合約總數（份）'],
     [on.length, '履約進行中（份）'],
@@ -1537,14 +1427,11 @@ function openC(no) {
   $('dNo').textContent = c.contract_type || '合約';
   $('dTitle').textContent = c.contract_no;
   const sites = c.sites.length ? c.sites.map((s) => `<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.site_name)}</button></li>`).join('') : '';
-  const commercialHtml = currentUser?.can_view_commercial
-    ? '<h3>商務與保發條款</h3>' + dl([['收款時程', c.payment_schedule], ['維運金額', c.maintenance_amount], ['保發責任', c.guaranteed_liability], ['保發結算時間', c.clearing_timing], ['獎懲計算方式', c.calculation_type, 1], ['獎金定義', c.award_terms, 1], ['罰款定義', c.indemnity_clause, 1]])
-    : '<h3>商務與保發條款</h3><p class="empty"><span class="masked-val">權限受限：僅具商務檢視權限之授權人員可查閱金額與獎懲條款</span></p>';
   $('dBody').innerHTML = custLink(c.customer_no, c.customer)
     + '<h3>基本資料</h3>' + dl([['合約狀態', c.status], ['合約開始', c.start_date], ['合約結束', c.end_date], ['合約年限', c.years]])
     + `<h3>關聯案場（${c.sites.length}）</h3>` + (sites ? `<ul style="margin:0;padding-left:18px">${sites}</ul>` : '<p class="empty">無資料</p>')
     + '<h3>維運服務條件 (SLA)</h3>' + dl([['查檢到場時限（小時）', c.inspection_dl], ['修復零件更換時限（小時）', c.repair_dl], ['巡檢週期（天）', c.inspection_cycle], ['高壓週期（天）', c.hv_cycle], ['清洗週期（天）', c.clean_cycle], ['環境整理週期（天）', c.weeding_cycle]])
-    + commercialHtml
+    + '<h3>商務與保發條款</h3>' + dl([['收款時程', c.payment_schedule], ['維運金額', c.maintenance_amount], ['保發責任', c.guaranteed_liability], ['保發結算時間', c.clearing_timing], ['獎懲計算方式', c.calculation_type, 1], ['獎金定義', c.award_terms, 1], ['罰款定義', c.indemnity_clause, 1]])
     + '<h3>保險與風險轉移</h3>' + dl([['雇主意外責任保險編號', c.eli_no], ['保險到期日', c.eli_end_date], ['營繕承包人保險編號', c.cli_no], ['保險到期日', c.repair_contractor_end_date]])
     + '<h3>報告與交付文件</h3>' + dl([['年度維運報告書', c.anr], ['繳交時程', c.anr_content], ['最晚繳交日期', c.anr_last_date], ['保固書開立日期', c.warranty_issue_date], ['工程期滿通知書開立日期', c.pen_date]])
     + sub('災前、災後巡檢紀錄', c.inspections)
@@ -1616,13 +1503,10 @@ function openD(no) {
   $('dNo').textContent = r.field_no;
   $('dTitle').textContent = r.name;
   const g = validXY(r) ? `<p style="margin:10px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟定位 ↗</a></p>` : '';
-  const contactsPart = currentUser?.can_view_commercial
-    ? sub('案場聯絡人', r.contacts) + sub('通知 E-Mail', r.emails)
-    : '<h3>案場聯絡人與信箱</h3><p class="empty"><span class="masked-val">唯讀權限已遮罩個人聯絡資訊</span></p>';
   $('dBody').innerHTML = g + siteRiskHtml(r.field_no) + custLink(r.customer_no, r.customer)
-    + '<h3>基本與電氣規格</h3>' + dl([['容量 (kW)', r.capacity], ['維運分區', r.area], ['GPS 座標', r.gps], ['負責工程師', r.engineer], ['負責管理師', r.manager], ['案場屬性', r.source], ['案場類型', r.field_type], ['變流器 (INV)', r.inverter], ['模組 (PV)', r.pv], ['躉售費率', currentUser?.can_view_commercial ? r.bulk_tariff : '（權限受限）'], ['交流規格', r.ac_spec], ['驗收日期', r.acceptance_date], ['併聯日期', r.parallel_date], ['MOF 表倍數', r.mof_ratio], ['高壓案場', r.is_high_voltage], ['高保由我司施作', r.hv_by_us], ['有效合約', r.active_contract], ['案場地址', r.address, 1], ['維運注意事項', r.note, 1]])
+    + '<h3>基本與電氣規格</h3>' + dl([['容量 (kW)', r.capacity], ['維運分區', r.area], ['GPS 座標', r.gps], ['負責工程師', r.engineer], ['負責管理師', r.manager], ['案場屬性', r.source], ['案場類型', r.field_type], ['變流器 (INV)', r.inverter], ['模組 (PV)', r.pv], ['躉售費率', r.bulk_tariff], ['交流規格', r.ac_spec], ['驗收日期', r.acceptance_date], ['併聯日期', r.parallel_date], ['MOF 表倍數', r.mof_ratio], ['高壓案場', r.is_high_voltage], ['高保由我司施作', r.hv_by_us], ['有效合約', r.active_contract], ['案場地址', r.address, 1], ['維運注意事項', r.note, 1]])
     + `<h3>關聯合約</h3>` + ((contractsOfSite[r.field_no] || []).length ? `<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map((n) => `<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
-    + contactsPart
+    + sub('案場聯絡人', r.contacts) + sub('通知 E-Mail', r.emails)
     + sub('台電電號', r.electric_nos) + sub('協力與設備', r.accessories) + sub('計量硬體設備', r.devices) + fileList('site', r.field_no);
   $('drawerWrap').hidden = false;
   $('dTitle').focus();
@@ -1630,7 +1514,6 @@ function openD(no) {
 function closeD() { $('drawerWrap').hidden = true; lastFocus && lastFocus.focus && lastFocus.focus(); }
 
 function csv(cols, list, name) {
-  if (!currentUser?.can_export) return;
   const q = (v) => { let s = String(v ?? ''); if (/^[=+\-@]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
   const rows = [cols.map((c) => q(c[1])).join(','), ...list.map((r) => cols.map((c) => q(r[c[0]])).join(','))];
   const a = document.createElement('a');
@@ -1638,107 +1521,7 @@ function csv(cols, list, name) {
   a.download = name;
   a.click();
   URL.revokeObjectURL(a.href);
-  apiCall({ action: 'log_export', target: name, rows: list.length }, true).catch(() => {});
-}
-
-// ── Admin Console (Members / Access Keys / Protected Config / Audit Logs) ──
-function aMsg(t, ok = false) {
-  $('aMsg').textContent = t;
-  $('aMsg').className = ok ? 'err ok' : 'err';
-}
-function switchAdminSub(tab) {
-  [['Members', 'panelMembers'], ['Keys', 'panelKeys'], ['Config', 'panelConfig'], ['Audit', 'panelAudit']].forEach(([n, p]) => {
-    const active = n === tab;
-    $('sub' + n).setAttribute('aria-selected', active ? 'true' : 'false');
-    $(p).hidden = !active;
-  });
-  aMsg('');
-  if (tab === 'Members') aLoadMembers();
-  if (tab === 'Keys' || tab === 'Config') aLoadKeysAndConfig();
-  if (tab === 'Audit') aLoadAudit();
-}
-
-async function aLoadMembers() {
-  try {
-    const { me, my_role, members } = await apiCall({ action: 'list' }, true);
-    const isOwner = my_role === 'owner';
-    const activeCount = members.filter((m) => m.enabled).length;
-    $('aHeadline').textContent = `授權名單共 ${members.length} 位使用者（${activeCount} 位啟用中），全面落實最小權限治理`;
-    $('aTbody').innerHTML = members.map((m) => {
-      const self = m.email.toLowerCase() === me;
-      const locked = self || (!isOwner && m.role === 'owner');
-      const roleOpts = ['owner', 'admin', 'member', 'viewer']
-        .filter((r) => isOwner || r === m.role || (r !== 'owner' && r !== 'admin'))
-        .map((r) => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${ROLE_META[r].label}</option>`)
-        .join('');
-      return `<tr data-email="${esc(m.email)}">
-        <td><strong>${esc(m.email)}</strong>${self ? ' <small style="color:var(--acme-blue-dark)">（目前登入）</small>' : ''}${m.display_name ? `<br><small style="color:var(--mute)">${esc(m.display_name)}</small>` : ''}</td>
-        <td class="nw"><select class="perm-select" data-f="role" ${locked ? 'disabled' : ''}>${roleOpts}</select></td>
-        <td class="nw"><input type="checkbox" class="perm-chk" data-f="enabled" ${m.enabled ? 'checked' : ''} ${locked ? 'disabled' : ''}></td>
-        <td class="nw"><input type="checkbox" class="perm-chk" data-f="can_view_commercial" ${m.can_view_commercial ? 'checked' : ''} ${locked || m.role === 'viewer' ? 'disabled' : ''}></td>
-        <td class="nw"><input type="checkbox" class="perm-chk" data-f="can_export" ${m.can_export ? 'checked' : ''} ${locked || m.role === 'viewer' ? 'disabled' : ''}></td>
-        <td class="nw">${m.account ? (m.confirmed ? tag('normal', '已啟用') : tag('warning', '待驗證')) : tag('incomplete', '未建帳')}</td>
-        <td class="nw">${m.last_sign_in_at ? esc(twTime(m.last_sign_in_at)) : '—'}</td>
-        <td class="nw">${m.wx_role ? esc({ admin: '管理者', viewer: '唯讀', engineer: '工程師' }[m.wx_role] || m.wx_role) : '—'}</td>
-        <td class="nw">
-          ${locked ? '' : `<button class="btn btn-ghost btn-sm" data-save="${esc(m.email)}" type="button">儲存</button> `}
-          ${m.account && (!(!isOwner && m.role === 'owner')) ? `<button class="link" data-pw="${esc(m.email)}" type="button">重設密碼</button>` : ''}
-          ${m.role === 'owner' || self || (!isOwner && m.role === 'admin') ? '' : ` <button class="link" style="color:var(--t-danger)" data-rm="${esc(m.email)}" type="button">移除</button>`}
-        </td>
-      </tr>`;
-    }).join('');
-  } catch (e) {
-    aMsg('讀取成員權限清單失敗：' + e.message);
-  }
-}
-
-async function aLoadKeysAndConfig() {
-  try {
-    const { keys, config } = await apiCall({ action: 'list_keys' }, true);
-    $('cfgRequireKey').checked = !!config.require_access_key;
-    $('cfgDriveUrl').value = config.drive_folder_url || '';
-    $('cfgNotice').value = config.portal_notice || '';
-
-    const now = Date.now();
-    $('kKeysTbody').innerHTML = keys.map((k) => {
-      const expired = k.expires_at && new Date(k.expires_at).getTime() < now;
-      const statusBadge = !k.enabled ? tag('incomplete', '已停用') : expired ? tag('danger', '已過期') : tag('normal', '有效啟用');
-      return `<tr>
-        <td><strong>${esc(k.label)}</strong></td>
-        <td class="nw"><span class="mono-code">${esc(k.key_hint)}</span></td>
-        <td class="nw">${statusBadge}</td>
-        <td class="num">${esc(k.usage_count || 0)}</td>
-        <td class="nw">${k.last_used_at ? esc(twTime(k.last_used_at)) : '尚未驗證'}</td>
-        <td class="nw">${k.expires_at ? esc(k.expires_at.slice(0, 10)) : '永久有效'}</td>
-        <td class="nw">${esc(k.created_by)}</td>
-        <td class="nw">
-          <button class="btn btn-ghost btn-sm" data-toggle-key="${esc(k.id)}" data-next="${k.enabled ? '0' : '1'}" type="button">${k.enabled ? '停用' : '啟用'}</button>
-          ${k.enabled ? '' : ` <button class="link" style="color:var(--t-danger);margin-left:8px" data-del-key="${esc(k.id)}" type="button">刪除</button>`}
-        </td>
-      </tr>`;
-    }).join('') || '<tr><td colspan="8" class="empty">尚未建立任何存取金鑰</td></tr>';
-  } catch (e) {
-    aMsg('讀取存取金鑰與系統設定失敗：' + e.message);
-  }
-}
-
-async function aLoadAudit() {
-  try {
-    const { logs } = await apiCall({ action: 'list_audit_logs' }, true);
-    $('auditTbody').innerHTML = logs.map((l) => {
-      const detailStr = l.detail && Object.keys(l.detail).length ? JSON.stringify(l.detail) : '—';
-      const tone = l.action === 'gate_failed' ? 'danger' : l.action.includes('removed') || l.action.includes('disabled') ? 'warning' : 'normal';
-      return `<tr>
-        <td class="nw">${esc(twFull(l.created_at))}</td>
-        <td class="nw">${esc(l.actor_email || '未登入訪客（門禁層）')}</td>
-        <td class="nw">${tag(tone, AUDIT_LABELS[l.action] || l.action)}</td>
-        <td class="nw">${esc(l.target || '—')}</td>
-        <td style="font-size:12px;color:var(--mute);word-break:break-all">${esc(detailStr)}</td>
-      </tr>`;
-    }).join('') || '<tr><td colspan="5" class="empty">目前尚無稽核紀錄</td></tr>';
-  } catch (e) {
-    aMsg('讀取稽核日誌失敗：' + e.message);
-  }
+  apiCall({ action: 'log_export', target: name, rows: list.length }).catch(() => {});
 }
 
 // ── Event Bindings ──
@@ -1746,77 +1529,82 @@ $('gateForm').onsubmit = async (e) => {
   e.preventDefault();
   $('gateErr').textContent = '';
   $('gateBtn').disabled = true;
-  $('gateBtn').textContent = '後端加密驗證中…';
+  $('gateBtn').textContent = '金鑰驗證與解鎖中…';
   try {
-    const res = await apiCall({ action: 'verify_key', access_key: $('gateKeyInput').value.trim() }, false);
-    if (res.gate_token) setGateToken(res.gate_token);
-    gateState = { required: !!res.required, valid: true, label: res.key_label || null };
+    const res = await apiCall({ action: 'unlock', access_key: $('gateKeyInput').value.trim() });
     $('gateKeyInput').value = '';
-    const { data } = await sb.auth.getSession();
-    if (data?.session) await showApp();
-    else renderAuthStep('login');
+    await enterPortalWithResponse(res);
   } catch (err) {
     $('gateErr').textContent = err.message || '存取金鑰驗證失敗';
   } finally {
     $('gateBtn').disabled = false;
-    $('gateBtn').textContent = '驗證存取金鑰並繼續';
+    $('gateBtn').textContent = '驗證金鑰並解鎖系統';
   }
-};
-
-$('resetGateBtn').onclick = () => {
-  setGateToken('');
-  gateState.valid = false;
-  $('gateErr').textContent = '';
-  renderAuthStep('gate');
-};
-
-$('loginForm').onsubmit = async (e) => {
-  e.preventDefault();
-  $('loginErr').textContent = '';
-  $('loginBtn').disabled = true;
-  const u = $('user').value.trim();
-  const { error } = await sb.auth.signInWithPassword({
-    email: u.includes('@') ? u : u + LOGIN_DOMAIN,
-    password: $('pass').value,
-  });
-  $('loginBtn').disabled = false;
-  $('pass').value = '';
-  if (error) {
-    $('loginErr').textContent = '帳號或密碼不正確，請重新確認。';
-    return;
-  }
-  await showApp();
 };
 
 $('logout').onclick = async () => {
-  $('tabAccounts').hidden = true;
-  $('aTbody').textContent = '';
-  currentUser = null;
+  setGateToken('');
   all = [];
   await sb.auth.signOut();
-  renderAuthStep(gateState.required && !gateState.valid ? 'gate' : 'login');
+  showGateScreen();
 };
 
-// Self-service password modal
-$('openPwModal').onclick = () => { $('pwModalErr').textContent = ''; $('newPw1').value = ''; $('newPw2').value = ''; $('pwModal').hidden = false; $('newPw1').focus(); };
-const closePwModal = () => { $('pwModal').hidden = true; };
-$('pwModalCancel').onclick = closePwModal;
-$('pwScrim').onclick = closePwModal;
-$('pwModalForm').onsubmit = async (e) => {
+// 60-Day Key Rotation Modal
+const openRotateModal = () => {
+  $('rotateModalErr').textContent = '';
+  $('rotateModalErr').className = 'err';
+  $('curKeyInput').value = '';
+  $('newKeyInput1').value = '';
+  $('newKeyInput2').value = '';
+  $('rotateModal').hidden = false;
+  $('curKeyInput').focus();
+};
+const closeRotateModal = () => { $('rotateModal').hidden = true; };
+$('openRotateModal').onclick = openRotateModal;
+$('alertRotateBtn').onclick = openRotateModal;
+$('rotateModalCancel').onclick = closeRotateModal;
+$('rotateScrim').onclick = closeRotateModal;
+
+$('genRandomKeyBtn').onclick = () => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const seg = (n) => {
+    const b = new Uint8Array(n);
+    crypto.getRandomValues(b);
+    return Array.from(b, (x) => chars[x % chars.length]).join('');
+  };
+  const generated = `ACME-${seg(4)}-${seg(4)}`;
+  $('newKeyInput1').value = generated;
+  $('newKeyInput2').value = generated;
+};
+
+$('rotateModalForm').onsubmit = async (e) => {
   e.preventDefault();
-  const p1 = $('newPw1').value, p2 = $('newPw2').value;
-  if (p1 !== p2) { $('pwModalErr').textContent = '兩次輸入的新密碼不一致。'; return; }
-  $('pwModalSubmit').disabled = true;
+  const cur = $('curKeyInput').value.trim();
+  const n1 = $('newKeyInput1').value.trim();
+  const n2 = $('newKeyInput2').value.trim();
+  if (n1 !== n2) {
+    $('rotateModalErr').className = 'err';
+    $('rotateModalErr').textContent = '兩次輸入的新存取金鑰不一致，請重新確認。';
+    return;
+  }
+  $('rotateModalSubmit').disabled = true;
   try {
-    await apiCall({ action: 'change_own_password', new_password: p1 }, true);
-    $('pwModalErr').className = 'err ok';
-    $('pwModalErr').textContent = '密碼已成功更新！';
-    setTimeout(() => { $('pwModalErr').className = 'err'; closePwModal(); }, 1100);
+    const res = await apiCall({
+      action: 'rotate_key',
+      current_key: cur,
+      new_key: n1,
+    });
+    if (res.gate_token) setGateToken(res.gate_token);
+    if (res.rotation) renderRotationStatus(res.rotation);
+    $('rotateModalErr').className = 'err ok';
+    $('rotateModalErr').textContent = `✓ 金鑰已更新為 ${n1}！60 天定期變更計時已重設為 60 天。`;
+    try { await navigator.clipboard.writeText(n1); } catch {}
+    setTimeout(() => { closeRotateModal(); }, 1800);
   } catch (err) {
-    $('pwModalErr').className = 'err';
-    $('pwModalErr').textContent = err.message;
+    $('rotateModalErr').className = 'err';
+    $('rotateModalErr').textContent = err.message || '變更金鑰失敗';
   } finally {
-    $('pwModalSubmit').disabled = false;
+    $('rotateModalSubmit').disabled = false;
   }
 };
 
@@ -1826,13 +1614,6 @@ $('tabContracts').onclick = () => switchTab('contracts');
 $('tabExpiry').onclick = () => switchTab('expiry');
 $('tabCustomers').onclick = () => switchTab('customers');
 $('tabMap').onclick = () => switchTab('map');
-$('tabAccounts').onclick = () => { switchTab('accounts'); switchAdminSub('Members'); };
-
-$('subMembers').onclick = () => switchAdminSub('Members');
-$('subKeys').onclick = () => switchAdminSub('Keys');
-$('subConfig').onclick = () => switchAdminSub('Config');
-$('subAudit').onclick = () => switchAdminSub('Audit');
-$('refreshAuditBtn').onclick = () => aLoadAudit();
 
 $('q').oninput = () => { pageNo = 0; apply(); };
 $('thead').onclick = (e) => { const k = e.target.closest('th')?.dataset.k; if (!k) return; if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = 1; } apply(); };
@@ -1874,7 +1655,13 @@ $('mList').onclick = (e) => {
   const b = e.target.closest('button');
   if (!b) return;
   const m = markers[b.dataset.no];
-  if (m) cluster.zoomToShowLayer(m, () => m.openPopup());
+  if (!m) return;
+  if (useClustering && map.hasLayer(cluster)) {
+    cluster.zoomToShowLayer(m, () => m.openPopup());
+  } else {
+    map.setView(m.getLatLng(), Math.max(map.getZoom(), 14));
+    m.openPopup();
+  }
 };
 $('dBody').onclick = (e) => {
   const b = e.target.closest('.jump');
@@ -1888,183 +1675,9 @@ $('scrim').onclick = closeD;
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (!$('drawerWrap').hidden) closeD();
-    if (!$('pwModal').hidden) closePwModal();
+    if (!$('rotateModal').hidden) closeRotateModal();
   }
 });
-
-// Admin Forms & Table Events
-$('aRole').onchange = () => {
-  const isViewer = $('aRole').value === 'viewer';
-  $('aCommercial').checked = !isViewer;
-  $('aCommercial').disabled = isViewer;
-  $('aExport').checked = !isViewer;
-  $('aExport').disabled = isViewer;
-};
-
-$('aForm').onsubmit = async (e) => {
-  e.preventDefault();
-  $('aAdd').disabled = true;
-  aMsg('處理授權中…', true);
-  try {
-    const r = await apiCall({
-      action: 'add',
-      email: $('aEmail').value,
-      display_name: $('aName').value,
-      role: $('aRole').value,
-      password: $('aPass').value,
-      can_view_commercial: $('aCommercial').checked,
-      can_export: $('aExport').checked,
-      wx_viewer: $('aWx').checked,
-    }, true);
-    aMsg(r.created ? '已建立登入帳號並寫入授權權限。' : r.password_ignored ? '此信箱原已有帳號，已更新權限設定（密碼維持不變）。' : '已加入授權名單並設定權限。', true);
-    $('aEmail').value = '';
-    $('aName').value = '';
-  } catch (err) {
-    aMsg(err.message);
-  } finally {
-    $('aPass').value = '';
-    $('aAdd').disabled = false;
-    aLoadMembers();
-  }
-};
-
-$('aTbody').onchange = (e) => {
-  if (e.target.dataset.f === 'role') {
-    const tr = e.target.closest('tr');
-    const isViewer = e.target.value === 'viewer';
-    const c1 = tr.querySelector('[data-f="can_view_commercial"]');
-    const c2 = tr.querySelector('[data-f="can_export"]');
-    if (isViewer) { c1.checked = false; c2.checked = false; }
-    c1.disabled = isViewer;
-    c2.disabled = isViewer;
-  }
-};
-
-$('aTbody').onclick = async (e) => {
-  const sv = e.target.closest('[data-save]');
-  const pw = e.target.closest('[data-pw]');
-  const rm = e.target.closest('[data-rm]');
-  try {
-    if (sv) {
-      const tr = sv.closest('tr');
-      sv.disabled = true;
-      await apiCall({
-        action: 'update_member',
-        email: sv.dataset.save,
-        role: tr.querySelector('[data-f="role"]').value,
-        enabled: tr.querySelector('[data-f="enabled"]').checked,
-        can_view_commercial: tr.querySelector('[data-f="can_view_commercial"]').checked,
-        can_export: tr.querySelector('[data-f="can_export"]').checked,
-      }, true);
-      aMsg(`已更新 ${sv.dataset.save} 的角色與存取權限。`, true);
-      aLoadMembers();
-    }
-    if (pw) {
-      const v = prompt('輸入 ' + pw.dataset.pw + ' 的新密碼（至少 8 個字元）');
-      if (!v) return;
-      await apiCall({ action: 'password', email: pw.dataset.pw, password: v }, true);
-      aMsg(`已重設 ${pw.dataset.pw} 的登入密碼。`, true);
-    }
-    if (rm) {
-      if (!confirm('確定從案場資料庫授權名單移除 ' + rm.dataset.rm + '？（登入帳號保留，風雨戰情站權限將同步停用）')) return;
-      await apiCall({ action: 'remove', email: rm.dataset.rm, wx_also: true }, true);
-      aMsg(`已移除 ${rm.dataset.rm} 的授權。`, true);
-      aLoadMembers();
-    }
-  } catch (err) {
-    aMsg(err.message);
-    if (sv) sv.disabled = false;
-  }
-};
-
-$('keyForm').onsubmit = async (e) => {
-  e.preventDefault();
-  $('kCreateBtn').disabled = true;
-  aMsg('產生加密存取金鑰中…', true);
-  try {
-    const expVal = $('kExpires').value ? new Date($('kExpires').value + 'T23:59:59+08:00').toISOString() : null;
-    const r = await apiCall({
-      action: 'create_key',
-      label: $('kLabel').value,
-      custom_key: $('kCustom').value,
-      expires_at: expVal,
-    }, true);
-    $('keyRevealCode').textContent = r.plain_key;
-    $('keyRevealBox').hidden = false;
-    $('kLabel').value = '';
-    $('kCustom').value = '';
-    $('kExpires').value = '';
-    aMsg('新存取金鑰已建立！請立即複製上方明碼交付授權人員。', true);
-    aLoadKeysAndConfig();
-  } catch (err) {
-    aMsg(err.message);
-  } finally {
-    $('kCreateBtn').disabled = false;
-  }
-};
-
-$('copyNewKeyBtn').onclick = async () => {
-  try {
-    await navigator.clipboard.writeText($('keyRevealCode').textContent);
-    $('copyNewKeyBtn').textContent = '已複製！';
-    setTimeout(() => $('copyNewKeyBtn').textContent = '複製金鑰', 1800);
-  } catch {}
-};
-$('dismissKeyReveal').onclick = () => { $('keyRevealBox').hidden = true; $('keyRevealCode').textContent = '—'; };
-
-$('kKeysTbody').onclick = async (e) => {
-  const tg = e.target.closest('[data-toggle-key]');
-  const dlBtn = e.target.closest('[data-del-key]');
-  try {
-    if (tg) {
-      const next = tg.dataset.next === '1';
-      await apiCall({ action: 'toggle_key', id: tg.dataset.toggleKey, enabled: next }, true);
-      aMsg(next ? '已重新啟用此存取金鑰。' : '已停用此存取金鑰（原憑證即時失效）。', true);
-      aLoadKeysAndConfig();
-    }
-    if (dlBtn) {
-      if (!confirm('確定永久刪除此已停用的存取金鑰紀錄？')) return;
-      await apiCall({ action: 'delete_key', id: dlBtn.dataset.delKey }, true);
-      aMsg('已刪除存取金鑰。', true);
-      aLoadKeysAndConfig();
-    }
-  } catch (err) {
-    aMsg(err.message);
-  }
-};
-
-$('cfgForm').onsubmit = async (e) => {
-  e.preventDefault();
-  $('cfgSaveBtn').disabled = true;
-  try {
-    await apiCall({
-      action: 'update_config',
-      require_access_key: $('cfgRequireKey').checked,
-      drive_folder_url: $('cfgDriveUrl').value,
-      portal_notice: $('cfgNotice').value,
-    }, true);
-    aMsg('系統安全設定與機密連結已儲存生效。', true);
-    const refreshed = await apiCall({ action: 'me' }, true);
-    portalConfig = refreshed.config || {};
-    gateState.required = !!refreshed.require_access_key;
-    applyRoleUI();
-  } catch (err) {
-    aMsg(err.message);
-  } finally {
-    $('cfgSaveBtn').disabled = false;
-  }
-};
-
-$('rotateSecretBtn').onclick = async () => {
-  if (!confirm('確定輪替門禁簽章密鑰？所有已驗證之裝置（包含目前裝置）將於下次重新整理時被要求重新輸入存取金鑰。')) return;
-  try {
-    await apiCall({ action: 'update_config', rotate_gate_secret: true }, true);
-    setGateToken('');
-    aMsg('已完成全域簽章輪替！所有裝置重新整理後皆須重新驗證存取金鑰。', true);
-  } catch (err) {
-    aMsg(err.message);
-  }
-};
 
 bootstrap();
 </script>
