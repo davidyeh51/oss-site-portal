@@ -3,758 +3,2070 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>案場資料庫</title>
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>ACMEPOINT 進金生能源｜維運資產與合約決策平台</title>
+<link rel="icon" type="image/png" href="./assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <style>
-:root{--navy:#0c2b15;--blue:#197a56;--cyan:#96f878;--ink:#212427;--mute:#696969;--rule:#d4d4d4;--soft:#f2f2f2;--warm:#f1eeea;--white:#fff;
---serif:"Palatino Linotype",Palatino,"Noto Serif TC",Georgia,serif;--sans:"Helvetica Neue",Helvetica,Arial,"Noto Sans TC",sans-serif}
-*{box-sizing:border-box}
-body{margin:0;background:var(--white);color:var(--ink);font:15px/1.6 var(--sans)}
+:root{
+  /* McKinsey Executive Navy × ACMEPOINT Corporate Identity */
+  --navy:#051C2C;
+  --navy-2:#102A43;
+  --acme-deep:#1D3B60;
+  --acme-blue:#548ABF;
+  --acme-blue-dark:#36699C;
+  --acme-sky:#EBF3FA;
+  --acme-lime:#A1CE39;
+  --acme-lime-dark:#7DA622;
+  --acme-emerald:#0C7A43;
+  --ink:#1A202C;
+  --ink-2:#3F4B5B;
+  --mute:#64748B;
+  --rule:#D4DCE6;
+  --rule-light:#E8EDF3;
+  --canvas:#FFFFFF;
+  --surface:#F6F8FB;
+  --surface-alt:#F0F4F8;
+  /* Risk & Semantic Tokens */
+  --t-danger:#B42318;
+  --t-warning:#C26B0A;
+  --t-possible:#9F8300;
+  --t-normal:#0C7A43;
+  --t-incomplete:#6B7280;
+  --t-plain:#051C2C;
+  /* Typography */
+  --serif:Georgia,"Noto Serif TC","Times New Roman",serif;
+  --sans:"Inter","Noto Sans TC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font:14.5px/1.62 var(--sans);-webkit-font-smoothing:antialiased}
 [hidden]{display:none!important}
-button,input,select{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-/* 登入 */
-.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
-.login-side{background:var(--navy);color:#fff;padding:64px;display:flex;flex-direction:column;justify-content:flex-end}
-.login-side h1{font:500 44px/1.2 var(--serif);margin:0 0 16px}
-.login-side p{color:#b8c4ce;margin:0;max-width:30em}
-.login-form{display:flex;align-items:center;justify-content:center;padding:32px 16px}
-.login-form form{width:100%;max-width:340px}
-.login-form h2{font:500 26px var(--serif);color:var(--navy);margin:0 0 28px}
-label{display:block;font-size:13px;color:var(--mute);margin-bottom:18px}
-label input{display:block;width:100%;margin-top:4px;padding:9px 0;border:0;border-bottom:1px solid var(--navy);background:none;font-size:16px;color:var(--ink)}
-.btn{background:var(--navy);color:#fff;border:0;padding:11px 22px;cursor:pointer;font-weight:500}
-.btn:hover{background:var(--blue)}
-.login-form .btn{width:100%;margin-top:8px}
-.err{color:#b42318;font-size:13px;min-height:20px;margin:10px 0 0}
-/* 版面 */
-.top{background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 40px}
-.top b{font:500 18px var(--serif)}
-.top nav{display:flex;gap:24px;margin:0 auto 0 40px}
-.tab{background:none;border:0;border-bottom:2px solid transparent;color:#b8c4ce;padding:4px 0;cursor:pointer}
-.tab[aria-current=page]{color:#fff;border-bottom-color:var(--cyan)}
-.jump{background:none;border:0;padding:0;color:var(--blue);cursor:pointer;text-decoration:underline;text-align:left;font-size:13px}
-.filters.c{grid-template-columns:2fr repeat(3,1fr)}
-.filters.k{grid-template-columns:2fr 1fr}
-.mapwrap{display:grid;grid-template-columns:1fr 320px;gap:20px;height:calc(100vh - 300px);min-height:460px}
-#map{height:100%;border:1px solid var(--rule);z-index:0}
-.mlist{overflow:auto;border-top:1px solid var(--navy);margin:0;padding:0;list-style:none}
-.mlist li{border-bottom:1px solid var(--rule)}
-.mlist button{display:block;width:100%;background:none;border:0;text-align:left;padding:8px 4px;cursor:pointer;font-size:13px}
-.mlist button:hover{background:var(--soft)}
-.mlist small{display:block;color:var(--mute)}
-.pop b{display:block;color:var(--navy);font-size:14px}.pop span{display:block;color:var(--mute);margin-bottom:6px}
-.pop .jump{display:block;margin-top:4px}
-.pop a{font-size:13px}
-.scrim{z-index:2000}.drawer{z-index:2001}
-.riskbox{background:var(--warm);border-radius:20px;padding:18px 22px;margin-bottom:18px}
-.riskbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
-.seg{display:inline-flex;background:#fff;border-radius:999px;padding:3px}
-.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;color:var(--ink)}
-.seg button[aria-pressed=true]{background:var(--navy);color:#fff}
-.riskmeta{font-size:12px;color:var(--mute)}.riskact{margin-left:auto;display:flex;gap:12px}
-.risknote{background:#fff4d6;border-radius:10px;padding:8px 12px;font-size:13px;margin:0 0 10px}.risknote.drill{background:var(--cyan);color:var(--navy);font-weight:500}
-.riskgrid{display:grid;grid-template-columns:1.1fr 1.2fr .9fr;gap:22px}
-.rh{font-size:12px;font-weight:500;color:var(--mute);margin:0 0 6px}
-.storm{background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:8px}.storm b{font:400 20px var(--serif);color:var(--navy)}.storm small{color:var(--mute)}
-.storm dl{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:8px 0 4px;font-size:13px}.storm dt{font-size:11px;color:var(--mute)}.storm dd{margin:0}
-.lv{display:grid;grid-template-columns:128px 1fr 104px;gap:8px;align-items:center;font-size:12px;padding:3px 0}
-.lvbar{height:8px;background:#e2ddd5;border-radius:4px;overflow:hidden}.lvbar i{display:block;height:100%}
-.lvval{text-align:right;color:var(--mute);white-space:nowrap}
-.engrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:5px 0;border-bottom:1px solid var(--rule)}.engrow small{display:block;color:var(--mute);font-size:11px}
-.warnbox{margin-top:12px;font-size:13px}.warnbox details{background:#fff;border-radius:10px;padding:6px 12px;margin-top:6px}.warnbox details.ty{outline:2px solid var(--t-danger)}.warnbox p{white-space:pre-line;color:var(--mute);margin:6px 0}
-.warnhead{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.warnhead a{margin-left:auto;color:var(--blue)}
-:root{--t-danger:#c0392b;--t-warning:#e08a1e;--t-possible:#c2ab1f;--t-normal:#197a56;--t-incomplete:#9aa0a6;--t-plain:#0c2b15}
-.t-danger{background:var(--t-danger)}.t-warning{background:var(--t-warning)}.t-possible{background:var(--t-possible)}.t-normal{background:var(--t-normal)}.t-incomplete{background:var(--t-incomplete)}.t-plain{background:var(--t-plain)}
-.dotk{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.tag{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;color:#fff}
-.smk{display:block;width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
-.ccl{display:grid;place-items:center;border-radius:50%;color:#fff;font-size:12px;font-weight:700;border:3px solid rgba(255,255,255,.85);box-shadow:0 0 0 1px rgba(0,0,0,.2)}
-.ty-eye{font-size:26px;line-height:30px;display:block;text-align:center}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:10px}
-.riskblk{background:var(--warm);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:13px}.riskblk div{margin-top:4px;color:var(--mute)}
-.mlist .tag{margin-top:3px}
-.etable .etype{color:var(--t-danger)}
-.acform{display:grid;grid-template-columns:2fr 1.3fr auto auto;gap:14px;align-items:end;background:var(--warm);border-radius:20px;padding:16px 20px;margin-bottom:8px}.acform label{margin:0}.acform .chk{display:flex;gap:6px;align-items:center;color:var(--ink);font-size:13px;padding-bottom:12px}.acform .chk input{width:auto;margin:0}.acform .btn{padding:11px 20px}
-@media(max-width:900px){.acform{grid-template-columns:1fr}}.etable th{cursor:default}
-.link{background:none;border:0;color:inherit;cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
-main{max-width:1360px;margin:0 auto;padding:36px 40px 64px}
-.title{font:500 30px/1.3 var(--serif);color:var(--navy);margin:0 0 6px;max-width:32em}
-.sub{color:var(--mute);margin:0 0 28px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--navy);border-bottom:1px solid var(--rule);margin-bottom:32px}
-.kpi{padding:16px 20px 16px 0}
-.kpi+.kpi{border-left:1px solid var(--rule);padding-left:20px}
-.kpi strong{display:block;font:500 32px/1.2 var(--serif);color:var(--navy)}
-.kpi span{font-size:13px;color:var(--mute)}
-.exhibit{font-size:12px;letter-spacing:.08em;color:var(--blue);font-weight:700;margin:0}
-h2.ex{font:500 19px var(--serif);color:var(--navy);margin:2px 0 14px}
-.filters{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:12px;margin-bottom:14px}
-.filters label{margin:0;font-size:12px}
-.filters input,.filters select{display:block;width:100%;margin-top:2px;padding:7px 4px;border:0;border-bottom:1px solid var(--rule);background:#fff;font-size:14px;min-width:0}
-.bar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);margin-bottom:6px;gap:12px}
-.tw{overflow-x:auto;border-top:1px solid var(--navy)}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th{font-weight:700;color:var(--navy);text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--navy);white-space:nowrap;cursor:pointer;font-size:13px}
-td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
-tbody tr.row{cursor:pointer}
-tbody tr.row:hover{background:var(--soft)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acme-blue);outline-offset:2px}
+a{color:var(--acme-blue-dark);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── Top Brand Accent Strip ── */
+.brand-stripe{height:4px;background:linear-gradient(90deg,var(--navy) 0%,var(--acme-blue) 68%,var(--acme-lime) 100%);width:100%}
+
+/* ── Dual-Layer Access Gate & Sign-In Screen (Zero Public Business Data) ── */
+.gate-shell{min-height:100vh;display:grid;grid-template-columns:1.15fr 1fr;background:var(--canvas)}
+.gate-brand{
+  background:var(--navy);
+  color:#fff;
+  padding:56px 64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  overflow:hidden;
+  border-right:4px solid var(--acme-lime);
+}
+.gate-brand::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(84,138,191,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(84,138,191,.09) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+}
+.gate-brand::after{
+  content:"";
+  position:absolute;
+  right:-120px;bottom:-140px;
+  width:420px;height:420px;
+  background:radial-gradient(circle,rgba(84,138,191,.22) 0%,rgba(161,206,57,.08) 45%,transparent 70%);
+  pointer-events:none;
+}
+.gate-top,.gate-mid,.gate-bot{position:relative;z-index:1}
+.gate-logo-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.14)}
+.gate-logo-row img{height:42px;width:auto;display:block}
+.ticker-pill{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--acme-lime);border:1px solid rgba(161,206,57,.45);padding:4px 10px;font-weight:600}
+.gate-kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--acme-lime);font-weight:600;margin:0 0 14px}
+.gate-mid h1{font:600 40px/1.22 var(--serif);margin:0 0 18px;letter-spacing:-.01em;color:#fff}
+.gate-lead{color:#C5D3E0;font-size:15px;line-height:1.72;max-width:34em;margin:0 0 28px}
+.pillars{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.pillar{font-size:12px;color:#E2ECF5;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);padding:5px 11px;letter-spacing:.03em}
+.pillar strong{color:var(--acme-lime);font-weight:600;margin-right:4px}
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid rgba(255,255,255,.14);padding-top:20px}
+.cred-item small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8BF;margin-bottom:4px}
+.cred-item span{font-size:13px;color:#fff;font-weight:500}
+.gate-bot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;color:#8FA8BF;border-top:1px solid rgba(255,255,255,.14);padding-top:18px}
+.gate-bot a{color:#BFD8F0}
+
+.gate-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 36px;background:var(--surface)}
+.gate-card{width:100%;max-width:420px;background:var(--canvas);border:1px solid var(--rule);border-top:3px solid var(--navy);padding:38px 36px 34px;box-shadow:0 12px 32px rgba(5,28,44,.06)}
+.step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.step-dot{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--rule);background:var(--surface);font-weight:600}
+.step-dot.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.step-dot.done{background:#ECFDF3;color:var(--acme-emerald);border-color:#A6F4C5}
+.gate-card h2{font:600 25px/1.3 var(--serif);color:var(--navy);margin:0 0 8px}
+.gate-desc{font-size:13.5px;color:var(--mute);margin:0 0 24px;line-height:1.6}
+.gate-verified-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F1F8E9;border-left:3px solid var(--acme-emerald);padding:9px 12px;margin-bottom:20px;font-size:12.5px;color:#14532D}
+.gate-verified-bar button{background:none;border:0;color:var(--acme-blue-dark);cursor:pointer;text-decoration:underline;font-size:12px;padding:0;white-space:nowrap}
+
+.field{display:block;margin-bottom:18px}
+.field .lbl{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--navy);margin-bottom:6px;text-transform:uppercase}
+.field input,.field select,.field textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--rule);background:var(--canvas);
+  font-size:14.5px;color:var(--ink);border-radius:2px;transition:border-color .15s,box-shadow .15s
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--acme-blue);box-shadow:0 0 0 3px rgba(84,138,191,.16);outline:none}
+.field input.mono{font-family:var(--mono);letter-spacing:.06em}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--navy);color:#fff;border:1px solid var(--navy);
+  padding:11px 22px;font-size:14px;font-weight:600;letter-spacing:.03em;
+  border-radius:2px;cursor:pointer;transition:background .15s,border-color .15s,color .15s
+}
+.btn:hover:not(:disabled){background:var(--acme-blue-dark);border-color:var(--acme-blue-dark)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-full{width:100%}
+.btn-accent{background:var(--acme-blue);border-color:var(--acme-blue);color:#fff}
+.btn-accent:hover:not(:disabled){background:var(--acme-blue-dark);border-color:var(--acme-blue-dark)}
+.btn-ghost{background:var(--canvas);color:var(--navy);border:1px solid var(--rule)}
+.btn-ghost:hover:not(:disabled){background:var(--surface);border-color:var(--navy)}
+.btn-danger{background:var(--canvas);color:var(--t-danger);border:1px solid #F1C2BE}
+.btn-danger:hover:not(:disabled){background:#FEF3F2;border-color:var(--t-danger)}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+.err{color:var(--t-danger);font-size:13px;min-height:20px;margin:12px 0 0;font-weight:500}
+.err.ok{color:var(--acme-emerald)}
+.sec-note{margin-top:22px;padding-top:16px;border-top:1px solid var(--rule-light);font-size:12px;color:var(--mute);display:flex;align-items:flex-start;gap:8px;line-height:1.55}
+.sec-note b{color:var(--navy)}
+
+/* ── Authenticated Executive Header ── */
+.hdr-wrap{position:sticky;top:0;z-index:1000;background:var(--canvas);border-bottom:1px solid var(--rule);box-shadow:0 2px 10px rgba(5,28,44,.04)}
+.top{max-width:1440px;margin:0 auto;padding:0 36px;min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand-lockup{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.brand-lockup img{height:34px;width:auto;display:block}
+.brand-sep{width:1px;height:28px;background:var(--rule)}
+.brand-titles{line-height:1.2}
+.brand-titles b{display:block;font:600 15.5px var(--serif);color:var(--navy);letter-spacing:.01em}
+.brand-titles small{display:block;font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+.top nav{display:flex;align-items:stretch;gap:2px;margin:0 auto 0 12px;height:66px}
+.tab{
+  position:relative;display:inline-flex;align-items:center;gap:6px;
+  background:none;border:0;border-bottom:3px solid transparent;
+  color:var(--ink-2);padding:0 14px;cursor:pointer;font-size:13.5px;font-weight:500;
+  white-space:nowrap;text-decoration:none;transition:color .15s,border-color .15s,background .15s
+}
+.tab:hover{color:var(--navy);background:var(--surface);text-decoration:none}
+.tab[aria-current=page]{color:var(--navy);font-weight:700;border-bottom-color:var(--acme-blue)}
+.tab[aria-current=page]::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:3px;background:linear-gradient(90deg,var(--navy),var(--acme-blue) 75%,var(--acme-lime))}
+.tab-admin{color:var(--acme-deep)}
+.dl-tab{color:var(--acme-blue-dark);font-weight:600}
+
+.user-bar{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.user-chip{display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--surface);border:1px solid var(--rule);font-size:12.5px}
+.user-chip .u-email{color:var(--navy);font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.role-badge{display:inline-block;padding:2px 7px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:2px}
+.role-owner{background:var(--navy);color:var(--acme-lime)}
+.role-admin{background:var(--acme-blue);color:#fff}
+.role-member{background:var(--acme-sky);color:var(--acme-deep)}
+.role-viewer{background:#F1F5F9;color:#475569;border:1px solid var(--rule)}
+.hdr-link{background:none;border:0;color:var(--ink-2);cursor:pointer;font-size:12.5px;font-weight:500;padding:5px 8px;border-radius:2px}
+.hdr-link:hover{background:var(--surface);color:var(--navy)}
+
+.notice-bar{background:var(--navy);color:#DCE7F2;font-size:12.5px;padding:7px 36px;border-bottom:2px solid var(--acme-lime)}
+.notice-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.notice-tag{color:var(--acme-lime);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-right:10px;font-size:11px}
+
+/* ── Main McKinsey Exhibit Workspace ── */
+main{max-width:1440px;margin:0 auto;padding:34px 36px 56px}
+.exhibit-head{margin-bottom:24px}
+.exhibit{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--acme-blue-dark);font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.exhibit::before{content:"";display:inline-block;width:18px;height:3px;background:var(--acme-lime)}
+.title{font:600 30px/1.28 var(--serif);color:var(--navy);margin:0 0 8px;max-width:36em;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0;font-size:14.5px;max-width:60em}
+
+/* McKinsey Pyramid KPI Strip */
+.kpis{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--canvas);
+  border-top:2.5px solid var(--navy);
+  border-bottom:1px solid var(--rule);
+  margin:0 0 30px;
+}
+.kpi{padding:20px 24px 20px 0;position:relative}
+.kpi+.kpi{border-left:1px solid var(--rule-light);padding-left:24px}
+.kpi strong{display:block;font:600 34px/1.18 var(--serif);color:var(--navy);font-variant-numeric:tabular-nums;margin-bottom:4px}
+.kpi span{display:block;font-size:12.5px;color:var(--mute);font-weight:500}
+.kpi:first-child strong{color:var(--acme-blue-dark)}
+
+h2.ex{font:600 18px/1.35 var(--serif);color:var(--navy);margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+h2.ex small{font:500 12.5px var(--sans);color:var(--mute)}
+
+/* Filter Bar */
+.filters{
+  display:grid;grid-template-columns:2.2fr repeat(5,1fr);gap:14px;
+  background:var(--surface);border:1px solid var(--rule-light);border-left:3px solid var(--acme-blue);
+  padding:14px 18px;margin-bottom:16px
+}
+.filters.c{grid-template-columns:2.2fr repeat(3,1fr)}
+.filters.k{grid-template-columns:2.4fr 1fr}
+.filters label{display:block;margin:0;font-size:11.5px;font-weight:600;color:var(--navy);letter-spacing:.03em;text-transform:uppercase}
+.filters input,.filters select{
+  display:block;width:100%;margin-top:5px;padding:8px 10px;
+  border:1px solid var(--rule);background:var(--canvas);font-size:13.5px;min-width:0;border-radius:2px
+}
+.filters input:focus,.filters select:focus{border-color:var(--acme-blue);outline:none}
+
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);margin-bottom:8px;gap:12px;flex-wrap:wrap}
+.bar-actions{display:flex;align-items:center;gap:14px}
+.link{background:none;border:0;color:var(--acme-blue-dark);cursor:pointer;font-weight:600;font-size:13px;padding:3px 2px;text-decoration:none;border-bottom:1px solid transparent}
+.link:hover{border-bottom-color:var(--acme-blue-dark)}
+.jump{background:none;border:0;padding:0;color:var(--acme-blue-dark);cursor:pointer;text-decoration:underline;text-align:left;font-size:13px;font-weight:500}
+.jump:hover{color:var(--navy)}
+
+/* McKinsey Crisp Tables */
+.tw{overflow-x:auto;border-top:2px solid var(--navy);border-bottom:1px solid var(--rule);background:var(--canvas)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+thead{background:var(--surface)}
+th{
+  font-weight:700;color:var(--navy);text-align:left;
+  padding:11px 14px 11px 10px;border-bottom:1px solid var(--navy);
+  white-space:nowrap;cursor:pointer;font-size:12.5px;letter-spacing:.02em
+}
+td{padding:10px 14px 10px 10px;border-bottom:1px solid var(--rule-light);vertical-align:top;color:var(--ink)}
+tbody tr.row{cursor:pointer;transition:background .1s}
+tbody tr.row:hover{background:var(--acme-sky)}
 .num{text-align:right;font-variant-numeric:tabular-nums}
 .nw{white-space:nowrap}
-.pager{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:14px;font-size:13px}
-.pager button{background:none;border:1px solid var(--rule);padding:4px 12px;cursor:pointer}
-.pager button:disabled{opacity:.4;cursor:default}
-.foot{margin-top:28px;font-size:12px;color:var(--mute);border-top:1px solid var(--rule);padding-top:10px}
-/* 明細 */
-.scrim{position:fixed;inset:0;background:rgba(5,28,44,.45)}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(720px,100%);background:#fff;overflow:auto;padding:32px 36px 48px}
-.drawer h2{font:500 26px/1.3 var(--serif);color:var(--navy);margin:0}
-.drawer h3{font:700 13px var(--sans);color:var(--blue);letter-spacing:.04em;margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--navy)}
-.dl{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
-.dl div{padding:7px 0;border-bottom:1px solid var(--rule);min-width:0;overflow-wrap:anywhere}
-.dl dt{font-size:12px;color:var(--mute)}
-.dl dd{margin:0}
+.etable th{cursor:default}
+.etable .etype{color:var(--t-danger);font-weight:600}
+.masked-val{display:inline-block;font-size:12px;color:var(--mute);background:var(--surface-alt);border:1px dashed var(--rule);padding:2px 8px}
+
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:16px;font-size:13px;color:var(--mute)}
+.pager button{background:var(--canvas);border:1px solid var(--navy);padding:5px 14px;cursor:pointer;color:var(--navy);font-weight:600;font-size:12.5px;border-radius:2px}
+.pager button:hover:not(:disabled){background:var(--navy);color:#fff}
+.pager button:disabled{opacity:.38;cursor:default}
+
+.foot{margin-top:24px;font-size:12px;color:var(--mute);border-top:1px solid var(--rule);padding-top:10px}
+
+/* ── Map & Typhoon Risk Ops ── */
+.riskbox{background:var(--surface);border:1px solid var(--rule);border-top:2.5px solid var(--navy);padding:20px 24px;margin-bottom:20px}
+.riskbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.seg{display:inline-flex;background:var(--canvas);border:1px solid var(--rule);padding:2px;border-radius:2px}
+.seg button{border:0;background:none;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.seg button[aria-pressed=true]{background:var(--navy);color:#fff}
+.riskmeta{font-size:12px;color:var(--mute)}
+.riskact{margin-left:auto;display:flex;gap:14px}
+.risknote{background:#FEF9E7;border-left:3px solid var(--t-warning);padding:9px 14px;font-size:13px;margin:0 0 12px;color:#7D4E00}
+.risknote.drill{background:#EFF8DF;border-left-color:var(--acme-lime-dark);color:var(--navy);font-weight:600}
+.riskgrid{display:grid;grid-template-columns:1.1fr 1.2fr .9fr;gap:24px}
+.rh{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acme-blue-dark);margin:0 0 8px;padding-bottom:4px;border-bottom:1px solid var(--rule)}
+.storm{background:var(--canvas);border:1px solid var(--rule);border-left:3px solid var(--navy);padding:12px 14px;margin-bottom:8px}
+.storm b{font:600 18px var(--serif);color:var(--navy)}
+.storm small{color:var(--mute)}
+.storm dl{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:8px 0 4px;font-size:12.5px}
+.storm dt{font-size:11px;color:var(--mute)}
+.storm dd{margin:0;font-weight:500}
+.lv{display:grid;grid-template-columns:128px 1fr 106px;gap:8px;align-items:center;font-size:12px;padding:4px 0}
+.lvbar{height:8px;background:#DFE5EC;overflow:hidden}
+.lvbar i{display:block;height:100%}
+.lvval{text-align:right;color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums}
+.engrow{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--rule-light)}
+.engrow small{display:block;color:var(--mute);font-size:11px}
+.warnbox{margin-top:14px;font-size:13px}
+.warnbox details{background:var(--canvas);border:1px solid var(--rule);padding:8px 14px;margin-top:6px}
+.warnbox details.ty{border-left:4px solid var(--t-danger)}
+.warnbox p{white-space:pre-line;color:var(--ink-2);margin:8px 0 4px}
+.warnhead{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.warnhead a{margin-left:auto;color:var(--acme-blue-dark);font-weight:600}
+
+.t-danger{background:var(--t-danger)}.t-warning{background:var(--t-warning)}.t-possible{background:var(--t-possible)}.t-normal{background:var(--t-normal)}.t-incomplete{background:var(--t-incomplete)}.t-plain{background:var(--t-plain)}
+.dotk{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.tag{display:inline-block;border-radius:2px;padding:2px 8px;font-size:11.5px;font-weight:600;color:#fff;letter-spacing:.02em}
+.smk{display:block;width:15px;height:15px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(5,28,44,.35)}
+.ccl{display:grid;place-items:center;border-radius:50%;color:#fff;font-size:12px;font-weight:700;border:2.5px solid rgba(255,255,255,.92);box-shadow:0 2px 6px rgba(5,28,44,.28)}
+.ty-eye{font-size:26px;line-height:30px;display:block;text-align:center}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:12px}
+.riskblk{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--acme-blue);padding:12px 14px;margin-top:14px;font-size:13px}
+.riskblk div{margin-top:5px;color:var(--ink-2)}
+
+.mapwrap{display:grid;grid-template-columns:1fr 330px;gap:20px;height:calc(100vh - 300px);min-height:480px}
+#map{height:100%;border:1px solid var(--rule);z-index:0}
+.mlist{overflow:auto;border:1px solid var(--rule);border-top:2px solid var(--navy);margin:0;padding:0;list-style:none;background:var(--canvas)}
+.mlist li{border-bottom:1px solid var(--rule-light)}
+.mlist button{display:block;width:100%;background:none;border:0;text-align:left;padding:10px 12px;cursor:pointer;font-size:13px}
+.mlist button:hover{background:var(--acme-sky)}
+.mlist small{display:block;color:var(--mute);margin-top:2px}
+.mlist .tag{margin-top:4px}
+.pop b{display:block;color:var(--navy);font-size:14px;font-family:var(--serif)}
+.pop span{display:block;color:var(--mute);margin-bottom:6px;font-size:12.5px}
+.pop .jump{display:block;margin-top:4px}
+.pop a{font-size:12.5px;color:var(--acme-blue-dark)}
+
+/* ── Admin Backstage Console (Governance, RBAC, Access Keys, Audit) ── */
+.subtabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:24px;overflow-x:auto}
+.subtab{
+  background:none;border:0;border-bottom:2.5px solid transparent;
+  padding:10px 20px;font-size:13.5px;font-weight:600;color:var(--mute);cursor:pointer;white-space:nowrap
+}
+.subtab:hover{color:var(--navy);background:var(--surface)}
+.subtab[aria-selected=true]{color:var(--navy);border-bottom-color:var(--navy);background:var(--surface)}
+.admin-card{background:var(--surface);border:1px solid var(--rule);border-top:2.5px solid var(--navy);padding:20px 24px;margin-bottom:22px}
+.admin-card h3{font:600 16px var(--serif);color:var(--navy);margin:0 0 6px}
+.admin-card p.hint{font-size:13px;color:var(--mute);margin:0 0 16px}
+.acform-grid{display:grid;grid-template-columns:1.6fr 1.1fr 1fr 1.1fr;gap:14px;align-items:end}
+.acform-opts{display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule-light)}
+.chk-inline{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);cursor:pointer}
+.chk-inline input{width:15px;height:15px;accent-color:var(--navy);margin:0}
+.key-reveal{
+  background:#051C2C;color:#fff;padding:18px 22px;margin:0 0 20px;
+  border-left:4px solid var(--acme-lime);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap
+}
+.key-reveal code{font:700 18px var(--mono);color:var(--acme-lime);letter-spacing:.08em;display:block;margin-top:4px}
+.key-reveal small{color:#B8CBE0;display:block;font-size:12px}
+.keyform-grid{display:grid;grid-template-columns:1.6fr 1.4fr 1fr auto;gap:14px;align-items:end}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.perm-select{padding:4px 8px;border:1px solid var(--rule);background:var(--canvas);font-size:12.5px;border-radius:2px}
+.perm-chk{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
+.mono-code{font-family:var(--mono);font-size:12.5px;background:var(--surface-alt);padding:2px 7px;border:1px solid var(--rule-light);color:var(--navy)}
+
+/* ── Detail Drawer & Modal ── */
+.scrim{position:fixed;inset:0;background:rgba(5,28,44,.52);z-index:2000;backdrop-filter:blur(1px)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(760px,100%);background:var(--canvas);overflow:auto;padding:30px 36px 48px;z-index:2001;border-left:4px solid var(--navy);box-shadow:-12px 0 36px rgba(5,28,44,.18)}
+.drawer h2{font:600 26px/1.3 var(--serif);color:var(--navy);margin:6px 0 4px}
+.drawer h3{font:700 12px var(--sans);color:var(--acme-blue-dark);letter-spacing:.08em;text-transform:uppercase;margin:26px 0 10px;padding-bottom:6px;border-bottom:1.5px solid var(--navy)}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+.dl div{padding:8px 0;border-bottom:1px solid var(--rule-light);min-width:0;overflow-wrap:anywhere}
+.dl dt{font-size:11.5px;color:var(--mute);font-weight:600;margin-bottom:2px}
+.dl dd{margin:0;color:var(--ink)}
 .dl .full{grid-column:1/-1}
 .drawer table{font-size:13px}
 .empty{color:var(--mute);font-size:13px;margin:0}
-/* 視覺語言：深綠＋亮綠點綴、細體襯線標題、圓角卡片、膠囊按鈕 */
-.login-side{border-radius:0 32px 32px 0}
-.login-side h1{font-weight:300;font-size:56px}
-.login-form h2{font-weight:300;font-size:32px}
-label input{border:0;border-radius:10px;background:var(--soft);padding:12px 14px;margin-top:6px}
-.btn{background:var(--cyan);color:var(--navy);border-radius:999px;font-weight:700;padding:13px 28px}
-.btn:hover{background:#7fe563}
-.top{position:sticky;top:12px;z-index:1000;margin:12px 24px 0;background:var(--soft);color:var(--ink);border-radius:18px;padding:10px 24px}
-.top b{font-weight:400;font-size:20px;color:var(--navy)}
-.tab{border:0;border-radius:999px;padding:7px 16px;color:var(--ink);font-size:14px}
-.tab:hover{background:#e3e3e3}
-.tab[aria-current=page]{background:var(--navy);color:#fff}
-.top nav{gap:6px}
-.dl-tab{text-decoration:none;display:inline-flex;align-items:center}
-.title{font-weight:300;font-size:40px;line-height:1.25}
-.sub{font-size:16px}
-.kpis{background:var(--navy);border:0;border-radius:24px;padding:12px 32px;color:#fff}
-.kpi strong{color:var(--cyan);font-weight:300;font-size:40px}
-.kpi span{color:rgba(255,255,255,.75)}
-.kpi+.kpi{border-left-color:rgba(255,255,255,.2)}
-h2.ex{font-weight:300;font-size:26px;margin:0 0 16px}
-.filters{background:var(--warm);border-radius:20px;padding:16px 20px}
-.filters label{color:var(--mute)}
-.filters input,.filters select{border:0;border-radius:10px;padding:9px 10px;margin-top:4px}
-.tw{border-top:0}
-th{border-bottom:1px solid var(--navy);padding:10px 14px 10px 0}
-td{padding:11px 14px 11px 0}
-tbody tr.row:hover{background:var(--warm)}
-.link{color:var(--blue);font-weight:500}
-.top .link{color:var(--ink)}
-.pager button{border:1px solid var(--navy);border-radius:999px;padding:6px 18px;color:var(--navy)}
-.pager button:hover:not(:disabled){background:var(--navy);color:#fff}
-.foot{border-top:0;background:var(--soft);border-radius:12px;padding:12px 16px}
-.drawer{border-radius:28px 0 0 28px}
-.drawer h2{font-weight:300;font-size:32px}
-.drawer h3{color:var(--navy);font-size:14px;letter-spacing:0;border-bottom:1px solid var(--rule)}
-.drawer a,.pop a{color:var(--blue)}
-.scrim{background:rgba(12,43,21,.5)}
-#map{border:0;border-radius:20px}
-.mlist{border-top:0;background:var(--warm);border-radius:20px;padding:6px 12px}
-.mlist li{border-bottom-color:var(--rule)}
-.mlist button:hover{background:#e7e2db}
-.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(150,248,120,.55)}
-.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:var(--navy);color:#fff}
-@media(max-width:900px){
- .login-side{border-radius:0 0 28px 28px}.login-side h1{font-size:36px}
- .top{margin:8px 8px 0;border-radius:16px;padding:10px 14px}
- .top nav{overflow-x:auto;flex-wrap:nowrap}.tab{white-space:nowrap}
- .title{font-size:28px}.kpis{padding:8px 20px}.kpi strong{font-size:30px}
- .drawer{border-radius:0}
- .login{grid-template-columns:1fr}.login-side{padding:32px 16px}.login-side h1{font-size:30px}
- .top{padding:12px 16px;flex-wrap:wrap;gap:8px}.top nav{order:3;margin:0;width:100%}.riskgrid{grid-template-columns:1fr}.riskact{margin-left:0}.lv{grid-template-columns:112px 1fr 92px}.filters.c,.filters.k{grid-template-columns:1fr 1fr}.mapwrap{grid-template-columns:1fr;height:auto}#map{height:60vh}.mlist{max-height:320px}main{padding:24px 16px 48px}.title{font-size:24px}
- .kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(3){border-left:0;padding-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--rule)}
- .filters{grid-template-columns:1fr 1fr}.filters .q{grid-column:1/-1}
- .drawer{padding:24px 16px}.dl{grid-template-columns:1fr}
+
+.modal-wrap{position:fixed;inset:0;z-index:2200;display:grid;place-items:center;padding:20px}
+.modal-card{position:relative;z-index:2201;width:100%;max-width:440px;background:var(--canvas);border:1px solid var(--rule);border-top:3px solid var(--navy);padding:28px 30px;box-shadow:0 20px 50px rgba(5,28,44,.24)}
+.modal-card h3{font:600 20px var(--serif);color:var(--navy);margin:0 0 6px}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+
+/* ── ACMEPOINT Brand Footer ── */
+.site-footer{background:var(--navy);color:#B8C9DA;border-top:3px solid var(--acme-lime);margin-top:40px}
+.footer-inner{max-width:1440px;margin:0 auto;padding:28px 36px;display:grid;grid-template-columns:1.3fr 2fr 1fr;gap:28px;align-items:start;font-size:12.5px}
+.footer-brand img{height:30px;width:auto;display:block;margin-bottom:10px}
+.footer-brand p{margin:0;line-height:1.6;color:#9AB1C7}
+.footer-offices{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.footer-offices div strong{color:#fff;display:block;font-size:12px}
+.footer-offices div span{color:#9AB1C7;font-size:11.5px}
+.footer-meta{text-align:right}
+.footer-meta .conf{display:inline-block;border:1px solid rgba(161,206,57,.5);color:var(--acme-lime);padding:3px 9px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:10px}
+.footer-meta a{color:#D5E6F7;display:block;margin-bottom:4px}
+
+@media(max-width:1060px){
+  .gate-shell{grid-template-columns:1fr}
+  .gate-brand{padding:36px 28px;border-right:0;border-bottom:4px solid var(--acme-lime)}
+  .gate-mid h1{font-size:30px}
+  .top{padding:10px 18px;flex-wrap:wrap;min-height:auto}
+  .top nav{order:3;width:100%;height:auto;margin:6px 0 0;overflow-x:auto;padding-bottom:2px}
+  .tab{padding:9px 12px}
+  main{padding:24px 18px 44px}
+  .title{font-size:24px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi:nth-child(3){border-left:0;padding-left:0}
+  .kpi:nth-child(n+3){border-top:1px solid var(--rule-light)}
+  .filters{grid-template-columns:1fr 1fr}
+  .filters .q{grid-column:1/-1}
+  .filters.c,.filters.k{grid-template-columns:1fr 1fr}
+  .riskgrid,.mapwrap,.acform-grid,.keyform-grid,.cfg-grid,.footer-inner{grid-template-columns:1fr}
+  .footer-meta{text-align:left}
+  .mapwrap{height:auto}
+  #map{height:58vh}
+  .mlist{max-height:320px}
+  .drawer{padding:24px 18px}
+  .dl{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-<section class="login" id="loginView" hidden>
-  <div class="login-side"><h1>案場資料庫</h1><p>維運案場的基本資料、聯絡窗口與電號。僅限授權管理者使用。</p></div>
-  <div class="login-form">
-    <form id="loginForm">
-      <h2>管理者登入</h2>
-      <label>帳號<input id="user" autocomplete="username" required></label>
-      <label>密碼<input id="pass" type="password" autocomplete="current-password" required></label>
-      <button class="btn" id="loginBtn">登入</button>
-      <p class="err" id="loginErr" role="alert"></p>
-    </form>
+<div class="brand-stripe" aria-hidden="true"></div>
+
+<!-- ====================================================================== -->
+<!-- LAYER 1 & 2: CONFIDENTIAL ACCESS GATE + AUTHORIZED SIGN-IN             -->
+<!-- Zero internal business data or Drive URLs exist in public HTML.        -->
+<!-- ====================================================================== -->
+<section class="gate-shell" id="authShell" hidden>
+  <aside class="gate-brand">
+    <div class="gate-top">
+      <div class="gate-logo-row">
+        <img src="./assets/acmepoint-logo-white.png" alt="ACMEPOINT 進金生能源服務">
+        <span class="ticker-pill">TPEx 6692 · 進能服</span>
+      </div>
+    </div>
+    <div class="gate-mid">
+      <p class="gate-kicker">ACMEPOINT EXECUTIVE ASSET INTELLIGENCE</p>
+      <h1>維運資產與合約<br>決策管理平台</h1>
+      <p class="gate-lead">進金生能源服務股份有限公司（ACMEPOINT Energy Services）內部專用決策系統。整合全台太陽光電與儲能案場資產、合約履約預警、客戶圖譜與即時颱風風險戰情，全面落實雙重安全存取控管。</p>
+      <div class="pillars">
+        <span class="pillar"><strong>01</strong>太陽光電 Solar PV</span>
+        <span class="pillar"><strong>02</strong>儲能與微電網 BESS</span>
+        <span class="pillar"><strong>03</strong>電廠維運與服務 O&amp;M</span>
+        <span class="pillar"><strong>04</strong>地熱發電</span>
+        <span class="pillar"><strong>05</strong>碳封存</span>
+      </div>
+      <div class="cred-grid">
+        <div class="cred-item"><small>品質與維運標竿</small><span>德國萊因 TÜV 太陽光電維運 AAA 級認證</span></div>
+        <div class="cred-item"><small>資訊安全分級</small><span>CONFIDENTIAL · 金鑰門禁 ＋ RBAC 權限控管</span></div>
+      </div>
+    </div>
+    <div class="gate-bot">
+      <span>© ACMEPOINT Energy Services Co., Ltd. 進金生能源服務</span>
+      <a href="https://www.acmepointes.com/zh-tw" target="_blank" rel="noopener">acmepointes.com ↗</a>
+    </div>
+  </aside>
+
+  <div class="gate-panel">
+    <div class="gate-card">
+      <div class="step-indicator" id="stepIndicator">
+        <span class="step-dot active" id="step1Badge">STEP 1 · 存取金鑰</span>
+        <span>→</span>
+        <span class="step-dot" id="step2Badge">STEP 2 · 帳號驗證</span>
+      </div>
+
+      <!-- STEP 1: Server-Verified Access Key Gate -->
+      <div id="gateStep" hidden>
+        <h2>系統存取金鑰驗證</h2>
+        <p class="gate-desc">為防止內部案場與合約資訊公開外流，進入系統前須先通過後端加密雜湊驗證之「系統存取金鑰（Access Key）」。</p>
+        <form id="gateForm" autocomplete="off">
+          <label class="field">
+            <span class="lbl">存取金鑰（Access Key）</span>
+            <input id="gateKeyInput" class="mono" type="password" placeholder="請輸入授權通行金鑰（例如 ACME-XXXX-XXXX）" required autocomplete="off">
+          </label>
+          <button class="btn btn-full" id="gateBtn" type="submit">驗證存取金鑰並繼續</button>
+          <p class="err" id="gateErr" role="alert"></p>
+        </form>
+        <div class="sec-note">
+          <span>🔒</span>
+          <span><b>零前端明碼儲存：</b>所有存取金鑰皆以加鹽 SHA-256 儲存於後端資料庫並由伺服器簽發時效憑證，系統擁有者可隨時於後台輪替或即時撤銷。</span>
+        </div>
+      </div>
+
+      <!-- STEP 2: Supabase Auth Authorized Account Sign-In -->
+      <div id="loginStep" hidden>
+        <div class="gate-verified-bar" id="gateVerifiedBar" hidden>
+          <span>✓ 門禁金鑰已通過：<strong id="gateKeyLabel">授權通行</strong></span>
+          <button type="button" id="resetGateBtn">重新輸入金鑰</button>
+        </div>
+        <h2>授權人員登入</h2>
+        <p class="gate-desc">請使用進金生能源核准之帳號與密碼登入。系統將依您的角色權限（擁有者／管理員／成員／唯讀訪客）動態控管資料範圍。</p>
+        <form id="loginForm">
+          <label class="field">
+            <span class="lbl">電子郵件帳號</span>
+            <input id="user" autocomplete="username" placeholder="name@acmepointes.com" required>
+          </label>
+          <label class="field">
+            <span class="lbl">登入密碼</span>
+            <input id="pass" type="password" autocomplete="current-password" placeholder="請輸入密碼" required>
+          </label>
+          <button class="btn btn-full" id="loginBtn" type="submit">安全登入系統</button>
+          <p class="err" id="loginErr" role="alert"></p>
+        </form>
+        <div class="sec-note">
+          <span>🛡️</span>
+          <span><b>最小權限原則：</b>所有業務查詢皆受資料庫行級安全（RLS）強制保護；未列入授權名單或已停用之帳號將自動拒絕存取。</span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- ====================================================================== -->
+<!-- AUTHENTICATED EXECUTIVE WORKSPACE                                      -->
+<!-- ====================================================================== -->
 <div id="appView" hidden>
-  <header class="top"><b>案場資料庫</b>
-    <nav aria-label="功能"><button class="tab" id="tabContracts">合約查詢</button><button class="tab" id="tabExpiry">合約到期</button><button class="tab" id="tabSites" aria-current="page">案場查詢</button><button class="tab" id="tabCustomers">客戶查詢</button><button class="tab" id="tabMap">案場地圖</button><button class="tab" id="tabAccounts" hidden>帳號管理</button><a class="tab dl-tab" href="https://drive.google.com/drive/folders/1E79klqsGGVgJU1J204UhHR1TG4RDuaQM" target="_blank" rel="noopener">資料庫下載</a></nav>
-    <button class="link" id="logout">登出</button></header>
-  <main id="expiryView" hidden>
-    <h1 class="title" id="eHeadline">載入中</h1>
-    <p class="sub" id="eSubline">比照維運系統「合約到期提醒通知」：列出期限內到期的合約與關聯案場。</p>
-    <div class="kpis" id="eKpis"></div>
-    <h2 class="ex">到期清單（點選列可看合約明細）</h2>
+  <div class="hdr-wrap">
+    <header class="top">
+      <div class="brand-lockup">
+        <img src="./assets/acmepoint-logo.png" alt="ACMEPOINT">
+        <span class="brand-sep"></span>
+        <div class="brand-titles">
+          <b>維運資產與合約決策平台</b>
+          <small>ACMEPOINT · OSS Executive Portal</small>
+        </div>
+      </div>
+      <nav aria-label="主要功能">
+        <button class="tab" id="tabContracts">合約總覽</button>
+        <button class="tab" id="tabExpiry">到期預警</button>
+        <button class="tab" id="tabSites">案場資料庫</button>
+        <button class="tab" id="tabCustomers">客戶圖譜</button>
+        <button class="tab" id="tabMap">風雨戰情地圖</button>
+        <button class="tab tab-admin" id="tabAccounts" hidden>後台與權限管理</button>
+        <a class="tab dl-tab" id="driveLink" href="#" target="_blank" rel="noopener" hidden>雲端資料庫 ↗</a>
+      </nav>
+      <div class="user-bar">
+        <div class="user-chip" id="userChip">
+          <span class="role-badge role-member" id="myRoleBadge">MEMBER</span>
+          <span class="u-email" id="myEmailText">—</span>
+        </div>
+        <button class="hdr-link" id="openPwModal" type="button">修改密碼</button>
+        <button class="hdr-link" id="logout" type="button">登出</button>
+      </div>
+    </header>
+  </div>
+  <div class="notice-bar" id="noticeBar" hidden>
+    <div class="notice-inner">
+      <div><span class="notice-tag">CONFIDENTIAL</span><span id="noticeText"></span></div>
+      <div id="gateStatusPill" style="font-size:11.5px;color:#9AB1C7"></div>
+    </div>
+  </div>
+
+  <!-- EXHIBIT 01: 合約總覽 -->
+  <main id="contractsView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 01 · CONTRACT PORTFOLIO</p>
+      <h1 class="title" id="cHeadline">資料載入中…</h1>
+      <p class="sub" id="cSubline"></p>
+    </div>
+    <div class="kpis" id="cKpis"></div>
+    <h2 class="ex">合約清冊<small>點選任一列可展開完整履約條款與附件明細</small></h2>
     <div class="filters c">
-      <label class="q">搜尋<input id="eq" type="search" placeholder="案場編號、案場名稱、合約編號、客戶"></label>
-      <label>期限<select id="eWindow"><option value="7">7 天內到期</option><option value="30" selected>30 天內到期</option><option value="60">60 天內到期</option><option value="90">90 天內到期</option><option value="180">180 天內到期</option><option value="-30">近 30 天已到期</option></select></label>
+      <label class="q">關鍵字檢索<input id="cq" type="search" placeholder="合約編號、客戶名稱、案場、保險編號"></label>
+      <label>合約類型<select id="cType"></select></label>
+      <label>合約狀態<select id="cStatus"></select></label>
+      <label>到期篩選<select id="cExpire"><option value="">全部期間</option><option value="90">90 天內到期</option><option value="180">180 天內到期</option><option value="365">一年內到期</option></select></label>
+    </div>
+    <div class="bar"><span id="cCount"></span><div class="bar-actions"><button class="link" id="cCsv">匯出 CSV 報表</button></div></div>
+    <div class="tw"><table><thead><tr id="cThead"></tr></thead><tbody id="cTbody"></tbody></table></div>
+    <div class="pager"><button id="cPrev">上一頁</button><span id="cPage"></span><button id="cNext">下一頁</button></div>
+    <p class="foot" id="cFoot"></p>
+  </main>
+
+  <!-- EXHIBIT 02: 合約到期預警 -->
+  <main id="expiryView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 02 · RENEWAL &amp; EXPIRY RADAR</p>
+      <h1 class="title" id="eHeadline">資料載入中…</h1>
+      <p class="sub" id="eSubline">比照維運系統「合約到期提醒通知」：集中監控即期與已到期合約，加速續約決策與風險控管。</p>
+    </div>
+    <div class="kpis" id="eKpis"></div>
+    <h2 class="ex">到期風險清單<small>依剩餘天數急迫程度排序，點選列檢視合約明細</small></h2>
+    <div class="filters c">
+      <label class="q">關鍵字檢索<input id="eq" type="search" placeholder="案場編號、案場名稱、合約編號、客戶"></label>
+      <label>預警視窗<select id="eWindow"><option value="7">7 天內到期</option><option value="30" selected>30 天內到期</option><option value="60">60 天內到期</option><option value="90">90 天內到期</option><option value="180">180 天內到期</option><option value="-30">近 30 天已到期</option></select></label>
       <label>合約類型<select id="eType"></select></label>
       <label>合約狀態<select id="eStatus"></select></label>
     </div>
-    <div class="bar"><span id="eCount"></span><span><button class="link" id="eCopy">複製通知內容</button>　<button class="link" id="eCsv">匯出 CSV</button></span></div>
+    <div class="bar"><span id="eCount"></span><div class="bar-actions"><button class="link" id="eCopy">複製通知清單</button><button class="link" id="eCsv">匯出 CSV 報表</button></div></div>
     <div class="tw"><table class="etable"><thead><tr><th>案場編號</th><th>案場名稱</th><th>合約編號</th><th>合約類型</th><th>合約結束日期</th><th class="num">剩餘天數</th><th>客戶</th><th>狀態</th></tr></thead><tbody id="eTbody"></tbody></table></div>
-    <p class="foot" id="eFoot">到期日以維運系統快照為準；快照之後的續約或延期不會反映在這裡。</p>
+    <p class="foot" id="eFoot">資料基準：維運管理系統同步快照；快照之後之續約或展延請以最新簽核文件為準。</p>
   </main>
-  <main id="accountsView" hidden>
-    <h1 class="title" id="aHeadline">帳號管理</h1>
-    <p class="sub">名單內的人才能讀取案場資料庫。登入帳號與風雨戰情站共用；從名單移除不會刪除登入帳號。</p>
-    <form class="acform" id="aForm" autocomplete="off">
-      <label>電子郵件<input id="aEmail" type="email" required placeholder="name@acmepointes.com"></label>
-      <label>初始密碼<input id="aPass" type="password" autocomplete="new-password" minlength="8" placeholder="已有登入帳號可留空"></label>
-      <label class="chk"><input id="aWx" type="checkbox" checked>同時開通風雨戰情站（唯讀）</label>
-      <button class="btn" id="aAdd">新增使用者</button>
-    </form>
-    <p class="err" id="aMsg" role="status"></p>
-    <div class="tw"><table><thead><tr><th>電子郵件</th><th>角色</th><th>登入帳號</th><th>最後登入</th><th>風雨戰情站</th><th>操作</th></tr></thead><tbody id="aTbody"></tbody></table></div>
-    <p class="foot">密碼至少 8 個字元，建議每人不同並請本人首次登入後更換。帳號以完整電子郵件登入。</p>
-  </main>
-  <main id="customersView" hidden>
-    <h1 class="title" id="kHeadline">載入中</h1>
-    <p class="sub" id="kSubline"></p>
-    <div class="kpis" id="kKpis"></div>
-        <h2 class="ex">客戶清單（點選列可看合約與案場）</h2>
-    <div class="filters k">
-      <label class="q">搜尋<input id="kq" type="search" placeholder="客戶編號、名稱、統編、地址、窗口"></label>
-      <label>範圍<select id="kScope"><option value="linked">有合約或案場的客戶</option><option value="">全部客戶</option></select></label>
+
+  <!-- EXHIBIT 03: 案場資料庫 -->
+  <main id="sitesView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 03 · RENEWABLE ASSET REGISTRY</p>
+      <h1 class="title" id="headline">資料載入中…</h1>
+      <p class="sub" id="subline"></p>
     </div>
-    <div class="bar"><span id="kCount"></span><button class="link" id="kCsv">匯出 CSV</button></div>
+    <div class="kpis" id="kpis"></div>
+    <h2 class="ex">案場資產清冊<small>點選任一列可檢視技術規格、電號、聯絡窗口與即時風雨評估</small></h2>
+    <div class="filters">
+      <label class="q">關鍵字檢索<input id="q" type="search" placeholder="案場編號、名稱、客戶、地址、電號"></label>
+      <label>有效合約<select id="fContract"></select></label>
+      <label>案場屬性<select id="fSource"></select></label>
+      <label>案場類型<select id="fType"></select></label>
+      <label>負責工程師<select id="fEng"></select></label>
+      <label>維運分區<select id="fArea"></select></label>
+    </div>
+    <div class="bar"><span id="count"></span><div class="bar-actions"><button class="link" id="csv">匯出 CSV 報表</button></div></div>
+    <div class="tw"><table><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div>
+    <div class="pager"><button id="prev">上一頁</button><span id="page"></span><button id="next">下一頁</button></div>
+    <p class="foot" id="foot"></p>
+  </main>
+
+  <!-- EXHIBIT 04: 客戶圖譜 -->
+  <main id="customersView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 04 · CLIENT &amp; PORTFOLIO MATRIX</p>
+      <h1 class="title" id="kHeadline">資料載入中…</h1>
+      <p class="sub" id="kSubline"></p>
+    </div>
+    <div class="kpis" id="kKpis"></div>
+    <h2 class="ex">客戶資產總覽<small>點選列檢視甲方關聯合約、所屬案場與對接窗口</small></h2>
+    <div class="filters k">
+      <label class="q">關鍵字檢索<input id="kq" type="search" placeholder="客戶編號、名稱、統編、地址、聯絡窗口"></label>
+      <label>涵蓋範圍<select id="kScope"><option value="linked">有合約或案場的客戶</option><option value="">全部客戶</option></select></label>
+    </div>
+    <div class="bar"><span id="kCount"></span><div class="bar-actions"><button class="link" id="kCsv">匯出 CSV 報表</button></div></div>
     <div class="tw"><table><thead><tr id="kThead"></tr></thead><tbody id="kTbody"></tbody></table></div>
     <div class="pager"><button id="kPrev">上一頁</button><span id="kPage"></span><button id="kNext">下一頁</button></div>
     <p class="foot" id="kFoot"></p>
   </main>
+
+  <!-- EXHIBIT 05: 風雨戰情地圖 -->
   <main id="mapView" hidden>
-    <h1 class="title" id="mHeadline">案場地圖</h1>
-    <p class="sub" id="mSubline"></p>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 05 · GEOSPATIAL &amp; TYPHOON RISK OPERATIONS</p>
+      <h1 class="title" id="mHeadline">全台案場地理分佈與氣象風險戰情</h1>
+      <p class="sub" id="mSubline"></p>
+    </div>
     <section class="riskbox" aria-labelledby="mRiskHead">
       <div class="riskbar">
-        <div class="seg" role="group" aria-label="地圖著色"><button id="modeTy" aria-pressed="false">颱風風險</button><button id="modeWx" aria-pressed="true">即時風雨</button><button id="modeNone" aria-pressed="false">不著色</button></div>
-        <span class="riskmeta" id="mRiskMeta">讀取風雨資料中…</span>
-        <span class="riskact"><button class="link" id="mFitTy" hidden>看颱風路徑</button><button class="link" id="mDrill" aria-pressed="false">演練情境</button></span>
+        <div class="seg" role="group" aria-label="地圖著色模式">
+          <button id="modeTy" aria-pressed="false">颱風風險</button>
+          <button id="modeWx" aria-pressed="true">即時風雨</button>
+          <button id="modeNone" aria-pressed="false">標準檢視</button>
+        </div>
+        <span class="riskmeta" id="mRiskMeta">讀取氣象署觀測資料中…</span>
+        <span class="riskact">
+          <button class="link" id="mFitTy" hidden>聚焦颱風路徑</button>
+          <button class="link" id="mDrill" aria-pressed="false">啟動颱風演練</button>
+        </span>
       </div>
       <p class="risknote" id="mRiskNote" hidden role="status"></p>
       <h2 class="ex" id="mRiskHead">讀取颱風資料中…</h2>
       <div class="riskgrid">
         <div id="mStorms"></div>
-        <div><h3 class="rh">案場分級（依目前篩選）</h3><div id="mLevels"></div></div>
-        <div><h3 class="rh">工程師負載</h3><div id="mEngLoad"></div></div>
+        <div><h3 class="rh">案場風險分級（依目前篩選）</h3><div id="mLevels"></div></div>
+        <div><h3 class="rh">工程師維運負載</h3><div id="mEngLoad"></div></div>
       </div>
       <div id="mWarn" class="warnbox"></div>
     </section>
     <div class="filters">
-      <label class="q">搜尋<input id="mq" type="search" placeholder="編號、名稱、客戶、地址"></label>
+      <label class="q">關鍵字檢索<input id="mq" type="search" placeholder="編號、名稱、客戶、地址"></label>
       <label>有效合約<select id="mContract"></select></label>
-      <label>屬性<select id="mSource"></select></label>
-      <label>類型<select id="mType"></select></label>
+      <label>案場屬性<select id="mSource"></select></label>
+      <label>案場類型<select id="mType"></select></label>
       <label>負責工程師<select id="mEng"></select></label>
-      <label>分區<select id="mArea"></select></label>
+      <label>維運分區<select id="mArea"></select></label>
     </div>
     <div class="mapwrap"><div id="map" role="application" aria-label="案場地圖"></div><ul class="mlist" id="mList"></ul></div>
     <div class="legend" id="mLegend"></div>
     <p class="foot" id="mFoot"></p>
   </main>
-  <main id="contractsView" hidden>
-    <h1 class="title" id="cHeadline">載入中</h1>
-    <p class="sub" id="cSubline"></p>
-    <div class="kpis" id="cKpis"></div>
-        <h2 class="ex">合約清單（點選列可看明細）</h2>
-    <div class="filters c">
-      <label class="q">搜尋<input id="cq" type="search" placeholder="合約編號、客戶、案場、保險編號"></label>
-      <label>合約類型<select id="cType"></select></label>
-      <label>合約狀態<select id="cStatus"></select></label>
-      <label>到期<select id="cExpire"><option value="">全部</option><option value="90">90 天內到期</option><option value="180">180 天內到期</option><option value="365">一年內到期</option></select></label>
+
+  <!-- EXHIBIT 06: 後台與權限管理中心 (Owner / Admin Only) -->
+  <main id="accountsView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 06 · GOVERNANCE, RBAC &amp; ACCESS KEY CONTROL</p>
+      <h1 class="title" id="aHeadline">後台權限與存取金鑰治理中心</h1>
+      <p class="sub">集中管控授權名單、角色層級（擁有者／管理員／成員／唯讀訪客）、商務金額與匯出權限、系統存取密碼 Key 及安全稽核軌跡。</p>
     </div>
-    <div class="bar"><span id="cCount"></span><button class="link" id="cCsv">匯出 CSV</button></div>
-    <div class="tw"><table><thead><tr id="cThead"></tr></thead><tbody id="cTbody"></tbody></table></div>
-    <div class="pager"><button id="cPrev">上一頁</button><span id="cPage"></span><button id="cNext">下一頁</button></div>
-    <p class="foot" id="cFoot"></p>
-  </main>
-  <main id="sitesView">
-    <h1 class="title" id="headline">載入中</h1>
-    <p class="sub" id="subline"></p>
-    <div class="kpis" id="kpis"></div>
-        <h2 class="ex">案場清單（點選列可看明細）</h2>
-    <div class="filters">
-      <label class="q">搜尋<input id="q" type="search" placeholder="編號、名稱、客戶、地址、電號"></label>
-      <label>有效合約<select id="fContract"></select></label>
-      <label>屬性<select id="fSource"></select></label>
-      <label>類型<select id="fType"></select></label>
-      <label>負責工程師<select id="fEng"></select></label>
-      <label>分區<select id="fArea"></select></label>
+
+    <div class="subtabs" role="tablist">
+      <button class="subtab" id="subMembers" role="tab" aria-selected="true">成員與角色權限</button>
+      <button class="subtab" id="subKeys" role="tab" aria-selected="false" hidden>存取密碼 Key 門禁</button>
+      <button class="subtab" id="subConfig" role="tab" aria-selected="false" hidden>系統機密設定</button>
+      <button class="subtab" id="subAudit" role="tab" aria-selected="false">安全稽核日誌</button>
     </div>
-    <div class="bar"><span id="count"></span><button class="link" id="csv">匯出 CSV</button></div>
-    <div class="tw"><table><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div>
-    <div class="pager"><button id="prev">上一頁</button><span id="page"></span><button id="next">下一頁</button></div>
-    <p class="foot" id="foot"></p>
+
+    <p class="err" id="aMsg" role="status" style="margin:0 0 16px"></p>
+
+    <!-- Sub-Panel A: Members & RBAC -->
+    <section id="panelMembers">
+      <div class="admin-card">
+        <h3>新增授權使用者</h3>
+        <p class="hint">名單內且狀態為「啟用」的人員才可讀取資料庫；「唯讀訪客 (Viewer)」將自動遮罩商務金額條款並禁止匯出或存取雲端資料庫。</p>
+        <form id="aForm" autocomplete="off">
+          <div class="acform-grid">
+            <label class="field" style="margin:0"><span class="lbl">電子郵件（登入帳號）</span><input id="aEmail" type="email" required placeholder="name@acmepointes.com"></label>
+            <label class="field" style="margin:0"><span class="lbl">顯示名稱／部門</span><input id="aName" type="text" placeholder="選填，例如：王小明（維運部）"></label>
+            <label class="field" style="margin:0"><span class="lbl">權限角色</span>
+              <select id="aRole">
+                <option value="member">一般成員 (Member)</option>
+                <option value="viewer">唯讀訪客 (Viewer·遮罩機敏)</option>
+                <option value="admin" id="optRoleAdmin">管理員 (Admin)</option>
+                <option value="owner" id="optRoleOwner">系統擁有者 (Owner)</option>
+              </select>
+            </label>
+            <label class="field" style="margin:0"><span class="lbl">初始密碼（新帳號必填）</span><input id="aPass" type="password" autocomplete="new-password" minlength="8" placeholder="至少 8 碼；已有帳號可留空"></label>
+          </div>
+          <div class="acform-opts">
+            <label class="chk-inline"><input id="aCommercial" type="checkbox" checked>允許檢視商務與保發金額</label>
+            <label class="chk-inline"><input id="aExport" type="checkbox" checked>允許匯出 CSV 與雲端下載</label>
+            <label class="chk-inline"><input id="aWx" type="checkbox" checked>同步開通風雨戰情站（唯讀）</label>
+            <button class="btn" id="aAdd" type="submit" style="margin-left:auto">新增並授權</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>帳號與名稱</th>
+              <th>角色層級</th>
+              <th>啟用</th>
+              <th>商務金額</th>
+              <th>匯出下載</th>
+              <th>認證狀態</th>
+              <th>最後登入</th>
+              <th>風雨站</th>
+              <th>管理操作</th>
+            </tr>
+          </thead>
+          <tbody id="aTbody"></tbody>
+        </table>
+      </div>
+      <p class="foot">權限即時生效：停用帳號後，Supabase 行級安全（RLS）將立即阻斷該帳號之所有資料表查詢。</p>
+    </section>
+
+    <!-- Sub-Panel B: Access Keys Management (Owner Only) -->
+    <section id="panelKeys" hidden>
+      <div class="key-reveal" id="keyRevealBox" hidden>
+        <div>
+          <small>✓ 新存取金鑰已建立並以加鹽 SHA-256 加密儲存（此明碼僅顯示一次，請立即妥善保存）</small>
+          <code id="keyRevealCode">—</code>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-accent btn-sm" id="copyNewKeyBtn" type="button">複製金鑰</button>
+          <button class="btn btn-ghost btn-sm" id="dismissKeyReveal" type="button">我已複製</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>發行新存取金鑰（Access Key / 系統通行碼）</h3>
+        <p class="hint">訪客開啟網頁時須先通過有效金鑰驗證，才能進入登入畫面。建議按季度輪替或依部門／專案發行獨立金鑰，離職或專案結束時可一鍵停用。</p>
+        <form id="keyForm" autocomplete="off">
+          <div class="keyform-grid">
+            <label class="field" style="margin:0"><span class="lbl">金鑰用途名稱</span><input id="kLabel" required placeholder="例如：2026 Q4 維運團隊通行碼"></label>
+            <label class="field" style="margin:0"><span class="lbl">自訂密碼 Key（留空自動產生）</span><input id="kCustom" class="mono" minlength="8" placeholder="選填，至少 8 碼；留空自動產生強金鑰"></label>
+            <label class="field" style="margin:0"><span class="lbl">有效期限（選填）</span><input id="kExpires" type="date"></label>
+            <button class="btn" id="kCreateBtn" type="submit">建立存取金鑰</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>用途名稱</th>
+              <th>金鑰識別碼</th>
+              <th>狀態</th>
+              <th class="num">驗證次數</th>
+              <th>最後使用</th>
+              <th>到期時間</th>
+              <th>建立者</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="kKeysTbody"></tbody>
+        </table>
+      </div>
+      <p class="foot">安全機制：停用任一金鑰後，原持該金鑰登入之裝置在下次頁面載入或操作時將立即失效並被要求重新驗證。</p>
+    </section>
+
+    <!-- Sub-Panel C: Protected System Config (Owner Only) -->
+    <section id="panelConfig" hidden>
+      <div class="admin-card">
+        <h3>安全門禁與機密連結設定</h3>
+        <p class="hint">原公開寫死於靜態網頁中的雲端硬碟連結已遷移至此處受後端資料庫保護，僅具備「匯出下載權限」之已登入使用者才會取得連結。</p>
+        <form id="cfgForm">
+          <div class="cfg-grid">
+            <div>
+              <label class="field">
+                <span class="lbl">Google Drive 資料庫下載網址（受保護）</span>
+                <input id="cfgDriveUrl" type="url" placeholder="https://drive.google.com/drive/folders/...">
+              </label>
+              <label class="field">
+                <span class="lbl">頂部機密公告橫幅文字</span>
+                <input id="cfgNotice" type="text" placeholder="顯示於已登入頁面上方之機密提醒">
+              </label>
+            </div>
+            <div>
+              <div style="background:var(--canvas);border:1px solid var(--rule);padding:16px 18px;margin-bottom:14px">
+                <label class="chk-inline" style="font-weight:700;color:var(--navy)">
+                  <input id="cfgRequireKey" type="checkbox" checked>
+                  強制啟用「存取金鑰（密碼 Key）」前置門禁
+                </label>
+                <p style="font-size:12.5px;color:var(--mute);margin:8px 0 0;line-height:1.6">開啟時，任何未持有有效門禁憑證的瀏覽器都必須先輸入正確 Access Key，才能看見帳號登入表單或載入資料。</p>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn" id="cfgSaveBtn" type="submit">儲存系統設定</button>
+                <button class="btn btn-danger" id="rotateSecretBtn" type="button">強制所有裝置重新驗證金鑰</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Sub-Panel D: Security Audit Logs -->
+    <section id="panelAudit" hidden>
+      <div class="bar">
+        <span>顯示最近 80 筆安全門禁、帳號權限與資料匯出稽核紀錄</span>
+        <button class="link" id="refreshAuditBtn" type="button">重新整理日誌</button>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>時間（台灣）</th>
+              <th>執行者</th>
+              <th>事件類型</th>
+              <th>對象</th>
+              <th>摘要明細</th>
+            </tr>
+          </thead>
+          <tbody id="auditTbody"></tbody>
+        </table>
+      </div>
+    </section>
   </main>
+
+  <!-- Executive Brand Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="./assets/acmepoint-logo-white.png" alt="ACMEPOINT">
+        <p>進金生能源服務股份有限公司（進能服 · 6692）<br>台灣首家綠能 EPC 上櫃企業 · 德國萊因 TÜV 太陽光電維運 AAA 級認證</p>
+      </div>
+      <div class="footer-offices">
+        <div><strong>台北總公司</strong><span>(02) 8791-2886 · 台北市內湖區新湖二路257號6樓</span></div>
+        <div><strong>北區事業中心</strong><span>(03) 287-2657 · 桃園市中壢區高鐵站前西路一段268號3樓之1</span></div>
+        <div><strong>中區事業中心</strong><span>(04) 2252-5559 · 台中市西屯區市政北二路238號11樓之1</span></div>
+        <div><strong>南區事業中心</strong><span>(07) 334-7879 · 高雄市前鎮區中山二路2號7樓之3</span></div>
+      </div>
+      <div class="footer-meta">
+        <span class="conf">CONFIDENTIAL · INTERNAL</span>
+        <a href="https://www.acmepointes.com/zh-tw" target="_blank" rel="noopener">進金生能源官方網站 ↗</a>
+        <span style="font-size:11.5px;color:#89A3BC">受 RLS 行級安全與存取金鑰雙重保護</span>
+      </div>
+    </div>
+  </footer>
 </div>
 
+<!-- Detail Drawer -->
 <div id="drawerWrap" hidden>
   <div class="scrim" id="scrim"></div>
   <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle">
-    <div class="bar"><span id="dNo"></span><button class="link" id="dClose">關閉</button></div>
+    <div class="bar"><span id="dNo" class="mono-code"></span><button class="btn btn-ghost btn-sm" id="dClose" type="button">關閉 ✕</button></div>
     <h2 id="dTitle" tabindex="-1"></h2>
     <div id="dBody"></div>
   </aside>
+</div>
+
+<!-- Self-Service Change Password Modal -->
+<div class="modal-wrap" id="pwModal" hidden>
+  <div class="scrim" id="pwScrim"></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
+    <h3 id="pwModalTitle">變更個人登入密碼</h3>
+    <p class="gate-desc" style="margin-bottom:18px">新密碼長度至少需 8 個字元，建議混合英數字以強化帳號安全。</p>
+    <form id="pwModalForm">
+      <label class="field"><span class="lbl">新密碼</span><input id="newPw1" type="password" minlength="8" required autocomplete="new-password"></label>
+      <label class="field"><span class="lbl">再次確認新密碼</span><input id="newPw2" type="password" minlength="8" required autocomplete="new-password"></label>
+      <p class="err" id="pwModalErr" role="alert"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost btn-sm" id="pwModalCancel" type="button">取消</button>
+        <button class="btn btn-sm" id="pwModalSubmit" type="submit">確認更新</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
-const SB_URL='https://cowljafosekwvxithwjd.supabase.co';
-const SB_KEY='sb_publishable_YP57cbbDJSP7-PvBgtKivA_25uDcp5n';
-const LOGIN_DOMAIN='@acme-oss.example'; // 登入帳號對應 Supabase Auth 的 email
-const sb=supabase.createClient(SB_URL,SB_KEY);
-const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=n=>Number(n).toLocaleString('zh-TW',{maximumFractionDigits:1});
-const PAGE=50;
-const COLS=[['field_no','編號'],['name','案場名稱'],['capacity','容量 kW',1],['customer','客戶'],['active_contract','有效合約'],['is_high_voltage','高壓'],['engineer','工程師'],['manager','管理師'],['area','分區'],['source','屬性'],['field_type','類型']];
-const CCOLS=[['contract_no','合約編號'],['contract_type','類型'],['status','狀態'],['start_date','開始'],['end_date','結束'],['years','年限'],['customer','客戶'],['site_count','案場數',1]];
-let all=[],view=[],pageNo=0,sortKey='field_no',sortDir=1,lastFocus=null;
-let cAll=[],cView=[],cPageNo=0,cSortKey='end_date',cSortDir=1,contractsOfSite={};
-const KCOLS=[['customer_no','客戶編號'],['name','客戶名稱'],['tax_id','統編'],['contract_count','合約數',1],['site_count','案場數',1],['capacity','容量 kW',1],['address','地址']];
-let kRaw=[],kAll=[],kView=[],kPageNo=0,kSortKey='contract_count',kSortDir=-1;
-let map=null,cluster=null,markers={},filesOf={};
-function fileList(type,no){
-  const fs=filesOf[type+':'+no]||[];
-  const rows=fs.map(f=>{
-    const size=f.size_bytes?` <small>${fmt(f.size_bytes/1048576)} MB</small>`:'';
-    if(f.http_status!==200)return `<li>${esc(f.label)}${size} <small>（原系統檔案已損壞，未能複製）</small></li>`;
-    if(f.copy_error)return `<li>${esc(f.label)}${size} <small>（複製失敗）</small></li>`;
-    if(!f.copied_at)return `<li>${esc(f.label)}${size} <small>（複製中）</small></li>`;
-    const url=f.drive_url||'https://drive.google.com/drive/search?q='+encodeURIComponent(f.file_name);
-    return `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(f.label)}</a>${size}</li>`;
-  }).join('');
-  return `<h3>附件（${fs.length}）</h3>`+(rows?`<ul style="margin:0;padding-left:18px">${rows}</ul><p class="empty" style="margin-top:6px">存放於 Google 雲端硬碟，需登入有權限的帳號。</p>`:'<p class="empty">無資料</p>');
+// =============================================================================
+// ACMEPOINT Energy Services — OSS Executive Portal
+// Security: Publishable Client Key ONLY + Server-Verified Access Key Gate + RLS
+// =============================================================================
+const SB_URL = 'https://cowljafosekwvxithwjd.supabase.co';
+const SB_KEY = 'sb_publishable_YP57cbbDJSP7-PvBgtKivA_25uDcp5n';
+const LOGIN_DOMAIN = '@acme-oss.example';
+const GATE_STORAGE_KEY = 'ACME_OSS_GATE_TOKEN_V2';
+const WX_BASE = 'https://davidyeh51.github.io/taiwan-weather-ops/';
+
+const sb = supabase.createClient(SB_URL, SB_KEY);
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n) => Number(n).toLocaleString('zh-TW', { maximumFractionDigits: 1 });
+const twTime = (v) => new Date(v).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+const twFull = (v) => new Date(v).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
+
+const PAGE = 50;
+const ROLE_META = {
+  owner: { label: '擁有者', badge: 'OWNER', cls: 'role-owner' },
+  admin: { label: '管理員', badge: 'ADMIN', cls: 'role-admin' },
+  member: { label: '一般成員', badge: 'MEMBER', cls: 'role-member' },
+  viewer: { label: '唯讀訪客', badge: 'VIEWER', cls: 'role-viewer' },
+};
+const AUDIT_LABELS = {
+  gate_verified: '金鑰驗證通過',
+  gate_failed: '金鑰驗證失敗',
+  member_added: '新增授權成員',
+  member_updated: '異動成員權限',
+  member_removed: '移除成員授權',
+  password_reset: '管理員重設密碼',
+  self_password_changed: '使用者變更密碼',
+  access_key_created: '發行存取金鑰',
+  access_key_enabled: '啟用存取金鑰',
+  access_key_disabled: '停用存取金鑰',
+  access_key_deleted: '刪除存取金鑰',
+  config_updated: '更新系統設定',
+  data_exported: '匯出報表檔案',
+};
+
+const COLS = [['field_no','編號'],['name','案場名稱'],['capacity','容量 kW',1],['customer','客戶'],['active_contract','有效合約'],['is_high_voltage','高壓'],['engineer','工程師'],['manager','管理師'],['area','分區'],['source','屬性'],['field_type','類型']];
+const CCOLS = [['contract_no','合約編號'],['contract_type','類型'],['status','狀態'],['start_date','開始'],['end_date','結束'],['years','年限'],['customer','客戶'],['site_count','案場數',1]];
+const KCOLS = [['customer_no','客戶編號'],['name','客戶名稱'],['tax_id','統編'],['contract_count','合約數',1],['site_count','案場數',1],['capacity','容量 kW',1],['address','地址']];
+
+let currentUser = null;
+let portalConfig = {};
+let gateState = { required: true, valid: false, label: null };
+let all = [], view = [], pageNo = 0, sortKey = 'field_no', sortDir = 1, lastFocus = null;
+let cAll = [], cView = [], cPageNo = 0, cSortKey = 'end_date', cSortDir = 1, contractsOfSite = {};
+let kRaw = [], kAll = [], kView = [], kPageNo = 0, kSortKey = 'contract_count', kSortDir = -1;
+let map = null, cluster = null, markers = {}, filesOf = {};
+let eRows = [];
+let risk = {}, drill = null, mode = 'weather', modeTouched = false, tyLayer = null;
+
+function getGateToken() { return sessionStorage.getItem(GATE_STORAGE_KEY) || localStorage.getItem(GATE_STORAGE_KEY) || ''; }
+function setGateToken(tok) {
+  if (tok) { sessionStorage.setItem(GATE_STORAGE_KEY, tok); localStorage.setItem(GATE_STORAGE_KEY, tok); }
+  else { sessionStorage.removeItem(GATE_STORAGE_KEY); localStorage.removeItem(GATE_STORAGE_KEY); }
 }
 
-function showLogin(){$('loginView').hidden=false;$('appView').hidden=true}
-async function showApp(){
-  $('loginView').hidden=true;$('appView').hidden=false;
-  const {data,error}=await sb.from('oss_sites').select('*').order('field_no');
-  if(error){$('headline').textContent='資料載入失敗';$('subline').textContent=error.message;return}
-  if(!data.length){$('headline').textContent='此帳號沒有讀取權限';$('subline').textContent='請確認帳號已列入管理者名單。';return}
-  all=data.map(r=>({...r,_s:[r.field_no,r.name,r.customer,r.address,JSON.stringify(r.electric_nos)].join(' ').toLowerCase()}));
-  initFilters();summary();apply();
+// ── Unified Edge Function Caller ──
+async function apiCall(body, requireAuth = true) {
+  const hdrs = { 'Content-Type': 'application/json', apikey: SB_KEY };
+  const gt = getGateToken();
+  if (gt) hdrs['x-oss-gate'] = gt;
+  if (requireAuth) {
+    const { data: { session } } = await sb.auth.getSession();
+    hdrs.Authorization = 'Bearer ' + (session?.access_token || '');
+  }
+  const r = await fetch(SB_URL + '/functions/v1/oss-account-admin', {
+    method: 'POST',
+    headers: hdrs,
+    body: JSON.stringify({ ...body, gate_token: gt }),
+  });
+  const j = await r.json().catch(() => ({ error: '伺服器回應格式錯誤' }));
+  if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+  return j;
+}
+
+// ── Gate & Auth Screen Orchestration ──
+function renderAuthStep(step) {
+  $('authShell').hidden = false;
+  $('appView').hidden = true;
+  if (step === 'gate') {
+    $('gateStep').hidden = false;
+    $('loginStep').hidden = true;
+    $('stepIndicator').hidden = false;
+    $('step1Badge').className = 'step-dot active';
+    $('step2Badge').className = 'step-dot';
+    $('gateKeyInput').focus();
+  } else {
+    $('gateStep').hidden = true;
+    $('loginStep').hidden = false;
+    $('stepIndicator').hidden = !gateState.required;
+    $('step1Badge').className = 'step-dot done';
+    $('step2Badge').className = 'step-dot active';
+    $('gateVerifiedBar').hidden = !gateState.required;
+    $('gateKeyLabel').textContent = gateState.label || '已通過驗證';
+    $('user').focus();
+  }
+}
+
+async function bootstrap() {
+  try {
+    const st = await apiCall({ action: 'gate_status' }, false);
+    gateState = { required: !!st.require_access_key, valid: !!st.gate_valid, label: st.key_label || null };
+  } catch (e) {
+    // Fail-closed: if gate status check fails, require key entry
+    gateState = { required: true, valid: false, label: null };
+  }
+
+  if (gateState.required && !gateState.valid) {
+    setGateToken('');
+    renderAuthStep('gate');
+    return;
+  }
+
+  const { data } = await sb.auth.getSession();
+  if (data?.session) {
+    await showApp();
+  } else {
+    renderAuthStep('login');
+  }
+}
+
+function applyRoleUI() {
+  const u = currentUser;
+  const rm = ROLE_META[u.role] || ROLE_META.member;
+  $('myRoleBadge').textContent = rm.badge;
+  $('myRoleBadge').className = 'role-badge ' + rm.cls;
+  $('myEmailText').textContent = u.display_name ? `${u.display_name} (${u.email})` : u.email;
+  $('myEmailText').title = u.email;
+
+  const isManager = u.role === 'owner' || u.role === 'admin';
+  const isOwner = u.role === 'owner';
+  $('tabAccounts').hidden = !isManager;
+  $('subKeys').hidden = !isOwner;
+  $('subConfig').hidden = !isOwner;
+  $('optRoleAdmin').hidden = !isOwner;
+  $('optRoleOwner').hidden = !isOwner;
+
+  // Protected Drive link: only visible if backend returned it (can_export = true)
+  if (portalConfig.drive_folder_url && u.can_export) {
+    $('driveLink').href = portalConfig.drive_folder_url;
+    $('driveLink').hidden = false;
+  } else {
+    $('driveLink').hidden = true;
+    $('driveLink').href = '#';
+  }
+
+  // Export button visibility based on RBAC
+  ['cCsv', 'eCsv', 'eCopy', 'csv', 'kCsv'].forEach((id) => {
+    $(id).hidden = !u.can_export;
+  });
+
+  // Top confidential notice banner
+  if (portalConfig.portal_notice) {
+    $('noticeText').textContent = portalConfig.portal_notice;
+    $('gateStatusPill').textContent = gateState.required
+      ? `雙重門禁啟用中${gateState.label ? ' · 金鑰：' + gateState.label : ''}`
+      : '帳號權限驗證中';
+    $('noticeBar').hidden = false;
+  } else {
+    $('noticeBar').hidden = true;
+  }
+}
+
+async function showApp() {
+  try {
+    const res = await apiCall({ action: 'me' }, true);
+    gateState.required = !!res.require_access_key;
+    gateState.valid = !!res.gate_valid;
+    gateState.label = res.key_label || gateState.label;
+
+    if (gateState.required && !gateState.valid) {
+      setGateToken('');
+      renderAuthStep('gate');
+      $('gateErr').textContent = '原存取金鑰憑證已失效或遭撤銷，請重新輸入有效金鑰。';
+      return;
+    }
+
+    currentUser = res.me;
+    portalConfig = res.config || {};
+    applyRoleUI();
+  } catch (err) {
+    await sb.auth.signOut();
+    renderAuthStep(gateState.required && !gateState.valid ? 'gate' : 'login');
+    $('loginErr').textContent = err.message || '此帳號沒有讀取權限。';
+    return;
+  }
+
+  $('authShell').hidden = true;
+  $('appView').hidden = false;
+
+  const { data, error } = await sb.from('oss_sites').select('*').order('field_no');
+  if (error) {
+    switchTab('sites');
+    $('headline').textContent = '資料載入失敗';
+    $('subline').textContent = error.message;
+    return;
+  }
+  if (!data.length) {
+    switchTab('sites');
+    $('headline').textContent = '此帳號沒有讀取權限';
+    $('subline').textContent = '請確認帳號已列入授權名單且處於啟用狀態。';
+    return;
+  }
+
+  all = data.map((r) => ({ ...r, _s: [r.field_no, r.name, r.customer, r.address, JSON.stringify(r.electric_nos)].join(' ').toLowerCase() }));
+  initFilters();
+  summary();
+  apply();
   switchTab('contracts');
   loadContracts();
-  sb.rpc('oss_is_owner').then(({data})=>{$('tabAccounts').hidden=data!==true;});
   loadRisk();
 }
-async function fetchAll(table,cols){
-  let out=[];
-  for(let i=0;;i+=1000){
-    const {data,error}=await sb.from(table).select(cols).range(i,i+999);
-    if(error)throw error;
-    out=out.concat(data);
-    if(data.length<1000)return out;
+
+async function fetchAll(table, cols) {
+  let out = [];
+  for (let i = 0; ; i += 1000) {
+    const { data, error } = await sb.from(table).select(cols).range(i, i + 999);
+    if (error) throw error;
+    out = out.concat(data);
+    if (data.length < 1000) return out;
   }
 }
-async function loadContracts(){
-  try{
-    const [cs,links,ks,fs]=await Promise.all([fetchAll('oss_contracts','*'),fetchAll('oss_contract_sites','*'),fetchAll('oss_customers','*'),fetchAll('oss_files','owner_type,owner_no,label,file_name,drive_url,copied_at,copy_error,size_bytes,http_status')]);
-    kRaw=ks;
-    filesOf={};fs.forEach(f=>{const k=f.owner_type+':'+f.owner_no;(filesOf[k]=filesOf[k]||[]).push(f)});
-    const by={};links.forEach(l=>(by[l.contract_no]=by[l.contract_no]||[]).push(l));
-    contractsOfSite={};links.forEach(l=>(contractsOfSite[l.field_no]=contractsOfSite[l.field_no]||[]).push(l.contract_no));
-    cAll=cs.map(c=>{const sites=by[c.contract_no]||[];return{...c,sites,site_count:sites.length,_s:[c.contract_no,c.customer,c.eli_no,c.cli_no,sites.map(s=>s.field_no+' '+s.site_name).join(' ')].join(' ').toLowerCase()}});
-    cInitFilters();cSummary();cApply();
+
+async function loadContracts() {
+  try {
+    const [cs, links, ks, fs] = await Promise.all([
+      fetchAll('oss_contracts', '*'),
+      fetchAll('oss_contract_sites', '*'),
+      fetchAll('oss_customers', '*'),
+      fetchAll('oss_files', 'owner_type,owner_no,label,file_name,drive_url,copied_at,copy_error,size_bytes,http_status'),
+    ]);
+    kRaw = ks;
+    filesOf = {};
+    fs.forEach((f) => { const k = f.owner_type + ':' + f.owner_no; (filesOf[k] = filesOf[k] || []).push(f); });
+    const by = {};
+    links.forEach((l) => (by[l.contract_no] = by[l.contract_no] || []).push(l));
+    contractsOfSite = {};
+    links.forEach((l) => (contractsOfSite[l.field_no] = contractsOfSite[l.field_no] || []).push(l.contract_no));
+    cAll = cs.map((c) => {
+      const sites = by[c.contract_no] || [];
+      return {
+        ...c,
+        sites,
+        site_count: sites.length,
+        _s: [c.contract_no, c.customer, c.eli_no, c.cli_no, sites.map((s) => s.field_no + ' ' + s.site_name).join(' ')].join(' ').toLowerCase(),
+      };
+    });
+    cInitFilters();
+    cSummary();
+    cApply();
     buildCustomers();
     eInit();
-  }catch(e){$('cHeadline').textContent='合約資料載入失敗';$('cSubline').textContent=e.message;$('kHeadline').textContent='客戶資料載入失敗'}
+  } catch (e) {
+    $('cHeadline').textContent = '合約資料載入失敗';
+    $('cSubline').textContent = e.message;
+    $('kHeadline').textContent = '客戶資料載入失敗';
+  }
 }
-function switchTab(t){
-  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map'],['accounts','Accounts']].forEach(([v,n])=>{
-    $(v+'View').hidden=v!==t;
-    if(v===t)$('tab'+n).setAttribute('aria-current','page');else $('tab'+n).removeAttribute('aria-current');
+
+function switchTab(t) {
+  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map'],['accounts','Accounts']].forEach(([v, n]) => {
+    $(v + 'View').hidden = v !== t;
+    if (v === t) $('tab' + n).setAttribute('aria-current', 'page');
+    else $('tab' + n).removeAttribute('aria-current');
   });
-  if(t==='map')showMap();
+  if (t === 'map') showMap();
 }
-function buildCustomers(){
-  const cBy={},sBy={};
-  cAll.forEach(c=>{if(c.customer_no)(cBy[c.customer_no]=cBy[c.customer_no]||[]).push(c)});
-  all.forEach(s=>{if(s.customer_no)(sBy[s.customer_no]=sBy[s.customer_no]||[]).push(s)});
-  kAll=kRaw.map(k=>{
-    const contracts=cBy[k.customer_no]||[];
-    const m=new Map();
-    (sBy[k.customer_no]||[]).forEach(s=>m.set(s.field_no,s));
-    contracts.forEach(c=>c.sites.forEach(l=>{if(!m.has(l.field_no)){const s=all.find(x=>x.field_no===l.field_no);m.set(l.field_no,s||{field_no:l.field_no,name:l.site_name})}}));
-    const sites=[...m.values()];
-    return{...k,contracts,sites,contract_count:contracts.length,site_count:sites.length,capacity:sites.reduce((a,s)=>a+(+s.capacity||0),0),
-      _s:[k.customer_no,k.name,k.tax_id,k.address,JSON.stringify(k.contacts)].join(' ').toLowerCase()};
+
+// ── File Attachment Renderer (respects can_export) ──
+function fileList(type, no) {
+  const fs = filesOf[type + ':' + no] || [];
+  if (!currentUser?.can_export) {
+    return `<h3>附件文件（${fs.length}）</h3><p class="empty"><span class="masked-val">您的角色權限為唯讀，未開放雲端附件下載</span></p>`;
+  }
+  const rows = fs.map((f) => {
+    const size = f.size_bytes ? ` <small>${fmt(f.size_bytes / 1048576)} MB</small>` : '';
+    if (f.http_status !== 200) return `<li>${esc(f.label)}${size} <small>（原系統檔案已損壞，未能複製）</small></li>`;
+    if (f.copy_error) return `<li>${esc(f.label)}${size} <small>（複製失敗）</small></li>`;
+    if (!f.copied_at) return `<li>${esc(f.label)}${size} <small>（複製中）</small></li>`;
+    const url = f.drive_url || 'https://drive.google.com/drive/search?q=' + encodeURIComponent(f.file_name);
+    return `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(f.label)}</a>${size}</li>`;
+  }).join('');
+  return `<h3>附件文件（${fs.length}）</h3>` + (rows ? `<ul style="margin:0;padding-left:18px">${rows}</ul><p class="empty" style="margin-top:6px">存放於受控管之公司雲端硬碟，需登入授權帳號檢視。</p>` : '<p class="empty">無資料</p>');
+}
+
+// ── Customers View ──
+function buildCustomers() {
+  const cBy = {}, sBy = {};
+  cAll.forEach((c) => { if (c.customer_no) (cBy[c.customer_no] = cBy[c.customer_no] || []).push(c); });
+  all.forEach((s) => { if (s.customer_no) (sBy[s.customer_no] = sBy[s.customer_no] || []).push(s); });
+  kAll = kRaw.map((k) => {
+    const contracts = cBy[k.customer_no] || [];
+    const m = new Map();
+    (sBy[k.customer_no] || []).forEach((s) => m.set(s.field_no, s));
+    contracts.forEach((c) => c.sites.forEach((l) => {
+      if (!m.has(l.field_no)) {
+        const s = all.find((x) => x.field_no === l.field_no);
+        m.set(l.field_no, s || { field_no: l.field_no, name: l.site_name });
+      }
+    }));
+    const sites = [...m.values()];
+    return {
+      ...k, contracts, sites,
+      contract_count: contracts.length,
+      site_count: sites.length,
+      capacity: sites.reduce((a, s) => a + (+s.capacity || 0), 0),
+      _s: [k.customer_no, k.name, k.tax_id, k.address, JSON.stringify(k.contacts)].join(' ').toLowerCase(),
+    };
   });
-  const linked=kAll.filter(k=>k.contract_count||k.site_count);
-  const multi=linked.filter(k=>k.site_count>1).length;
-  $('kHeadline').textContent=`${kAll.length} 位客戶中，${linked.length} 位有合約或案場，其中 ${multi} 位擁有多個案場`;
-  $('kSubline').textContent='客戶是合約甲方；案場數合計該客戶名下與其合約關聯的案場。';
-  $('kKpis').innerHTML=[[kAll.length,'客戶總數'],[kAll.filter(k=>k.contract_count).length,'有合約客戶'],[kAll.filter(k=>k.site_count).length,'有案場客戶'],[multi,'多案場客戶']].map(([a,b])=>`<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
-  $('kFoot').textContent='資料來源：維運管理系統「客戶資料」。此為複製快照，不會自動更新。';
+  const linked = kAll.filter((k) => k.contract_count || k.site_count);
+  const multi = linked.filter((k) => k.site_count > 1).length;
+  $('kHeadline').textContent = `${kAll.length} 位客戶中，${linked.length} 位具合約或案場關聯，其中 ${multi} 位為多案場核心客戶`;
+  $('kSubline').textContent = '客戶代表合約甲方主體；案場數與總容量整合該客戶名下及關聯合約之全部資產。';
+  $('kKpis').innerHTML = [
+    [kAll.length, '客戶總數（家）'],
+    [kAll.filter((k) => k.contract_count).length, '具履約合約客戶'],
+    [kAll.filter((k) => k.site_count).length, '具關聯案場客戶'],
+    [multi, '多案場集團／核心客戶'],
+  ].map(([a, b]) => `<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+  $('kFoot').textContent = '資料來源：進金生能源維運管理系統「客戶資料」同步快照。';
   kApply();
 }
-function kApply(){
-  const q=$('kq').value.trim().toLowerCase(),sc=$('kScope').value;
-  kView=kAll.filter(k=>(!q||k._s.includes(q))&&(!sc||k.contract_count||k.site_count));
-  kView.sort((a,b)=>{const x=a[kSortKey],y=b[kSortKey];if(x==null||x==='')return 1;if(y==null||y==='')return -1;
-    return kSortDir*(typeof x==='number'?(x-y):String(x).localeCompare(String(y),'zh-Hant'))});
+function kApply() {
+  const q = $('kq').value.trim().toLowerCase(), sc = $('kScope').value;
+  kView = kAll.filter((k) => (!q || k._s.includes(q)) && (!sc || k.contract_count || k.site_count));
+  kView.sort((a, b) => {
+    const x = a[kSortKey], y = b[kSortKey];
+    if (x == null || x === '') return 1;
+    if (y == null || y === '') return -1;
+    return kSortDir * (typeof x === 'number' ? (x - y) : String(x).localeCompare(String(y), 'zh-Hant'));
+  });
   kRender();
 }
-function kRender(){
-  $('kThead').innerHTML=KCOLS.map(([k,l,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${kSortKey===k?(kSortDir>0?'ascending':'descending'):'none'}">${esc(l)}${kSortKey===k?(kSortDir>0?' ▲':' ▼'):''}</th>`).join('');
-  const pages=Math.max(1,Math.ceil(kView.length/PAGE));kPageNo=Math.min(kPageNo,pages-1);
-  $('kTbody').innerHTML=kView.slice(kPageNo*PAGE,(kPageNo+1)*PAGE).map(r=>`<tr class="row" tabindex="0" data-no="${esc(r.customer_no)}">${KCOLS.map(([k,,n])=>`<td class="${n?'num':(k==='name'||k==='address'?'':'nw')}">${esc(k==='capacity'?fmt(r[k]):r[k])}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${KCOLS.length}" class="empty">沒有符合條件的客戶</td></tr>`;
-  $('kCount').textContent=`${kView.length} 筆`;
-  $('kPage').textContent=`第 ${kPageNo+1} / ${pages} 頁`;$('kPrev').disabled=!kPageNo;$('kNext').disabled=kPageNo>=pages-1;
+function kRender() {
+  $('kThead').innerHTML = KCOLS.map(([k, l, n]) => `<th class="${n ? 'num' : ''}" data-k="${k}" aria-sort="${kSortKey === k ? (kSortDir > 0 ? 'ascending' : 'descending') : 'none'}">${esc(l)}${kSortKey === k ? (kSortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('');
+  const pages = Math.max(1, Math.ceil(kView.length / PAGE));
+  kPageNo = Math.min(kPageNo, pages - 1);
+  $('kTbody').innerHTML = kView.slice(kPageNo * PAGE, (kPageNo + 1) * PAGE).map((r) => `<tr class="row" tabindex="0" data-no="${esc(r.customer_no)}">${KCOLS.map(([k,, n]) => `<td class="${n ? 'num' : (k === 'name' || k === 'address' ? '' : 'nw')}">${esc(k === 'capacity' ? fmt(r[k]) : r[k])}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${KCOLS.length}" class="empty">沒有符合條件的客戶</td></tr>`;
+  $('kCount').textContent = `共篩選出 ${kView.length} 筆客戶資料`;
+  $('kPage').textContent = `第 ${kPageNo + 1} / ${pages} 頁`;
+  $('kPrev').disabled = !kPageNo;
+  $('kNext').disabled = kPageNo >= pages - 1;
 }
-function openK(no){
-  const k=kAll.find(x=>x.customer_no===no);if(!k)return;
-  if($('drawerWrap').hidden)lastFocus=document.activeElement;
-  $('dNo').textContent=k.customer_no;$('dTitle').textContent=k.name;
-  $('dBody').innerHTML='<h3>基本資料</h3>'+dl([['統編',k.tax_id],['案場總容量 (kW)',k.site_count?fmt(k.capacity):''],['地址',k.address,1]])
-   +`<h3>合約（${k.contracts.length}）</h3>`+(k.contracts.length?`<ul style="margin:0;padding-left:18px">${k.contracts.map(c=>`<li><button class="jump" data-contract="${esc(c.contract_no)}">${esc(c.contract_no)}　${esc(c.contract_type)}　${esc(c.status)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
-   +`<h3>案場（${k.sites.length}）</h3>`+(k.sites.length?`<ul style="margin:0;padding-left:18px">${k.sites.map(s=>`<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.name)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
-   +sub('聯絡窗口',k.contacts);
-  $('drawerWrap').hidden=false;$('dTitle').focus();
+function openK(no) {
+  const k = kAll.find((x) => x.customer_no === no);
+  if (!k) return;
+  if ($('drawerWrap').hidden) lastFocus = document.activeElement;
+  $('dNo').textContent = k.customer_no;
+  $('dTitle').textContent = k.name;
+  const contactsHtml = currentUser?.can_view_commercial
+    ? sub('聯絡窗口', k.contacts)
+    : `<h3>聯絡窗口</h3><p class="empty"><span class="masked-val">唯讀權限已遮罩客戶窗口聯絡資訊</span></p>`;
+  $('dBody').innerHTML = '<h3>基本資料</h3>' + dl([['統一編號', k.tax_id], ['案場總容量 (kW)', k.site_count ? fmt(k.capacity) : ''], ['公司地址', k.address, 1]])
+    + `<h3>關聯合約（${k.contracts.length}）</h3>` + (k.contracts.length ? `<ul style="margin:0;padding-left:18px">${k.contracts.map((c) => `<li><button class="jump" data-contract="${esc(c.contract_no)}">${esc(c.contract_no)}　${esc(c.contract_type)}　${esc(c.status)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
+    + `<h3>關聯案場（${k.sites.length}）</h3>` + (k.sites.length ? `<ul style="margin:0;padding-left:18px">${k.sites.map((s) => `<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.name)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
+    + contactsHtml;
+  $('drawerWrap').hidden = false;
+  $('dTitle').focus();
 }
-const custLink=(no,name)=>`<h3>客戶（合約甲方）</h3>`+(no?`<button class="jump" data-customer="${esc(no)}">${esc(no)}　${esc(name)}</button>`:`<p class="empty">${esc(name)||'無資料'}（未對應到客戶資料）</p>`);
-const validXY=s=>s.lat>=21&&s.lat<=27&&s.lng>=117&&s.lng<=123;
-function showMap(){
-  if(!map){
-    const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'});
-    const emap=L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',{maxZoom:19,attribution:'&copy; 內政部國土測繪中心'});
-    map=L.map('map',{layers:[osm]}).setView([23.7,120.9],8);
-    L.control.layers({'OpenStreetMap':osm,'通用版電子地圖（國土測繪中心）':emap}).addTo(map);
-    // 群聚圓點顯示群內最嚴重的顏色，避免高風險案場被群聚蓋掉
-    cluster=L.markerClusterGroup({maxClusterRadius:45,iconCreateFunction:c=>{const ts=c.getAllChildMarkers().map(m=>m.options.tone);const t=TONE_ORDER.find(x=>ts.includes(x))||'plain';const n=c.getChildCount(),s=n<10?30:n<100?36:42;return L.divIcon({className:'',html:`<span class="ccl t-${t}" style="width:${s}px;height:${s}px">${n}</span>`,iconSize:[s,s]});}});map.addLayer(cluster);
-    tyLayer=L.layerGroup().addTo(map);
-    [['mContract','active_contract'],['mSource','source'],['mType','field_type'],['mEng','engineer'],['mArea','area']].forEach(([id,k])=>{
-      const v=[...new Set(all.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
-      $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
-      $(id).dataset.key=k;$(id).onchange=mApply;
+const custLink = (no, name) => `<h3>客戶（合約甲方）</h3>` + (no ? `<button class="jump" data-customer="${esc(no)}">${esc(no)}　${esc(name)}</button>` : `<p class="empty">${esc(name) || '無資料'}（未對應到客戶資料）</p>`);
+
+// ── Geospatial Map & Weather/Typhoon Risk Engine ──
+const validXY = (s) => s.lat >= 21 && s.lat <= 27 && s.lng >= 117 && s.lng <= 123;
+const TONE_ORDER = ['danger', 'warning', 'possible', 'normal', 'incomplete', 'plain'];
+const WX_LABEL = { normal: '監測中', warning: '注意', danger: '警戒', incomplete: '資料不足', unknown: '無有效觀測', location_missing: '待定位' };
+const siteIcon = (t) => L.divIcon({ className: '', html: `<span class="smk t-${t}"></span>`, iconSize: [15, 15], iconAnchor: [7.5, 7.5] });
+const wxTone = (s) => s === 'danger' ? 'danger' : s === 'warning' ? 'warning' : s === 'normal' ? 'normal' : 'incomplete';
+function toneOf(no) {
+  const r = risk.by?.[no];
+  if (!r || mode === 'none') return 'plain';
+  return mode === 'typhoon' ? risk.mods.ty.LEVELS[r.typhoon.level].tone : wxTone(r.weather.status);
+}
+const etaText = (t) => { if (t == null) return '—'; const h = Math.round((t - Date.now()) / 36e5); return twTime(t) + (h > 0 ? `（約 ${h} 小時後）` : ''); };
+function tyEta(r) { if (['now25', 'now15'].includes(r.level)) return '現在'; const e = risk.mods.ty.firstEta(r); return e ? etaText(e) : '—'; }
+const tag = (tone, text) => `<span class="tag t-${tone}">${esc(text)}</span>`;
+function listTag(no) {
+  const r = risk.by?.[no];
+  if (!r || mode === 'none') return '';
+  const L_ = risk.mods.ty.LEVELS;
+  return mode === 'typhoon'
+    ? `<small>${tag(L_[r.typhoon.level].tone, L_[r.typhoon.level].label)} ${esc(tyEta(r.typhoon))}</small>`
+    : `<small>${tag(wxTone(r.weather.status), WX_LABEL[r.weather.status] || r.weather.status)} ${r.weather.score ?? '—'} 分</small>`;
+}
+function riskLines(no) {
+  const r = risk.by?.[no];
+  if (!r) return '';
+  const l = risk.mods.ty.LEVELS[r.typhoon.level];
+  return `<span>颱風：${esc(l.label)}${risk.mods.ty.firstEta(r.typhoon) ? '　' + esc(tyEta(r.typhoon)) : ''}<br>即時風雨：${esc(WX_LABEL[r.weather.status] || r.weather.status)}${r.weather.score != null ? '　' + r.weather.score + ' 分' : ''}</span>`;
+}
+function siteRiskHtml(no) {
+  const r = risk.by?.[no];
+  if (!r) return risk.error ? `<div class="riskblk">風雨資料讀取失敗：${esc(risk.error)}</div>` : '';
+  const ty = r.typhoon, l = risk.mods.ty.LEVELS[ty.level], M = risk.mods.dm.METRICS;
+  const cells = Object.entries(M).map(([k, m]) => {
+    const c = r.weather.readings[k];
+    return `${esc(m.label)} ${c.value == null ? '—' : fmt(c.value)} ${esc(m.unit)}${c.station ? `（${esc(c.station.name)}，${fmt(c.distance)} km）` : ''}${c.valid ? '' : '　' + esc(c.status === 'far' ? '測站過遠' : c.status === 'stale' ? '資料延遲' : c.status === 'missing' ? '缺值' : c.status)}`;
+  }).join('<br>');
+  return `<div class="riskblk"><b>颱風風險評估</b>　${tag(l.tone, l.label)}<div>${ty.storm ? `${esc(ty.storm.name_zh || ty.storm.name)}　目前距離 ${fmt(ty.distanceNow)} km　預報最近 ${fmt(ty.minDistance)} km（${esc(twTime(ty.minAt))}）<br>進七級風圈 ${esc(etaText(ty.eta15))}　進十級風圈 ${esc(etaText(ty.eta25))}` : '目前沒有相關颱風威脅'}</div></div>`
+    + `<div class="riskblk"><b>即時風雨觀測（鄰近測站）</b>　${tag(wxTone(r.weather.status), WX_LABEL[r.weather.status] || r.weather.status)}${r.weather.score != null ? '　' + r.weather.score + ' 分' : ''}<div>${cells}</div><div>測站觀測非案場實測；風取 20 km、雨取 10 km 內測站。</div></div>`;
+}
+function showMap() {
+  if (!map) {
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' });
+    const emap = L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}', { maxZoom: 19, attribution: '&copy; 內政部國土測繪中心' });
+    map = L.map('map', { layers: [osm] }).setView([23.7, 120.9], 8);
+    L.control.layers({ 'OpenStreetMap': osm, '通用版電子地圖（國土測繪中心）': emap }).addTo(map);
+    cluster = L.markerClusterGroup({
+      maxClusterRadius: 45,
+      iconCreateFunction: (c) => {
+        const ts = c.getAllChildMarkers().map((m) => m.options.tone);
+        const t = TONE_ORDER.find((x) => ts.includes(x)) || 'plain';
+        const n = c.getChildCount(), s = n < 10 ? 30 : n < 100 ? 36 : 42;
+        return L.divIcon({ className: '', html: `<span class="ccl t-${t}" style="width:${s}px;height:${s}px">${n}</span>`, iconSize: [s, s] });
+      },
     });
-    $('mq').oninput=mApply;
-    all.filter(validXY).forEach(s=>{
-      const g=`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
-      const m=L.marker([s.lat,s.lng],{title:s.name,icon:siteIcon('plain'),tone:'plain'}).bindPopup(()=>`<div class="pop"><b>${esc(s.name)}</b><span>${esc(s.field_no)}　${s.capacity!=null?fmt(s.capacity)+' kW':''}<br>${esc(s.customer)}</span>${riskLines(s.field_no)}<button class="jump" data-site="${esc(s.field_no)}">查看案場資料</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟</a></div>`);
-      markers[s.field_no]=m;
+    map.addLayer(cluster);
+    tyLayer = L.layerGroup().addTo(map);
+    [['mContract','active_contract'],['mSource','source'],['mType','field_type'],['mEng','engineer'],['mArea','area']].forEach(([id, k]) => {
+      const v = [...new Set(all.map((r) => r[k]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+      $(id).innerHTML = '<option value="">全部</option>' + v.map((x) => `<option>${esc(x)}</option>`).join('');
+      $(id).dataset.key = k;
+      $(id).onchange = mApply;
     });
-    $('modeTy').onclick=()=>setMode('typhoon');$('modeWx').onclick=()=>setMode('weather');$('modeNone').onclick=()=>setMode('none');
-    $('mDrill').onclick=()=>{if(!risk.mods)return;drill=drill?null:risk.mods.ty.drillStorm(Date.now());modeTouched=false;computeRisk();mApply();if(drill)fitTyphoon();};
-    $('mFitTy').onclick=fitTyphoon;
-    $('map').addEventListener('click',e=>{const b=e.target.closest('.jump');if(b)openD(b.dataset.site)});
-    const bad=all.filter(s=>!validXY(s));
-    $('mFoot').innerHTML=`${bad.length} 個案場因 GPS 缺漏或格式異常未標示：`+bad.map(s=>`<button class="jump" data-site="${esc(s.field_no)}">${esc(s.name)}</button>`).join('、');
-    $('mFoot').onclick=e=>{const b=e.target.closest('.jump');if(b)openD(b.dataset.site)};
+    $('mq').oninput = mApply;
+    all.filter(validXY).forEach((s) => {
+      const g = `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
+      const m = L.marker([s.lat, s.lng], { title: s.name, icon: siteIcon('plain'), tone: 'plain' })
+        .bindPopup(() => `<div class="pop"><b>${esc(s.name)}</b><span>${esc(s.field_no)}　${s.capacity != null ? fmt(s.capacity) + ' kW' : ''}<br>${esc(s.customer)}</span>${riskLines(s.field_no)}<button class="jump" data-site="${esc(s.field_no)}">展開案場明細</button><a href="${g}" target="_blank" rel="noopener">在 Google 地圖開啟 ↗</a></div>`);
+      markers[s.field_no] = m;
+    });
+    $('modeTy').onclick = () => setMode('typhoon');
+    $('modeWx').onclick = () => setMode('weather');
+    $('modeNone').onclick = () => setMode('none');
+    $('mDrill').onclick = () => {
+      if (!risk.mods) return;
+      drill = drill ? null : risk.mods.ty.drillStorm(Date.now());
+      modeTouched = false;
+      computeRisk();
+      mApply();
+      if (drill) fitTyphoon();
+    };
+    $('mFitTy').onclick = fitTyphoon;
+    $('map').addEventListener('click', (e) => { const b = e.target.closest('.jump'); if (b) openD(b.dataset.site); });
+    const bad = all.filter((s) => !validXY(s));
+    $('mFoot').innerHTML = `${bad.length} 個案場因 GPS 缺漏或格式異常未標示：` + bad.map((s) => `<button class="jump" data-site="${esc(s.field_no)}">${esc(s.name)}</button>`).join('、');
+    $('mFoot').onclick = (e) => { const b = e.target.closest('.jump'); if (b) openD(b.dataset.site); };
     mApply();
-    if(!risk.loadedAt)loadRisk();
+    if (!risk.loadedAt) loadRisk();
   }
-  setTimeout(()=>map.invalidateSize(),0);
+  setTimeout(() => map.invalidateSize(), 0);
 }
-function mApply(){
-  const q=$('mq').value.trim().toLowerCase();
-  const fs=['mContract','mSource','mType','mEng','mArea'].map(i=>[$(i).dataset.key,$(i).value]).filter(x=>x[1]);
-  const filtered=all.filter(r=>(!q||r._s.includes(q))&&fs.every(([k,v])=>r[k]===v));
-  const list=filtered.filter(validXY);
-  if(risk.by&&mode==='typhoon')list.sort((a,b)=>risk.mods.ty.compareTyphoon(risk.by[a.field_no],risk.by[b.field_no]));
-  if(risk.by&&mode==='weather')list.sort((a,b)=>(risk.by[b.field_no].weather.score??-1)-(risk.by[a.field_no].weather.score??-1));
-  list.forEach(s=>{const m=markers[s.field_no],t=toneOf(s.field_no);if(m.options.tone!==t){m.options.tone=t;m.setIcon(siteIcon(t));}});
-  cluster.clearLayers();cluster.addLayers(list.map(s=>markers[s.field_no]));
-  const cap=list.reduce((a,s)=>a+(+s.capacity||0),0);
-  $('mHeadline').textContent=`地圖標示 ${list.length} 個案場，合計 ${fmt(cap/1000)} MW`;
-  $('mSubline').textContent='點標記可看摘要並連到案場資料；右側清單依目前著色的風險排序，可直接定位。';
-  $('mList').innerHTML=list.slice(0,300).map(s=>`<li><button data-no="${esc(s.field_no)}">${esc(s.name)}<small>${esc(s.field_no)}　${esc(s.customer)}</small>${listTag(s.field_no)}</button></li>`).join('')+(list.length>300?`<li class="empty" style="padding:8px 4px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>`:'');
+function mApply() {
+  const q = $('mq').value.trim().toLowerCase();
+  const fs = ['mContract','mSource','mType','mEng','mArea'].map((i) => [$(i).dataset.key, $(i).value]).filter((x) => x[1]);
+  const filtered = all.filter((r) => (!q || r._s.includes(q)) && fs.every(([k, v]) => r[k] === v));
+  const list = filtered.filter(validXY);
+  if (risk.by && mode === 'typhoon') list.sort((a, b) => risk.mods.ty.compareTyphoon(risk.by[a.field_no], risk.by[b.field_no]));
+  if (risk.by && mode === 'weather') list.sort((a, b) => (risk.by[b.field_no].weather.score ?? -1) - (risk.by[a.field_no].weather.score ?? -1));
+  list.forEach((s) => {
+    const m = markers[s.field_no], t = toneOf(s.field_no);
+    if (m.options.tone !== t) { m.options.tone = t; m.setIcon(siteIcon(t)); }
+  });
+  cluster.clearLayers();
+  cluster.addLayers(list.map((s) => markers[s.field_no]));
+  const cap = list.reduce((a, s) => a + (+s.capacity || 0), 0);
+  $('mHeadline').textContent = `全台地圖標示 ${list.length} 座案場，總裝置容量 ${fmt(cap / 1000)} MW`;
+  $('mSubline').textContent = '點選標記檢視摘要與風雨評分；右側清單依即時風險高低自動排序，可快速定位。';
+  $('mList').innerHTML = list.slice(0, 300).map((s) => `<li><button data-no="${esc(s.field_no)}">${esc(s.name)}<small>${esc(s.field_no)}　${esc(s.customer)}</small>${listTag(s.field_no)}</button></li>`).join('') + (list.length > 300 ? `<li class="empty" style="padding:10px 12px">僅列前 300 筆，請用搜尋或篩選縮小範圍</li>` : '');
   renderRisk(filtered);
 }
-// ── 風雨戰情：颱風判定與測站配對共用 taiwan-weather-ops 的模組，兩站邏輯一致 ──
-const WX_BASE='https://davidyeh51.github.io/taiwan-weather-ops/';
-const TONE_ORDER=['danger','warning','possible','normal','incomplete','plain'];
-const WX_LABEL={normal:'監測中',warning:'注意',danger:'警戒',incomplete:'資料不足',unknown:'無有效觀測',location_missing:'待定位'};
-let risk={},drill=null,mode='weather',modeTouched=false,tyLayer=null;
-const siteIcon=t=>L.divIcon({className:'',html:`<span class="smk t-${t}"></span>`,iconSize:[16,16],iconAnchor:[8,8]});
-const wxTone=s=>s==='danger'?'danger':s==='warning'?'warning':s==='normal'?'normal':'incomplete';
-function toneOf(no){const r=risk.by?.[no];if(!r||mode==='none')return 'plain';return mode==='typhoon'?risk.mods.ty.LEVELS[r.typhoon.level].tone:wxTone(r.weather.status);}
-const twTime=v=>new Date(v).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
-const etaText=t=>{if(t==null)return '—';const h=Math.round((t-Date.now())/36e5);return twTime(t)+(h>0?`（約 ${h} 小時後）`:'');};
-function tyEta(r){if(['now25','now15'].includes(r.level))return '現在';const e=risk.mods.ty.firstEta(r);return e?etaText(e):'—';}
-const tag=(tone,text)=>`<span class="tag t-${tone}">${esc(text)}</span>`;
-function listTag(no){const r=risk.by?.[no];if(!r||mode==='none')return '';const L_=risk.mods.ty.LEVELS;return mode==='typhoon'?`<small>${tag(L_[r.typhoon.level].tone,L_[r.typhoon.level].label)} ${esc(tyEta(r.typhoon))}</small>`:`<small>${tag(wxTone(r.weather.status),WX_LABEL[r.weather.status]||r.weather.status)} ${r.weather.score??'—'} 分</small>`;}
-function riskLines(no){const r=risk.by?.[no];if(!r)return '';const l=risk.mods.ty.LEVELS[r.typhoon.level];return `<span>颱風：${esc(l.label)}${risk.mods.ty.firstEta(r.typhoon)?'　'+esc(tyEta(r.typhoon)):''}<br>即時風雨：${esc(WX_LABEL[r.weather.status]||r.weather.status)}${r.weather.score!=null?'　'+r.weather.score+' 分':''}</span>`;}
-function siteRiskHtml(no){
-  const r=risk.by?.[no];
-  if(!r)return risk.error?`<div class="riskblk">風雨資料讀取失敗：${esc(risk.error)}</div>`:'';
-  const ty=r.typhoon,l=risk.mods.ty.LEVELS[ty.level],M=risk.mods.dm.METRICS;
-  const cells=Object.entries(M).map(([k,m])=>{const c=r.weather.readings[k];return `${esc(m.label)} ${c.value==null?'—':fmt(c.value)} ${esc(m.unit)}${c.station?`（${esc(c.station.name)}，${fmt(c.distance)} km）`:''}${c.valid?'':'　'+esc(c.status==='far'?'測站過遠':c.status==='stale'?'資料延遲':c.status==='missing'?'缺值':c.status)}`;}).join('<br>');
-  return `<div class="riskblk"><b>颱風風險</b>　${tag(l.tone,l.label)}<div>${ty.storm?`${esc(ty.storm.name_zh||ty.storm.name)}　現在距離 ${fmt(ty.distanceNow)} km　預報最近 ${fmt(ty.minDistance)} km（${esc(twTime(ty.minAt))}）<br>進七級風圈 ${esc(etaText(ty.eta15))}　進十級風圈 ${esc(etaText(ty.eta25))}`:'目前沒有相關颱風資料'}</div></div>`
-   +`<div class="riskblk"><b>即時風雨（鄰近測站）</b>　${tag(wxTone(r.weather.status),WX_LABEL[r.weather.status]||r.weather.status)}${r.weather.score!=null?'　'+r.weather.score+' 分':''}<div>${cells}</div><div>測站觀測非案場實測；風取 20 km、雨取 10 km 內測站。</div></div>`;
-}
-async function loadRisk(){
-  try{
-    if(!risk.mods){const [ty,pd,dm]=await Promise.all(['typhoon-domain.mjs','portfolio-domain.mjs','domain.mjs'].map(f=>import(WX_BASE+f)));risk.mods={ty,pd,dm};}
-    const rows=[];for(let i=0;;i+=1000){const {data,error}=await sb.from('wx_latest').select('*').order('station_id').order('kind').range(i,i+999);if(error)throw error;rows.push(...data);if(data.length<1000)break;}
-    const st=await sb.from('wx_typhoon_state').select('*').maybeSingle();if(st.error)throw st.error;
-    risk.state=st.data;risk.weather=rows;risk.error=null;risk.loadedAt=Date.now();
-  }catch(e){risk.error=e.message||'無法連線';}
-  computeRisk();if(map)mApply();
-}
-function computeRisk(){
-  if(!risk.mods||!risk.weather){risk.by=null;return;}
-  const {ty,pd}=risk.mods,now=Date.now(),fresh=drill?'ok':ty.freshness(risk.state,now),usable=drill||(fresh!=='pending'&&risk.state?.ok_at),storms=drill?[drill]:(risk.state?.storms||[]);
-  const index=pd.weatherIndex(risk.weather,now);risk.by={};risk.fresh=fresh;risk.storms=storms;
-  for(const s of all){
-    const site={site_id:s.field_no,name:s.name,latitude:validXY(s)?s.lat:null,longitude:validXY(s)?s.lng:null,capacity_kw:+s.capacity||0,engineer_name:s.engineer};
-    let t=usable?ty.assessTyphoon(site,storms,now):{level:pd.hasLocation(site)?'unavailable':'location_missing',minDistance:null};
-    if(fresh==='stale'&&t.level==='clear')t={...t,level:'unavailable'};
-    risk.by[s.field_no]={site,typhoon:t,weather:pd.assessSite(site,index)};
-  }
-  if(!modeTouched)mode=Object.values(risk.by).some(r=>ty.LEVELS[r.typhoon.level].rank>=2)?'typhoon':'weather';
-}
-function setMode(m){mode=m;modeTouched=true;mApply();}
-function fitTyphoon(){const pts=(risk.storms||[]).flatMap(s=>risk.mods.ty.trackPoints(s).map(p=>[p.latitude,p.longitude]));if(map&&pts.length)map.fitBounds([...pts,[21.9,120],[25.3,122]],{padding:[30,30],maxZoom:9});}
-function drawTyphoonLayer(){
-  if(!tyLayer)return;tyLayer.clearLayers();if(!risk.mods)return;const {ty}=risk.mods,now=Date.now();
-  for(const storm of risk.storms||[]){
-    const pts=ty.trackPoints(storm);if(!pts.length)continue;
-    const cur=ty.positionAt(pts,Math.max(now,pts[0].t))||pts.at(-1);
-    L.polyline(pts.map(p=>[p.latitude,p.longitude]),{color:'#0c2b15',weight:2,dashArray:'6 6',interactive:false}).addTo(tyLayer);
-    for(const p of pts.slice(1)){
-      if(p.p70)L.circle([p.latitude,p.longitude],{radius:p.p70*1000,color:'#197a56',weight:1,opacity:.5,fillOpacity:.06,interactive:false}).addTo(tyLayer);
-      L.circleMarker([p.latitude,p.longitude],{radius:4,color:'#0c2b15',fillColor:'#fff',fillOpacity:1,weight:2}).bindTooltip(`${esc(twTime(p.at))}<br>七級 ${p.r15??'—'} km · 十級 ${p.r25??'—'} km<br>70% 機率半徑 ${p.p70??'—'} km`).addTo(tyLayer);
+async function loadRisk() {
+  try {
+    if (!risk.mods) {
+      const [ty, pd, dm] = await Promise.all(['typhoon-domain.mjs', 'portfolio-domain.mjs', 'domain.mjs'].map((f) => import(WX_BASE + f)));
+      risk.mods = { ty, pd, dm };
     }
-    if(cur.r15)L.circle([cur.latitude,cur.longitude],{radius:cur.r15*1000,color:'#e08a1e',weight:2,fillOpacity:.12,interactive:false}).addTo(tyLayer);
-    if(cur.r25)L.circle([cur.latitude,cur.longitude],{radius:cur.r25*1000,color:'#c0392b',weight:2,fillOpacity:.18,interactive:false}).addTo(tyLayer);
-    L.marker([cur.latitude,cur.longitude],{icon:L.divIcon({className:'',html:'<span class="ty-eye">🌀</span>',iconSize:[30,30],iconAnchor:[15,15]})}).bindTooltip(esc(storm.name_zh||storm.name)).addTo(tyLayer);
+    const rows = [];
+    for (let i = 0; ; i += 1000) {
+      const { data, error } = await sb.from('wx_latest').select('*').order('station_id').order('kind').range(i, i + 999);
+      if (error) throw error;
+      rows.push(...data);
+      if (data.length < 1000) break;
+    }
+    const st = await sb.from('wx_typhoon_state').select('*').maybeSingle();
+    if (st.error) throw st.error;
+    risk.state = st.data;
+    risk.weather = rows;
+    risk.error = null;
+    risk.loadedAt = Date.now();
+  } catch (e) {
+    risk.error = e.message || '無法連線';
+  }
+  computeRisk();
+  if (map) mApply();
+}
+function computeRisk() {
+  if (!risk.mods || !risk.weather) { risk.by = null; return; }
+  const { ty, pd } = risk.mods, now = Date.now();
+  const fresh = drill ? 'ok' : ty.freshness(risk.state, now);
+  const usable = drill || (fresh !== 'pending' && risk.state?.ok_at);
+  const storms = drill ? [drill] : (risk.state?.storms || []);
+  const index = pd.weatherIndex(risk.weather, now);
+  risk.by = {}; risk.fresh = fresh; risk.storms = storms;
+  for (const s of all) {
+    const site = { site_id: s.field_no, name: s.name, latitude: validXY(s) ? s.lat : null, longitude: validXY(s) ? s.lng : null, capacity_kw: +s.capacity || 0, engineer_name: s.engineer };
+    let t = usable ? ty.assessTyphoon(site, storms, now) : { level: pd.hasLocation(site) ? 'unavailable' : 'location_missing', minDistance: null };
+    if (fresh === 'stale' && t.level === 'clear') t = { ...t, level: 'unavailable' };
+    risk.by[s.field_no] = { site, typhoon: t, weather: pd.assessSite(site, index) };
+  }
+  if (!modeTouched) mode = Object.values(risk.by).some((r) => ty.LEVELS[r.typhoon.level].rank >= 2) ? 'typhoon' : 'weather';
+}
+function setMode(m) { mode = m; modeTouched = true; mApply(); }
+function fitTyphoon() {
+  const pts = (risk.storms || []).flatMap((s) => risk.mods.ty.trackPoints(s).map((p) => [p.latitude, p.longitude]));
+  if (map && pts.length) map.fitBounds([...pts, [21.9, 120], [25.3, 122]], { padding: [30, 30], maxZoom: 9 });
+}
+function drawTyphoonLayer() {
+  if (!tyLayer) return;
+  tyLayer.clearLayers();
+  if (!risk.mods) return;
+  const { ty } = risk.mods, now = Date.now();
+  for (const storm of risk.storms || []) {
+    const pts = ty.trackPoints(storm);
+    if (!pts.length) continue;
+    const cur = ty.positionAt(pts, Math.max(now, pts[0].t)) || pts.at(-1);
+    L.polyline(pts.map((p) => [p.latitude, p.longitude]), { color: '#051C2C', weight: 2, dashArray: '6 6', interactive: false }).addTo(tyLayer);
+    for (const p of pts.slice(1)) {
+      if (p.p70) L.circle([p.latitude, p.longitude], { radius: p.p70 * 1000, color: '#548ABF', weight: 1, opacity: .55, fillOpacity: .07, interactive: false }).addTo(tyLayer);
+      L.circleMarker([p.latitude, p.longitude], { radius: 4, color: '#051C2C', fillColor: '#fff', fillOpacity: 1, weight: 2 }).bindTooltip(`${esc(twTime(p.at))}<br>七級 ${p.r15 ?? '—'} km · 十級 ${p.r25 ?? '—'} km<br>70% 機率半徑 ${p.p70 ?? '—'} km`).addTo(tyLayer);
+    }
+    if (cur.r15) L.circle([cur.latitude, cur.longitude], { radius: cur.r15 * 1000, color: '#C26B0A', weight: 2, fillOpacity: .12, interactive: false }).addTo(tyLayer);
+    if (cur.r25) L.circle([cur.latitude, cur.longitude], { radius: cur.r25 * 1000, color: '#B42318', weight: 2, fillOpacity: .18, interactive: false }).addTo(tyLayer);
+    L.marker([cur.latitude, cur.longitude], { icon: L.divIcon({ className: '', html: '<span class="ty-eye">🌀</span>', iconSize: [30, 30], iconAnchor: [15, 15] }) }).bindTooltip(esc(storm.name_zh || storm.name)).addTo(tyLayer);
   }
 }
-function renderRisk(rows){
-  ['Ty','Wx','None'].forEach(k=>$('mode'+k).setAttribute('aria-pressed',mode===({Ty:'typhoon',Wx:'weather',None:'none'})[k]));
-  $('mDrill').textContent=drill?'結束演練':'演練情境';$('mDrill').setAttribute('aria-pressed',!!drill);
-  if(!risk.by){$('mRiskHead').textContent=risk.error?'風雨資料讀取失敗':'讀取颱風資料中…';$('mRiskMeta').textContent=risk.error?'錯誤：'+risk.error:'';$('mLegend').innerHTML='';return;}
-  const {ty}=risk.mods,L_=ty.LEVELS,rs=rows.map(s=>risk.by[s.field_no]),{levels,engineers}=ty.summarize(rs),fresh=risk.fresh,storms=risk.storms;
-  const note=drill?'演練情境：這是模擬路徑，不是真實颱風，也沒有寫入資料庫。':fresh==='pending'?'颱風資料尚未取得，無法判定案場風險。':fresh==='stale'?'颱風資料已超過 1 小時未更新，以下為上次成功資料，不代表沒有颱風。請以氣象署公布為準。':fresh==='failed'?`最近一次颱風資料更新失敗（${risk.state?.message||'原因未明'}），以下為上次成功資料。`:risk.error?'風雨資料更新失敗，顯示上次讀取結果：'+risk.error:'';
-  $('mRiskNote').hidden=!note;$('mRiskNote').textContent=note;$('mRiskNote').classList.toggle('drill',!!drill);
-  $('mRiskMeta').textContent=(drill?'演練中':risk.state?.issued_at?'氣象署颱風資料 '+twTime(risk.state.issued_at):'')+(risk.loadedAt?'　讀取 '+twTime(risk.loadedAt):'');
-  $('mFitTy').hidden=!storms.length;
-  const hit=rs.filter(r=>L_[r.typhoon.level].rank>=2),kw=hit.reduce((a,r)=>a+r.site.capacity_kw,0),near=rs.filter(r=>Number.isFinite(r.typhoon.minDistance)).sort((a,b)=>a.typhoon.minDistance-b.typhoon.minDistance)[0],first=hit.map(r=>ty.firstEta(r.typhoon)).filter(Boolean).sort((a,b)=>a-b)[0];
-  $('mRiskHead').textContent=fresh==='pending'?'尚未取得颱風資料。':fresh==='stale'&&!hit.length?'颱風資料中斷，目前無法確認案場是否受影響。':!storms.length?`氣象署目前沒有發布颱風，${rows.length} 個案場未受颱風影響。`:hit.length?`${hit.length} 個案場（${fmt(kw/1000)} MW）可能受颱風影響${first?'，最早 '+etaText(first)+' 進入影響範圍':'，已在風圈內'}。`:`目前沒有案場落入颱風影響範圍${near?`；預報期間離案場最近約 ${fmt(near.typhoon.minDistance)} 公里`:''}。`;
-  $('mStorms').innerHTML=storms.map(s=>{const a=s.analysis;return `<div class="storm"><b>${esc(s.name_zh||s.name)}</b> <small>${esc(s.category_zh||'')} · ${esc(s.name)}</small><dl><div><dt>中心位置</dt><dd>${fmt(a.latitude)}°N ${fmt(a.longitude)}°E</dd></div><div><dt>移動</dt><dd>${esc(a.move?.direction||'—')} ${a.move?.speed??'—'} km/h</dd></div><div><dt>最大風速／陣風</dt><dd>${a.wind??'—'}／${a.gust??'—'} m/s</dd></div><div><dt>七級／十級半徑</dt><dd>${a.r15??'—'}／${a.r25??'—'} km</dd></div></dl><small>資料時間 ${esc(twTime(a.at))}</small></div>`;}).join('')||`<p class="empty">${fresh==='pending'?'尚未取得颱風資料。':'氣象署目前沒有發布颱風。'}</p>`;
-  const total=rows.length||1;
-  $('mLevels').innerHTML=Object.entries(L_).filter(([k,l])=>levels[k].count||l.rank>=2).map(([k,l])=>`<div class="lv"><span><i class="dotk t-${l.tone}"></i>${esc(l.label)}</span><span class="lvbar"><i class="t-${l.tone}" style="width:${(levels[k].count/total*100).toFixed(1)}%"></i></span><span class="lvval">${levels[k].count} 個 · ${fmt(levels[k].kw/1000)} MW</span></div>`).join('');
-  $('mEngLoad').innerHTML=engineers.slice(0,8).map(e=>`<div class="engrow"><span>${esc(e.name)}<small>${e.count} 個 · ${fmt(e.kw/1000)} MW</small></span><span>${e.earliest?esc(twTime(e.earliest)):'已在範圍內'}</span></div>`).join('')||'<p class="empty">目前沒有工程師負責受影響案場。</p>';
-  const ws=drill?[]:risk.state?.warnings||[],tw=ws.filter(w=>w.title.includes('颱風'));
-  $('mWarn').innerHTML=`<div class="warnhead"><b>氣象署警報</b><span class="empty">${drill?'演練中不顯示。':risk.state?.warning_status&&risk.state.warning_status!=='ok'?'警報讀取失敗，請直接查氣象署。':tw.length?'':'目前沒有海上或陸上颱風警報。'}</span><a href="https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html" target="_blank" rel="noopener">氣象署颱風消息 ↗</a></div>`+ws.map(w=>`<details class="${w.title.includes('颱風')?'ty':''}"><summary>${esc(w.title)} <small>${esc(w.issued)}${w.validto?' 至 '+esc(w.validto):''}</small></summary><p>${esc(w.content)}</p></details>`).join('');
-  $('mLegend').innerHTML=mode==='typhoon'?['danger:十級風圈','warning:七級風圈','possible:路徑偏移可能影響','normal:未受影響','incomplete:待定位或無資料'].map(x=>{const [t,l]=x.split(':');return `<span><i class="dotk t-${t}"></i>${l}</span>`;}).join('')+'<span>颱風判定屬風圈幾何計算，未計入地形；以氣象署警報為準。</span>':mode==='weather'?['danger:警戒 ≥90','warning:注意 ≥60','normal:監測中','incomplete:資料不足'].map(x=>{const [t,l]=x.split(':');return `<span><i class="dotk t-${t}"></i>${l}</span>`;}).join('')+'<span>鄰近測站觀測，非案場實測。</span>':'';
+function renderRisk(rows) {
+  ['Ty', 'Wx', 'None'].forEach((k) => $('mode' + k).setAttribute('aria-pressed', mode === ({ Ty: 'typhoon', Wx: 'weather', None: 'none' })[k]));
+  $('mDrill').textContent = drill ? '結束演練情境' : '啟動颱風演練';
+  $('mDrill').setAttribute('aria-pressed', !!drill);
+  if (!risk.by) {
+    $('mRiskHead').textContent = risk.error ? '風雨資料讀取失敗' : '讀取颱風資料中…';
+    $('mRiskMeta').textContent = risk.error ? '錯誤：' + risk.error : '';
+    $('mLegend').innerHTML = '';
+    return;
+  }
+  const { ty } = risk.mods, L_ = ty.LEVELS, rs = rows.map((s) => risk.by[s.field_no]), { levels, engineers } = ty.summarize(rs), fresh = risk.fresh, storms = risk.storms;
+  const note = drill ? '演練情境模式：此為模擬颱風路徑，並非真實氣象警報，亦不寫入資料庫。' : fresh === 'pending' ? '颱風資料尚未取得，無法判定案場風險。' : fresh === 'stale' ? '颱風資料已超過 1 小時未更新，以下為上次成功快照，請以氣象署最新公布為準。' : fresh === 'failed' ? `最近一次颱風資料更新失敗（${risk.state?.message || '原因未明'}），以下顯示上次成功資料。` : risk.error ? '風雨資料更新失敗，顯示上次讀取結果：' + risk.error : '';
+  $('mRiskNote').hidden = !note;
+  $('mRiskNote').textContent = note;
+  $('mRiskNote').classList.toggle('drill', !!drill);
+  $('mRiskMeta').textContent = (drill ? '演練模式' : risk.state?.issued_at ? '氣象署資料 ' + twTime(risk.state.issued_at) : '') + (risk.loadedAt ? '　更新於 ' + twTime(risk.loadedAt) : '');
+  $('mFitTy').hidden = !storms.length;
+  const hit = rs.filter((r) => L_[r.typhoon.level].rank >= 2), kw = hit.reduce((a, r) => a + r.site.capacity_kw, 0);
+  const near = rs.filter((r) => Number.isFinite(r.typhoon.minDistance)).sort((a, b) => a.typhoon.minDistance - b.typhoon.minDistance)[0];
+  const first = hit.map((r) => ty.firstEta(r.typhoon)).filter(Boolean).sort((a, b) => a - b)[0];
+  $('mRiskHead').textContent = fresh === 'pending' ? '尚未取得颱風資料。' : fresh === 'stale' && !hit.length ? '颱風資料更新中斷，目前無法確認案場是否受影響。' : !storms.length ? `氣象署目前無發布颱風，篩選內 ${rows.length} 座案場皆處常態監測。` : hit.length ? `${hit.length} 座案場（${fmt(kw / 1000)} MW）落入颱風影響評估範圍${first ? '，最早 ' + etaText(first) + ' 進入風圈' : '，目前已在風圈內'}。` : `目前無案場落入颱風影響範圍${near ? `；預報期間離最近案場約 ${fmt(near.typhoon.minDistance)} 公里` : ''}。`;
+  $('mStorms').innerHTML = storms.map((s) => {
+    const a = s.analysis;
+    return `<div class="storm"><b>${esc(s.name_zh || s.name)}</b> <small>${esc(s.category_zh || '')} · ${esc(s.name)}</small><dl><div><dt>中心位置</dt><dd>${fmt(a.latitude)}°N ${fmt(a.longitude)}°E</dd></div><div><dt>移動方向與速度</dt><dd>${esc(a.move?.direction || '—')} ${a.move?.speed ?? '—'} km/h</dd></div><div><dt>最大風速／陣風</dt><dd>${a.wind ?? '—'}／${a.gust ?? '—'} m/s</dd></div><div><dt>七級／十級半徑</dt><dd>${a.r15 ?? '—'}／${a.r25 ?? '—'} km</dd></div></dl><small>資料時間 ${esc(twTime(a.at))}</small></div>`;
+  }).join('') || `<p class="empty">${fresh === 'pending' ? '尚未取得颱風資料。' : '氣象署目前未發布颱風。'}</p>`;
+  const total = rows.length || 1;
+  $('mLevels').innerHTML = Object.entries(L_).filter(([k, l]) => levels[k].count || l.rank >= 2).map(([k, l]) => `<div class="lv"><span><i class="dotk t-${l.tone}"></i>${esc(l.label)}</span><span class="lvbar"><i class="t-${l.tone}" style="width:${(levels[k].count / total * 100).toFixed(1)}%"></i></span><span class="lvval">${levels[k].count} 座 · ${fmt(levels[k].kw / 1000)} MW</span></div>`).join('');
+  $('mEngLoad').innerHTML = engineers.slice(0, 8).map((e) => `<div class="engrow"><span>${esc(e.name)}<small>${e.count} 座 · ${fmt(e.kw / 1000)} MW</small></span><span>${e.earliest ? esc(twTime(e.earliest)) : '已在範圍內'}</span></div>`).join('') || '<p class="empty">目前沒有工程師負責受影響案場。</p>';
+  const ws = drill ? [] : risk.state?.warnings || [], tw = ws.filter((w) => w.title.includes('颱風'));
+  $('mWarn').innerHTML = `<div class="warnhead"><b>中央氣象署特報</b><span class="empty">${drill ? '演練模式不顯示即時警報。' : risk.state?.warning_status && risk.state.warning_status !== 'ok' ? '警報讀取失敗，請直接查閱氣象署官網。' : tw.length ? '' : '目前無海上或陸上颱風警報。'}</span><a href="https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html" target="_blank" rel="noopener">氣象署颱風消息 ↗</a></div>` + ws.map((w) => `<details class="${w.title.includes('颱風') ? 'ty' : ''}"><summary>${esc(w.title)} <small>${esc(w.issued)}${w.validto ? ' 至 ' + esc(w.validto) : ''}</small></summary><p>${esc(w.content)}</p></details>`).join('');
+  $('mLegend').innerHTML = mode === 'typhoon' ? ['danger:十級風圈','warning:七級風圈','possible:路徑偏移可能影響','normal:未受影響','incomplete:待定位或無資料'].map((x) => { const [t, l] = x.split(':'); return `<span><i class="dotk t-${t}"></i>${l}</span>`; }).join('') + '<span>註：風圈幾何估算未計入地形，請以氣象署警報為準。</span>' : mode === 'weather' ? ['danger:警戒 ≥90','warning:注意 ≥60','normal:監測中','incomplete:資料不足'].map((x) => { const [t, l] = x.split(':'); return `<span><i class="dotk t-${t}"></i>${l}</span>`; }).join('') + '<span>註：採鄰近測站觀測資料，非案場現場實測。</span>' : '';
   drawTyphoonLayer();
 }
-setInterval(()=>{if(!document.hidden&&all.length)loadRisk();},10*60*1000);
-const daysLeft=c=>c.end_date?Math.ceil((new Date(c.end_date)-new Date())/864e5):null;
-function cInitFilters(){
-  [['cType','contract_type'],['cStatus','status']].forEach(([id,k])=>{
-    const v=[...new Set(cAll.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
-    $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
-    $(id).onchange=()=>{cPageNo=0;cApply()};
+setInterval(() => { if (!document.hidden && all.length) loadRisk(); }, 10 * 60 * 1000);
+
+// ── Contracts & Expiry Views ──
+const daysLeft = (c) => c.end_date ? Math.ceil((new Date(c.end_date) - new Date()) / 864e5) : null;
+const dayTone = (d) => d < 0 ? 'incomplete' : d <= 7 ? 'danger' : d <= 30 ? 'warning' : 'normal';
+function cInitFilters() {
+  [['cType', 'contract_type'], ['cStatus', 'status']].forEach(([id, k]) => {
+    const v = [...new Set(cAll.map((r) => r[k]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+    $(id).innerHTML = '<option value="">全部</option>' + v.map((x) => `<option>${esc(x)}</option>`).join('');
+    $(id).onchange = () => { cPageNo = 0; cApply(); };
   });
-  $('cExpire').onchange=()=>{cPageNo=0;cApply()};
+  $('cExpire').onchange = () => { cPageNo = 0; cApply(); };
 }
-// ── 合約到期提醒：每個「合約 × 關聯案場」一列，沒有關聯案場的合約也列出 ──
-let eRows=[];
-const dayTone=d=>d<0?'incomplete':d<=7?'danger':d<=30?'warning':'normal';
-function eInit(){
-  const opt=(id,k)=>{const v=[...new Set(cAll.map(c=>c[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));$(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');};
-  opt('eType','contract_type');opt('eStatus','status');
-  const at=(lo,hi)=>cAll.filter(c=>{const d=daysLeft(c);return d!=null&&d>=lo&&d<=hi;});
-  const k=[[at(0,7),'7 天內到期'],[at(0,30),'30 天內到期'],[at(0,90),'90 天內到期'],[at(-30,-1),'近 30 天已到期']];
-  $('eKpis').innerHTML=k.map(([l,t])=>`<div class="kpi"><strong>${l.length}</strong><span>${esc(t)}（份）</span></div>`).join('');
+function eInit() {
+  const opt = (id, k) => {
+    const v = [...new Set(cAll.map((c) => c[k]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+    $(id).innerHTML = '<option value="">全部</option>' + v.map((x) => `<option>${esc(x)}</option>`).join('');
+  };
+  opt('eType', 'contract_type');
+  opt('eStatus', 'status');
+  const at = (lo, hi) => cAll.filter((c) => { const d = daysLeft(c); return d != null && d >= lo && d <= hi; });
+  const k = [[at(0, 7), '7 天內急迫到期（份）'], [at(0, 30), '30 天內到期（份）'], [at(0, 90), '90 天內到期（份）'], [at(-30, -1), '近 30 天已到期（份）']];
+  $('eKpis').innerHTML = k.map(([l, t]) => `<div class="kpi"><strong>${l.length}</strong><span>${esc(t)}</span></div>`).join('');
   eApply();
 }
-function eApply(){
-  const w=+$('eWindow').value,q=$('eq').value.trim().toLowerCase(),ty=$('eType').value,st=$('eStatus').value;
-  const inWin=d=>d!=null&&(w<0?d<0&&d>=w:d>=0&&d<=w);
-  const cs=cAll.filter(c=>inWin(daysLeft(c))&&(!ty||c.contract_type===ty)&&(!st||c.status===st));
-  eRows=cs.flatMap(c=>{const ls=c.sites.length?c.sites:[{field_no:'',site_name:''}];return ls.map(l=>({field_no:l.field_no,site_name:(all.find(s=>s.field_no===l.field_no)||{}).name||l.site_name,contract_no:c.contract_no,contract_type:c.contract_type,end_date:c.end_date,days:daysLeft(c),customer:c.customer,status:c.status}));})
-    .filter(r=>!q||[r.field_no,r.site_name,r.contract_no,r.customer].join(' ').toLowerCase().includes(q))
-    .sort((a,b)=>(w<0?b.days-a.days:a.days-b.days)||a.contract_no.localeCompare(b.contract_no)||a.field_no.localeCompare(b.field_no));
-  const nC=new Set(eRows.map(r=>r.contract_no)).size,nS=new Set(eRows.filter(r=>r.field_no).map(r=>r.field_no)).size,label=$('eWindow').selectedOptions[0].text;
-  $('eHeadline').textContent=w<0?`近 30 天有 ${nC} 份合約已到期，請確認是否續約`:nC?`${label}的合約有 ${nC} 份，涉及 ${nS} 個案場`:`${label}的合約：目前沒有`;
-  $('eCount').textContent=`${eRows.length} 列（${nC} 份合約）`;
-  $('eTbody').innerHTML=eRows.map(r=>`<tr class="row" tabindex="0" data-contract="${esc(r.contract_no)}"><td class="nw">${r.field_no?`<button class="jump" data-site="${esc(r.field_no)}">${esc(r.field_no)}</button>`:'—'}</td><td>${esc(r.site_name)||'<span class="empty">未關聯案場</span>'}</td><td class="nw">${esc(r.contract_no)}</td><td class="nw etype">${esc(r.contract_type)}</td><td class="nw">${esc(r.end_date)}</td><td class="num">${tag(dayTone(r.days),r.days<0?`已過 ${-r.days} 天`:`${r.days} 天`)}</td><td>${esc(r.customer)}</td><td class="nw">${esc(r.status)}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">期限內沒有到期的合約</td></tr>';
+function eApply() {
+  const w = +$('eWindow').value, q = $('eq').value.trim().toLowerCase(), ty = $('eType').value, st = $('eStatus').value;
+  const inWin = (d) => d != null && (w < 0 ? d < 0 && d >= w : d >= 0 && d <= w);
+  const cs = cAll.filter((c) => inWin(daysLeft(c)) && (!ty || c.contract_type === ty) && (!st || c.status === st));
+  eRows = cs.flatMap((c) => {
+    const ls = c.sites.length ? c.sites : [{ field_no: '', site_name: '' }];
+    return ls.map((l) => ({
+      field_no: l.field_no,
+      site_name: (all.find((s) => s.field_no === l.field_no) || {}).name || l.site_name,
+      contract_no: c.contract_no, contract_type: c.contract_type, end_date: c.end_date,
+      days: daysLeft(c), customer: c.customer, status: c.status,
+    }));
+  }).filter((r) => !q || [r.field_no, r.site_name, r.contract_no, r.customer].join(' ').toLowerCase().includes(q))
+    .sort((a, b) => (w < 0 ? b.days - a.days : a.days - b.days) || a.contract_no.localeCompare(b.contract_no) || a.field_no.localeCompare(b.field_no));
+  const nC = new Set(eRows.map((r) => r.contract_no)).size, nS = new Set(eRows.filter((r) => r.field_no).map((r) => r.field_no)).size;
+  const label = $('eWindow').selectedOptions[0].text;
+  $('eHeadline').textContent = w < 0 ? `近 30 天共有 ${nC} 份合約已屆期，建議優先確認續約進度` : nC ? `${label}共計 ${nC} 份合約，涵蓋 ${nS} 座關聯案場` : `${label}目前無到期合約`;
+  $('eCount').textContent = `共 ${eRows.length} 筆明細（${nC} 份合約）`;
+  $('eTbody').innerHTML = eRows.map((r) => `<tr class="row" tabindex="0" data-contract="${esc(r.contract_no)}"><td class="nw">${r.field_no ? `<button class="jump" data-site="${esc(r.field_no)}">${esc(r.field_no)}</button>` : '—'}</td><td>${esc(r.site_name) || '<span class="empty">未關聯案場</span>'}</td><td class="nw">${esc(r.contract_no)}</td><td class="nw etype">${esc(r.contract_type)}</td><td class="nw">${esc(r.end_date)}</td><td class="num">${tag(dayTone(r.days), r.days < 0 ? `已過 ${-r.days} 天` : `${r.days} 天`)}</td><td>${esc(r.customer)}</td><td class="nw">${esc(r.status)}</td></tr>`).join('') || '<tr><td colspan="8" class="empty">所選視窗內沒有到期合約</td></tr>';
 }
-function eText(){
-  const today=new Date().toLocaleDateString('zh-TW',{timeZone:'Asia/Taipei'});
-  return [`合約到期提醒通知-${today} (共計${eRows.length}筆)`,'','案場編號\t案場名稱\t合約編號\t合約類型\t合約結束日期',...eRows.map(r=>[r.field_no,r.site_name,r.contract_no,r.contract_type,r.end_date].join('\t'))].join('\n');
+function eText() {
+  const today = new Date().toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+  return [`合約到期提醒通知-${today} (共計${eRows.length}筆)`, '', '案場編號\t案場名稱\t合約編號\t合約類型\t合約結束日期', ...eRows.map((r) => [r.field_no, r.site_name, r.contract_no, r.contract_type, r.end_date].join('\t'))].join('\n');
 }
-// ── 帳號管理：所有寫入都經 oss-account-admin 函式（伺服器端再驗證擁有者身分） ──
-async function acct(body){
-  const {data:{session}}=await sb.auth.getSession();
-  const r=await fetch(SB_URL+'/functions/v1/oss-account-admin',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+(session?.access_token||'')},body:JSON.stringify(body)});
-  const j=await r.json().catch(()=>({error:'回應格式錯誤'}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j;
+function cSummary() {
+  const on = cAll.filter((c) => c.status === '進行中');
+  const soon = on.filter((c) => { const d = daysLeft(c); return d != null && d >= 0 && d <= 90; });
+  $('cHeadline').textContent = `納管 ${cAll.length} 份合約中，${on.length} 份履約進行中，${soon.length} 份將於 90 天內到期`;
+  $('cSubline').textContent = `涵蓋維運合約 ${cAll.filter((c) => c.contract_type === '維運合約').length} 份、工程合約 ${cAll.filter((c) => c.contract_type === '工程合約').length} 份；所有查詢均受角色權限與 RLS 保護。`;
+  $('cKpis').innerHTML = [
+    [cAll.length, '合約總數（份）'],
+    [on.length, '履約進行中（份）'],
+    [soon.length, '90 天內到期預警（份）'],
+    [cAll.filter((c) => c.status === '已到期').length, '已到期歷史合約（份）'],
+  ].map(([a, b]) => `<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+  const t = cAll.map((r) => r.synced_at).sort().pop();
+  $('cFoot').textContent = `資料來源：進金生能源維運管理系統「合約資料」；最後同步時間 ${t ? twFull(t) : '—'}。`;
 }
-const aMsg=(t,ok)=>{$('aMsg').textContent=t;$('aMsg').style.color=ok?'var(--t-normal)':'';};
-async function aLoad(){
-  try{
-    const {me,members}=await acct({action:'list'});
-    $('aHeadline').textContent=`案場資料庫共 ${members.length} 位使用者，${members.filter(m=>!m.account).length} 位尚未建立登入帳號`;
-    $('aTbody').innerHTML=members.map(m=>`<tr><td>${esc(m.email)}${m.email===me?' <small>（你）</small>':''}</td><td class="nw">${m.role==='owner'?'擁有者':'成員'}</td><td class="nw">${m.account?(m.confirmed?tag('normal','已建立'):tag('warning','未驗證')):tag('incomplete','未建立')}</td><td class="nw">${m.last_sign_in_at?esc(twTime(m.last_sign_in_at)):'—'}</td><td class="nw">${m.wx_role?esc({admin:'管理者',viewer:'唯讀',engineer:'工程師'}[m.wx_role]||m.wx_role):'—'}</td><td class="nw">${m.account?`<button class="link" data-pw="${esc(m.email)}">重設密碼</button>`:''}${m.role==='owner'?'':` <button class="link" data-rm="${esc(m.email)}">移除</button>`}</td></tr>`).join('');
-  }catch(e){aMsg('讀取帳號清單失敗：'+e.message);}
-}
-function cSummary(){
-  const on=cAll.filter(c=>c.status==='進行中');
-  const soon=on.filter(c=>{const d=daysLeft(c);return d!=null&&d>=0&&d<=90});
-  $('cHeadline').textContent=`${cAll.length} 份合約中，${on.length} 份進行中，其中 ${soon.length} 份將在 90 天內到期`;
-  $('cSubline').textContent=`維運合約 ${cAll.filter(c=>c.contract_type==='維運合約').length} 份，工程合約 ${cAll.filter(c=>c.contract_type==='工程合約').length} 份`;
-  $('cKpis').innerHTML=[[cAll.length,'合約總數'],[on.length,'進行中'],[soon.length,'90 天內到期'],[cAll.filter(c=>c.status==='已到期').length,'已到期']].map(([a,b])=>`<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
-  const t=cAll.map(r=>r.synced_at).sort().pop();
-  $('cFoot').textContent=`資料來源：維運管理系統「合約資料」；同步時間 ${new Date(t).toLocaleString('zh-TW')}。此為複製快照，不會自動更新。`;
-}
-function cApply(){
-  const q=$('cq').value.trim().toLowerCase(),ty=$('cType').value,st=$('cStatus').value,ex=+$('cExpire').value;
-  cView=cAll.filter(c=>{const d=daysLeft(c);return(!q||c._s.includes(q))&&(!ty||c.contract_type===ty)&&(!st||c.status===st)&&(!ex||(d!=null&&d>=0&&d<=ex))});
-  cView.sort((a,b)=>{const x=a[cSortKey],y=b[cSortKey];if(x==null||x==='')return 1;if(y==null||y==='')return -1;
-    return cSortDir*(cSortKey==='site_count'?(x-y):String(x).localeCompare(String(y),'zh-Hant'))});
+function cApply() {
+  const q = $('cq').value.trim().toLowerCase(), ty = $('cType').value, st = $('cStatus').value, ex = +$('cExpire').value;
+  cView = cAll.filter((c) => {
+    const d = daysLeft(c);
+    return (!q || c._s.includes(q)) && (!ty || c.contract_type === ty) && (!st || c.status === st) && (!ex || (d != null && d >= 0 && d <= ex));
+  });
+  cView.sort((a, b) => {
+    const x = a[cSortKey], y = b[cSortKey];
+    if (x == null || x === '') return 1;
+    if (y == null || y === '') return -1;
+    return cSortDir * (cSortKey === 'site_count' ? (x - y) : String(x).localeCompare(String(y), 'zh-Hant'));
+  });
   cRender();
 }
-function cRender(){
-  $('cThead').innerHTML=CCOLS.map(([k,l,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${cSortKey===k?(cSortDir>0?'ascending':'descending'):'none'}">${esc(l)}${cSortKey===k?(cSortDir>0?' ▲':' ▼'):''}</th>`).join('');
-  const pages=Math.max(1,Math.ceil(cView.length/PAGE));cPageNo=Math.min(cPageNo,pages-1);
-  $('cTbody').innerHTML=cView.slice(cPageNo*PAGE,(cPageNo+1)*PAGE).map(r=>`<tr class="row" tabindex="0" data-no="${esc(r.contract_no)}">${CCOLS.map(([k,,n])=>`<td class="${n?'num':(k==='customer'?'':'nw')}">${esc(r[k])}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${CCOLS.length}" class="empty">沒有符合條件的合約</td></tr>`;
-  $('cCount').textContent=`${cView.length} 筆`;
-  $('cPage').textContent=`第 ${cPageNo+1} / ${pages} 頁`;$('cPrev').disabled=!cPageNo;$('cNext').disabled=cPageNo>=pages-1;
+function cRender() {
+  $('cThead').innerHTML = CCOLS.map(([k, l, n]) => `<th class="${n ? 'num' : ''}" data-k="${k}" aria-sort="${cSortKey === k ? (cSortDir > 0 ? 'ascending' : 'descending') : 'none'}">${esc(l)}${cSortKey === k ? (cSortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('');
+  const pages = Math.max(1, Math.ceil(cView.length / PAGE));
+  cPageNo = Math.min(cPageNo, pages - 1);
+  $('cTbody').innerHTML = cView.slice(cPageNo * PAGE, (cPageNo + 1) * PAGE).map((r) => `<tr class="row" tabindex="0" data-no="${esc(r.contract_no)}">${CCOLS.map(([k,, n]) => `<td class="${n ? 'num' : (k === 'customer' ? '' : 'nw')}">${esc(r[k])}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${CCOLS.length}" class="empty">沒有符合條件的合約</td></tr>`;
+  $('cCount').textContent = `共篩選出 ${cView.length} 份合約`;
+  $('cPage').textContent = `第 ${cPageNo + 1} / ${pages} 頁`;
+  $('cPrev').disabled = !cPageNo;
+  $('cNext').disabled = cPageNo >= pages - 1;
 }
-function openC(no){
-  const c=cAll.find(x=>x.contract_no===no);if(!c)return;
-  if($('drawerWrap').hidden)lastFocus=document.activeElement;
-  $('dNo').textContent=c.contract_type||'合約';$('dTitle').textContent=c.contract_no;
-  const sites=c.sites.length?c.sites.map(s=>`<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.site_name)}</button></li>`).join(''):'';
-  $('dBody').innerHTML=custLink(c.customer_no,c.customer)+'<h3>基本資料</h3>'+dl([['合約狀態',c.status],['合約開始',c.start_date],['合約結束',c.end_date],['年限',c.years]])
-   +`<h3>關聯案場（${c.sites.length}）</h3>`+(sites?`<ul style="margin:0;padding-left:18px">${sites}</ul>`:'<p class="empty">無資料</p>')
-   +'<h3>服務條件</h3>'+dl([['查檢到場時限（小時）',c.inspection_dl],['修復零件更換時限（小時）',c.repair_dl],['巡檢週期（天）',c.inspection_cycle],['高壓週期（天）',c.hv_cycle],['清洗週期（天）',c.clean_cycle],['環境整理週期（天）',c.weeding_cycle]])
-   +'<h3>商務與保發</h3>'+dl([['收款時程',c.payment_schedule],['維運金額',c.maintenance_amount],['保發責任',c.guaranteed_liability],['保發結算時間',c.clearing_timing],['獎懲計算方式',c.calculation_type,1],['獎金定義',c.award_terms,1],['罰款定義',c.indemnity_clause,1]])
-   +'<h3>保險</h3>'+dl([['雇主意外責任保險編號',c.eli_no],['到期日',c.eli_end_date],['營繕承包人保險編號',c.cli_no],['到期日',c.repair_contractor_end_date]])
-   +'<h3>報告與文件</h3>'+dl([['年度維運報告書',c.anr],['繳交時程',c.anr_content],['最晚繳交日期',c.anr_last_date],['保固書開立日期',c.warranty_issue_date],['工程期滿通知書開立日期',c.pen_date]])
-   +sub('災前、災後巡檢',c.inspections)+fileList('contract',c.contract_no);
-  $('drawerWrap').hidden=false;$('dTitle').focus();
+function openC(no) {
+  const c = cAll.find((x) => x.contract_no === no);
+  if (!c) return;
+  if ($('drawerWrap').hidden) lastFocus = document.activeElement;
+  $('dNo').textContent = c.contract_type || '合約';
+  $('dTitle').textContent = c.contract_no;
+  const sites = c.sites.length ? c.sites.map((s) => `<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.site_name)}</button></li>`).join('') : '';
+  const commercialHtml = currentUser?.can_view_commercial
+    ? '<h3>商務與保發條款</h3>' + dl([['收款時程', c.payment_schedule], ['維運金額', c.maintenance_amount], ['保發責任', c.guaranteed_liability], ['保發結算時間', c.clearing_timing], ['獎懲計算方式', c.calculation_type, 1], ['獎金定義', c.award_terms, 1], ['罰款定義', c.indemnity_clause, 1]])
+    : '<h3>商務與保發條款</h3><p class="empty"><span class="masked-val">權限受限：僅具商務檢視權限之授權人員可查閱金額與獎懲條款</span></p>';
+  $('dBody').innerHTML = custLink(c.customer_no, c.customer)
+    + '<h3>基本資料</h3>' + dl([['合約狀態', c.status], ['合約開始', c.start_date], ['合約結束', c.end_date], ['合約年限', c.years]])
+    + `<h3>關聯案場（${c.sites.length}）</h3>` + (sites ? `<ul style="margin:0;padding-left:18px">${sites}</ul>` : '<p class="empty">無資料</p>')
+    + '<h3>維運服務條件 (SLA)</h3>' + dl([['查檢到場時限（小時）', c.inspection_dl], ['修復零件更換時限（小時）', c.repair_dl], ['巡檢週期（天）', c.inspection_cycle], ['高壓週期（天）', c.hv_cycle], ['清洗週期（天）', c.clean_cycle], ['環境整理週期（天）', c.weeding_cycle]])
+    + commercialHtml
+    + '<h3>保險與風險轉移</h3>' + dl([['雇主意外責任保險編號', c.eli_no], ['保險到期日', c.eli_end_date], ['營繕承包人保險編號', c.cli_no], ['保險到期日', c.repair_contractor_end_date]])
+    + '<h3>報告與交付文件</h3>' + dl([['年度維運報告書', c.anr], ['繳交時程', c.anr_content], ['最晚繳交日期', c.anr_last_date], ['保固書開立日期', c.warranty_issue_date], ['工程期滿通知書開立日期', c.pen_date]])
+    + sub('災前、災後巡檢紀錄', c.inspections)
+    + fileList('contract', c.contract_no);
+  $('drawerWrap').hidden = false;
+  $('dTitle').focus();
 }
-function initFilters(){
-  [['fContract','active_contract'],['fSource','source'],['fType','field_type'],['fEng','engineer'],['fArea','area']].forEach(([id,k])=>{
-    const v=[...new Set(all.map(r=>r[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
-    $(id).innerHTML='<option value="">全部</option>'+v.map(x=>`<option>${esc(x)}</option>`).join('');
-    $(id).dataset.key=k;$(id).onchange=()=>{pageNo=0;apply()};
+
+// ── Sites View ──
+function initFilters() {
+  [['fContract','active_contract'],['fSource','source'],['fType','field_type'],['fEng','engineer'],['fArea','area']].forEach(([id, k]) => {
+    const v = [...new Set(all.map((r) => r[k]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+    $(id).innerHTML = '<option value="">全部</option>' + v.map((x) => `<option>${esc(x)}</option>`).join('');
+    $(id).dataset.key = k;
+    $(id).onchange = () => { pageNo = 0; apply(); };
   });
 }
-function summary(){
-  const cap=all.reduce((s,r)=>s+(+r.capacity||0),0);
-  const act=all.filter(r=>r.active_contract==='有');
-  const actCap=act.reduce((s,r)=>s+(+r.capacity||0),0);
-  const hv=all.filter(r=>r.is_high_voltage==='是'||r.is_high_voltage==='有').length;
-  $('headline').textContent=`${all.length} 個案場中，${act.length} 個有有效合約，涵蓋 ${fmt(actCap/1000)} MW`;
-  $('subline').textContent=`有效合約案場占總容量 ${Math.round(actCap/cap*100)}%`;
-  $('kpis').innerHTML=[[all.length,'案場總數'],[fmt(cap/1000)+' MW','總容量'],[act.length,'有效合約案場'],[hv,'高壓案場']].map(([a,b])=>`<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
-  const t=all.map(r=>r.synced_at).sort().pop();
-  $('foot').textContent=`資料來源：維運管理系統「案場資料」；同步時間 ${new Date(t).toLocaleString('zh-TW')}。此為複製快照，不會自動更新。`;
+function summary() {
+  const cap = all.reduce((s, r) => s + (+r.capacity || 0), 0);
+  const act = all.filter((r) => r.active_contract === '有');
+  const actCap = act.reduce((s, r) => s + (+r.capacity || 0), 0);
+  const hv = all.filter((r) => r.is_high_voltage === '是' || r.is_high_voltage === '有').length;
+  $('headline').textContent = `納管 ${all.length} 座電廠資產中，${act.length} 座具現行有效合約，總涵蓋容量 ${fmt(actCap / 1000)} MW`;
+  $('subline').textContent = `有效合約案場占總納管容量 ${cap ? Math.round(actCap / cap * 100) : 0}%；涵蓋高壓電廠 ${hv} 座，支援即時氣象風險監測。`;
+  $('kpis').innerHTML = [
+    [all.length, '納管案場總數（座）'],
+    [fmt(cap / 1000) + ' MW', '總裝置容量'],
+    [act.length, '有效合約案場（座）'],
+    [hv, '高壓案場數（座）'],
+  ].map(([a, b]) => `<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+  const t = all.map((r) => r.synced_at).sort().pop();
+  $('foot').textContent = `資料來源：進金生能源維運管理系統「案場資料」；最後同步時間 ${t ? twFull(t) : '—'}。`;
 }
-function apply(){
-  const q=$('q').value.trim().toLowerCase();
-  const fs=['fContract','fSource','fType','fEng','fArea'].map(i=>[$(i).dataset.key,$(i).value]).filter(x=>x[1]);
-  view=all.filter(r=>(!q||r._s.includes(q))&&fs.every(([k,v])=>r[k]===v));
-  view.sort((a,b)=>{const x=a[sortKey],y=b[sortKey];if(x==null||x==='')return 1;if(y==null||y==='')return -1;
-    return sortDir*(sortKey==='capacity'?(x-y):String(x).localeCompare(String(y),'zh-Hant'))});
+function apply() {
+  const q = $('q').value.trim().toLowerCase();
+  const fs = ['fContract','fSource','fType','fEng','fArea'].map((i) => [$(i).dataset.key, $(i).value]).filter((x) => x[1]);
+  view = all.filter((r) => (!q || r._s.includes(q)) && fs.every(([k, v]) => r[k] === v));
+  view.sort((a, b) => {
+    const x = a[sortKey], y = b[sortKey];
+    if (x == null || x === '') return 1;
+    if (y == null || y === '') return -1;
+    return sortDir * (sortKey === 'capacity' ? (x - y) : String(x).localeCompare(String(y), 'zh-Hant'));
+  });
   render();
 }
-function render(){
-  $('thead').innerHTML=COLS.map(([k,l,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${sortKey===k?(sortDir>0?'ascending':'descending'):'none'}">${esc(l)}${sortKey===k?(sortDir>0?' ▲':' ▼'):''}</th>`).join('');
-  const pages=Math.max(1,Math.ceil(view.length/PAGE));pageNo=Math.min(pageNo,pages-1);
-  $('tbody').innerHTML=view.slice(pageNo*PAGE,(pageNo+1)*PAGE).map(r=>`<tr class="row" tabindex="0" data-no="${esc(r.field_no)}">${COLS.map(([k,,n])=>`<td class="${n?'num':(k==='name'||k==='customer'?'':'nw')}">${esc(n&&r[k]!=null?fmt(r[k]):r[k])}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${COLS.length}" class="empty">沒有符合條件的案場</td></tr>`;
-  const cap=view.reduce((s,r)=>s+(+r.capacity||0),0);
-  $('count').textContent=`${view.length} 筆，合計 ${fmt(cap)} kW`;
-  $('page').textContent=`第 ${pageNo+1} / ${pages} 頁`;$('prev').disabled=!pageNo;$('next').disabled=pageNo>=pages-1;
+function render() {
+  $('thead').innerHTML = COLS.map(([k, l, n]) => `<th class="${n ? 'num' : ''}" data-k="${k}" aria-sort="${sortKey === k ? (sortDir > 0 ? 'ascending' : 'descending') : 'none'}">${esc(l)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('');
+  const pages = Math.max(1, Math.ceil(view.length / PAGE));
+  pageNo = Math.min(pageNo, pages - 1);
+  $('tbody').innerHTML = view.slice(pageNo * PAGE, (pageNo + 1) * PAGE).map((r) => `<tr class="row" tabindex="0" data-no="${esc(r.field_no)}">${COLS.map(([k,, n]) => `<td class="${n ? 'num' : (k === 'name' || k === 'customer' ? '' : 'nw')}">${esc(n && r[k] != null ? fmt(r[k]) : r[k])}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${COLS.length}" class="empty">沒有符合條件的案場</td></tr>`;
+  const cap = view.reduce((s, r) => s + (+r.capacity || 0), 0);
+  $('count').textContent = `共篩選出 ${view.length} 座案場，合計裝置容量 ${fmt(cap)} kW（${fmt(cap / 1000)} MW）`;
+  $('page').textContent = `第 ${pageNo + 1} / ${pages} 頁`;
+  $('prev').disabled = !pageNo;
+  $('next').disabled = pageNo >= pages - 1;
 }
-function dl(items){return `<dl class="dl">${items.map(([l,v,f])=>`<div class="${f?'full':''}"><dt>${esc(l)}</dt><dd>${esc(v)||'—'}</dd></div>`).join('')}</dl>`}
-function sub(title,rows){
-  if(!rows||!rows.length)return `<h3>${esc(title)}</h3><p class="empty">無資料</p>`;
-  const hs=[...new Set(rows.flatMap(Object.keys))];
-  return `<h3>${esc(title)}</h3><div class="tw" style="border:0"><table><thead><tr>${hs.map(h=>`<th style="cursor:default">${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${hs.map(h=>`<td>${esc(r[h])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+function dl(items) {
+  return `<dl class="dl">${items.map(([l, v, f]) => `<div class="${f ? 'full' : ''}"><dt>${esc(l)}</dt><dd>${esc(v) || '—'}</dd></div>`).join('')}</dl>`;
 }
-function openD(no){
-  const r=all.find(x=>x.field_no===no);if(!r)return;
-  if($('drawerWrap').hidden)lastFocus=document.activeElement;
-  $('dNo').textContent=r.field_no;$('dTitle').textContent=r.name;
-  const g=validXY(r)?`<p style="margin:12px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟</a></p>`:'';
-  $('dBody').innerHTML=g+siteRiskHtml(r.field_no)+custLink(r.customer_no,r.customer)+'<h3>基本資料</h3>'+dl([['容量 (kW)',r.capacity],['維運分區',r.area],['GPS',r.gps],['負責工程師',r.engineer],['負責管理師',r.manager],['案場屬性',r.source],['案場類型',r.field_type],['INV',r.inverter],['PV',r.pv],['躉售費率',r.bulk_tariff],['交流規格',r.ac_spec],['驗收日期',r.acceptance_date],['併聯日期',r.parallel_date],['MOF 表倍數',r.mof_ratio],['高壓案場',r.is_high_voltage],['高保由我司施作',r.hv_by_us],['有效合約',r.active_contract],['地址',r.address,1],['注意事項',r.note,1]])
-   +`<h3>關聯合約</h3>`+((contractsOfSite[r.field_no]||[]).length?`<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map(n=>`<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>`:'<p class="empty">無資料</p>')
-   +sub('連絡人',r.contacts)+sub('E-Mail',r.emails)+sub('電號',r.electric_nos)+sub('協力與設備',r.accessories)+sub('計量硬體設備',r.devices)+fileList('site',r.field_no);
-  $('drawerWrap').hidden=false;$('dTitle').focus();
+function sub(title, rows) {
+  if (!rows || !rows.length) return `<h3>${esc(title)}</h3><p class="empty">無資料</p>`;
+  const hs = [...new Set(rows.flatMap(Object.keys))];
+  return `<h3>${esc(title)}</h3><div class="tw" style="border-top:1px solid var(--rule)"><table><thead><tr>${hs.map((h) => `<th style="cursor:default">${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${hs.map((h) => `<td>${esc(r[h])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
-function closeD(){$('drawerWrap').hidden=true;lastFocus&&lastFocus.focus&&lastFocus.focus()}
-function csv(cols,list,name){
-  const q=v=>{let s=String(v??'');if(/^[=+\-@]/.test(s))s="'"+s;return `"${s.replace(/"/g,'""')}"`};
-  const rows=[cols.map(c=>q(c[1])).join(','),...list.map(r=>cols.map(c=>q(r[c[0]])).join(','))];
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\r\n')],{type:'text/csv'}));a.download=name;a.click();URL.revokeObjectURL(a.href);
+function openD(no) {
+  const r = all.find((x) => x.field_no === no);
+  if (!r) return;
+  if ($('drawerWrap').hidden) lastFocus = document.activeElement;
+  $('dNo').textContent = r.field_no;
+  $('dTitle').textContent = r.name;
+  const g = validXY(r) ? `<p style="margin:10px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟定位 ↗</a></p>` : '';
+  const contactsPart = currentUser?.can_view_commercial
+    ? sub('案場聯絡人', r.contacts) + sub('通知 E-Mail', r.emails)
+    : '<h3>案場聯絡人與信箱</h3><p class="empty"><span class="masked-val">唯讀權限已遮罩個人聯絡資訊</span></p>';
+  $('dBody').innerHTML = g + siteRiskHtml(r.field_no) + custLink(r.customer_no, r.customer)
+    + '<h3>基本與電氣規格</h3>' + dl([['容量 (kW)', r.capacity], ['維運分區', r.area], ['GPS 座標', r.gps], ['負責工程師', r.engineer], ['負責管理師', r.manager], ['案場屬性', r.source], ['案場類型', r.field_type], ['變流器 (INV)', r.inverter], ['模組 (PV)', r.pv], ['躉售費率', currentUser?.can_view_commercial ? r.bulk_tariff : '（權限受限）'], ['交流規格', r.ac_spec], ['驗收日期', r.acceptance_date], ['併聯日期', r.parallel_date], ['MOF 表倍數', r.mof_ratio], ['高壓案場', r.is_high_voltage], ['高保由我司施作', r.hv_by_us], ['有效合約', r.active_contract], ['案場地址', r.address, 1], ['維運注意事項', r.note, 1]])
+    + `<h3>關聯合約</h3>` + ((contractsOfSite[r.field_no] || []).length ? `<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map((n) => `<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
+    + contactsPart
+    + sub('台電電號', r.electric_nos) + sub('協力與設備', r.accessories) + sub('計量硬體設備', r.devices) + fileList('site', r.field_no);
+  $('drawerWrap').hidden = false;
+  $('dTitle').focus();
 }
-$('loginForm').onsubmit=async e=>{
-  e.preventDefault();$('loginErr').textContent='';$('loginBtn').disabled=true;
-  const u=$('user').value.trim();
-  const {error}=await sb.auth.signInWithPassword({email:u.includes('@')?u:u+LOGIN_DOMAIN,password:$('pass').value});
-  $('loginBtn').disabled=false;$('pass').value='';
-  if(error){$('loginErr').textContent='帳號或密碼不正確';return}
-  showApp();
+function closeD() { $('drawerWrap').hidden = true; lastFocus && lastFocus.focus && lastFocus.focus(); }
+
+function csv(cols, list, name) {
+  if (!currentUser?.can_export) return;
+  const q = (v) => { let s = String(v ?? ''); if (/^[=+\-@]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
+  const rows = [cols.map((c) => q(c[1])).join(','), ...list.map((r) => cols.map((c) => q(r[c[0]])).join(','))];
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF' + rows.join('\r\n')], { type: 'text/csv' }));
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  apiCall({ action: 'log_export', target: name, rows: list.length }, true).catch(() => {});
+}
+
+// ── Admin Console (Members / Access Keys / Protected Config / Audit Logs) ──
+function aMsg(t, ok = false) {
+  $('aMsg').textContent = t;
+  $('aMsg').className = ok ? 'err ok' : 'err';
+}
+function switchAdminSub(tab) {
+  [['Members', 'panelMembers'], ['Keys', 'panelKeys'], ['Config', 'panelConfig'], ['Audit', 'panelAudit']].forEach(([n, p]) => {
+    const active = n === tab;
+    $('sub' + n).setAttribute('aria-selected', active ? 'true' : 'false');
+    $(p).hidden = !active;
+  });
+  aMsg('');
+  if (tab === 'Members') aLoadMembers();
+  if (tab === 'Keys' || tab === 'Config') aLoadKeysAndConfig();
+  if (tab === 'Audit') aLoadAudit();
+}
+
+async function aLoadMembers() {
+  try {
+    const { me, my_role, members } = await apiCall({ action: 'list' }, true);
+    const isOwner = my_role === 'owner';
+    const activeCount = members.filter((m) => m.enabled).length;
+    $('aHeadline').textContent = `授權名單共 ${members.length} 位使用者（${activeCount} 位啟用中），全面落實最小權限治理`;
+    $('aTbody').innerHTML = members.map((m) => {
+      const self = m.email.toLowerCase() === me;
+      const locked = self || (!isOwner && m.role === 'owner');
+      const roleOpts = ['owner', 'admin', 'member', 'viewer']
+        .filter((r) => isOwner || r === m.role || (r !== 'owner' && r !== 'admin'))
+        .map((r) => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${ROLE_META[r].label}</option>`)
+        .join('');
+      return `<tr data-email="${esc(m.email)}">
+        <td><strong>${esc(m.email)}</strong>${self ? ' <small style="color:var(--acme-blue-dark)">（目前登入）</small>' : ''}${m.display_name ? `<br><small style="color:var(--mute)">${esc(m.display_name)}</small>` : ''}</td>
+        <td class="nw"><select class="perm-select" data-f="role" ${locked ? 'disabled' : ''}>${roleOpts}</select></td>
+        <td class="nw"><input type="checkbox" class="perm-chk" data-f="enabled" ${m.enabled ? 'checked' : ''} ${locked ? 'disabled' : ''}></td>
+        <td class="nw"><input type="checkbox" class="perm-chk" data-f="can_view_commercial" ${m.can_view_commercial ? 'checked' : ''} ${locked || m.role === 'viewer' ? 'disabled' : ''}></td>
+        <td class="nw"><input type="checkbox" class="perm-chk" data-f="can_export" ${m.can_export ? 'checked' : ''} ${locked || m.role === 'viewer' ? 'disabled' : ''}></td>
+        <td class="nw">${m.account ? (m.confirmed ? tag('normal', '已啟用') : tag('warning', '待驗證')) : tag('incomplete', '未建帳')}</td>
+        <td class="nw">${m.last_sign_in_at ? esc(twTime(m.last_sign_in_at)) : '—'}</td>
+        <td class="nw">${m.wx_role ? esc({ admin: '管理者', viewer: '唯讀', engineer: '工程師' }[m.wx_role] || m.wx_role) : '—'}</td>
+        <td class="nw">
+          ${locked ? '' : `<button class="btn btn-ghost btn-sm" data-save="${esc(m.email)}" type="button">儲存</button> `}
+          ${m.account && (!(!isOwner && m.role === 'owner')) ? `<button class="link" data-pw="${esc(m.email)}" type="button">重設密碼</button>` : ''}
+          ${m.role === 'owner' || self || (!isOwner && m.role === 'admin') ? '' : ` <button class="link" style="color:var(--t-danger)" data-rm="${esc(m.email)}" type="button">移除</button>`}
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    aMsg('讀取成員權限清單失敗：' + e.message);
+  }
+}
+
+async function aLoadKeysAndConfig() {
+  try {
+    const { keys, config } = await apiCall({ action: 'list_keys' }, true);
+    $('cfgRequireKey').checked = !!config.require_access_key;
+    $('cfgDriveUrl').value = config.drive_folder_url || '';
+    $('cfgNotice').value = config.portal_notice || '';
+
+    const now = Date.now();
+    $('kKeysTbody').innerHTML = keys.map((k) => {
+      const expired = k.expires_at && new Date(k.expires_at).getTime() < now;
+      const statusBadge = !k.enabled ? tag('incomplete', '已停用') : expired ? tag('danger', '已過期') : tag('normal', '有效啟用');
+      return `<tr>
+        <td><strong>${esc(k.label)}</strong></td>
+        <td class="nw"><span class="mono-code">${esc(k.key_hint)}</span></td>
+        <td class="nw">${statusBadge}</td>
+        <td class="num">${esc(k.usage_count || 0)}</td>
+        <td class="nw">${k.last_used_at ? esc(twTime(k.last_used_at)) : '尚未驗證'}</td>
+        <td class="nw">${k.expires_at ? esc(k.expires_at.slice(0, 10)) : '永久有效'}</td>
+        <td class="nw">${esc(k.created_by)}</td>
+        <td class="nw">
+          <button class="btn btn-ghost btn-sm" data-toggle-key="${esc(k.id)}" data-next="${k.enabled ? '0' : '1'}" type="button">${k.enabled ? '停用' : '啟用'}</button>
+          ${k.enabled ? '' : ` <button class="link" style="color:var(--t-danger);margin-left:8px" data-del-key="${esc(k.id)}" type="button">刪除</button>`}
+        </td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="8" class="empty">尚未建立任何存取金鑰</td></tr>';
+  } catch (e) {
+    aMsg('讀取存取金鑰與系統設定失敗：' + e.message);
+  }
+}
+
+async function aLoadAudit() {
+  try {
+    const { logs } = await apiCall({ action: 'list_audit_logs' }, true);
+    $('auditTbody').innerHTML = logs.map((l) => {
+      const detailStr = l.detail && Object.keys(l.detail).length ? JSON.stringify(l.detail) : '—';
+      const tone = l.action === 'gate_failed' ? 'danger' : l.action.includes('removed') || l.action.includes('disabled') ? 'warning' : 'normal';
+      return `<tr>
+        <td class="nw">${esc(twFull(l.created_at))}</td>
+        <td class="nw">${esc(l.actor_email || '未登入訪客（門禁層）')}</td>
+        <td class="nw">${tag(tone, AUDIT_LABELS[l.action] || l.action)}</td>
+        <td class="nw">${esc(l.target || '—')}</td>
+        <td style="font-size:12px;color:var(--mute);word-break:break-all">${esc(detailStr)}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="5" class="empty">目前尚無稽核紀錄</td></tr>';
+  } catch (e) {
+    aMsg('讀取稽核日誌失敗：' + e.message);
+  }
+}
+
+// ── Event Bindings ──
+$('gateForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('gateErr').textContent = '';
+  $('gateBtn').disabled = true;
+  $('gateBtn').textContent = '後端加密驗證中…';
+  try {
+    const res = await apiCall({ action: 'verify_key', access_key: $('gateKeyInput').value.trim() }, false);
+    if (res.gate_token) setGateToken(res.gate_token);
+    gateState = { required: !!res.required, valid: true, label: res.key_label || null };
+    $('gateKeyInput').value = '';
+    const { data } = await sb.auth.getSession();
+    if (data?.session) await showApp();
+    else renderAuthStep('login');
+  } catch (err) {
+    $('gateErr').textContent = err.message || '存取金鑰驗證失敗';
+  } finally {
+    $('gateBtn').disabled = false;
+    $('gateBtn').textContent = '驗證存取金鑰並繼續';
+  }
 };
-$('logout').onclick=async()=>{$('tabAccounts').hidden=true;$('aTbody').textContent='';await sb.auth.signOut();all=[];showLogin()};
-$('q').oninput=()=>{pageNo=0;apply()};
-$('thead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=1}apply()};
-$('tbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)};
-$('tbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openD(t.dataset.no)}};
-$('prev').onclick=()=>{pageNo--;render()};$('next').onclick=()=>{pageNo++;render()};
-$('csv').onclick=()=>csv(COLS,view,'案場資料.csv');
-$('tabSites').onclick=()=>switchTab('sites');$('tabContracts').onclick=()=>switchTab('contracts');
-$('cq').oninput=()=>{cPageNo=0;cApply()};
-$('cThead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(cSortKey===k)cSortDir=-cSortDir;else{cSortKey=k;cSortDir=1}cApply()};
-$('cTbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openC(t.dataset.no)};
-$('cTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openC(t.dataset.no)}};
-$('cPrev').onclick=()=>{cPageNo--;cRender()};$('cNext').onclick=()=>{cPageNo++;cRender()};
-$('cCsv').onclick=()=>csv(CCOLS,cView,'合約資料.csv');
-$('dBody').onclick=e=>{const b=e.target.closest('.jump');if(!b)return;if(b.dataset.site)openD(b.dataset.site);else if(b.dataset.customer)openK(b.dataset.customer);else openC(b.dataset.contract)};
-$('tabCustomers').onclick=()=>switchTab('customers');$('tabAccounts').onclick=()=>{switchTab('accounts');aMsg('');aLoad();};
-$('aForm').onsubmit=async e=>{e.preventDefault();$('aAdd').disabled=true;aMsg('處理中…',true);
-  try{const r=await acct({action:'add',email:$('aEmail').value,password:$('aPass').value,wx_viewer:$('aWx').checked});aMsg(r.created?'已建立登入帳號並加入名單。':r.password_ignored?'此信箱原本就有登入帳號，已加入名單；密碼未變更，如需更換請用「重設密碼」。':'已加入名單。',true);$('aEmail').value='';}
-  catch(err){aMsg(err.message);}finally{$('aPass').value='';$('aAdd').disabled=false;aLoad();}};
-$('aTbody').onclick=async e=>{const pw=e.target.closest('[data-pw]'),rm=e.target.closest('[data-rm]');
-  try{
-    if(pw){const v=prompt('輸入 '+pw.dataset.pw+' 的新密碼（至少 8 個字元）');if(!v)return;await acct({action:'password',email:pw.dataset.pw,password:v});aMsg('密碼已更新。',true);}
-    if(rm){if(!confirm('從案場資料庫移除 '+rm.dataset.rm+'？登入帳號會保留，風雨戰情站權限也會一併停用。'))return;await acct({action:'remove',email:rm.dataset.rm,wx_also:true});aMsg('已移除。',true);aLoad();}
-  }catch(err){aMsg(err.message);}};
-$('tabExpiry').onclick=()=>switchTab('expiry');
-['eWindow','eType','eStatus'].forEach(i=>$(i).onchange=eApply);$('eq').oninput=eApply;
-$('eTbody').onclick=e=>{const b=e.target.closest('.jump');if(b){openD(b.dataset.site);return;}const t=e.target.closest('tr.row');if(t)openC(t.dataset.contract)};
-$('eTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openC(t.dataset.contract)}};
-$('eCsv').onclick=()=>csv([['field_no','案場編號'],['site_name','案場名稱'],['contract_no','合約編號'],['contract_type','合約類型'],['end_date','合約結束日期'],['days','剩餘天數'],['customer','客戶'],['status','狀態']],eRows,'合約到期清單.csv');
-$('eCopy').onclick=async()=>{try{await navigator.clipboard.writeText(eText());$('eCopy').textContent='已複製';}catch{$('eCopy').textContent='無法複製，請改用 CSV';}setTimeout(()=>$('eCopy').textContent='複製通知內容',2000)};
-$('tabMap').onclick=()=>switchTab('map');
-$('kq').oninput=()=>{kPageNo=0;kApply()};$('kScope').onchange=()=>{kPageNo=0;kApply()};
-$('kThead').onclick=e=>{const k=e.target.closest('th')?.dataset.k;if(!k)return;if(kSortKey===k)kSortDir=-kSortDir;else{kSortKey=k;kSortDir=1}kApply()};
-$('kTbody').onclick=e=>{const t=e.target.closest('tr.row');if(t)openK(t.dataset.no)};
-$('kTbody').onkeydown=e=>{if(e.key==='Enter'){const t=e.target.closest('tr.row');if(t)openK(t.dataset.no)}};
-$('kPrev').onclick=()=>{kPageNo--;kRender()};$('kNext').onclick=()=>{kPageNo++;kRender()};
-$('kCsv').onclick=()=>csv(KCOLS,kView,'客戶資料.csv');
-$('mList').onclick=e=>{const b=e.target.closest('button');if(!b)return;const m=markers[b.dataset.no];cluster.zoomToShowLayer(m,()=>m.openPopup())};
-$('dClose').onclick=closeD;$('scrim').onclick=closeD;
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('drawerWrap').hidden)closeD()});
-sb.auth.getSession().then(({data})=>data.session?showApp():showLogin());
+
+$('resetGateBtn').onclick = () => {
+  setGateToken('');
+  gateState.valid = false;
+  $('gateErr').textContent = '';
+  renderAuthStep('gate');
+};
+
+$('loginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('loginErr').textContent = '';
+  $('loginBtn').disabled = true;
+  const u = $('user').value.trim();
+  const { error } = await sb.auth.signInWithPassword({
+    email: u.includes('@') ? u : u + LOGIN_DOMAIN,
+    password: $('pass').value,
+  });
+  $('loginBtn').disabled = false;
+  $('pass').value = '';
+  if (error) {
+    $('loginErr').textContent = '帳號或密碼不正確，請重新確認。';
+    return;
+  }
+  await showApp();
+};
+
+$('logout').onclick = async () => {
+  $('tabAccounts').hidden = true;
+  $('aTbody').textContent = '';
+  currentUser = null;
+  all = [];
+  await sb.auth.signOut();
+  renderAuthStep(gateState.required && !gateState.valid ? 'gate' : 'login');
+};
+
+// Self-service password modal
+$('openPwModal').onclick = () => { $('pwModalErr').textContent = ''; $('newPw1').value = ''; $('newPw2').value = ''; $('pwModal').hidden = false; $('newPw1').focus(); };
+const closePwModal = () => { $('pwModal').hidden = true; };
+$('pwModalCancel').onclick = closePwModal;
+$('pwScrim').onclick = closePwModal;
+$('pwModalForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const p1 = $('newPw1').value, p2 = $('newPw2').value;
+  if (p1 !== p2) { $('pwModalErr').textContent = '兩次輸入的新密碼不一致。'; return; }
+  $('pwModalSubmit').disabled = true;
+  try {
+    await apiCall({ action: 'change_own_password', new_password: p1 }, true);
+    $('pwModalErr').className = 'err ok';
+    $('pwModalErr').textContent = '密碼已成功更新！';
+    setTimeout(() => { $('pwModalErr').className = 'err'; closePwModal(); }, 1100);
+  } catch (err) {
+    $('pwModalErr').className = 'err';
+    $('pwModalErr').textContent = err.message;
+  } finally {
+    $('pwModalSubmit').disabled = false;
+  }
+};
+
+// Main Navigation & Tables
+$('tabSites').onclick = () => switchTab('sites');
+$('tabContracts').onclick = () => switchTab('contracts');
+$('tabExpiry').onclick = () => switchTab('expiry');
+$('tabCustomers').onclick = () => switchTab('customers');
+$('tabMap').onclick = () => switchTab('map');
+$('tabAccounts').onclick = () => { switchTab('accounts'); switchAdminSub('Members'); };
+
+$('subMembers').onclick = () => switchAdminSub('Members');
+$('subKeys').onclick = () => switchAdminSub('Keys');
+$('subConfig').onclick = () => switchAdminSub('Config');
+$('subAudit').onclick = () => switchAdminSub('Audit');
+$('refreshAuditBtn').onclick = () => aLoadAudit();
+
+$('q').oninput = () => { pageNo = 0; apply(); };
+$('thead').onclick = (e) => { const k = e.target.closest('th')?.dataset.k; if (!k) return; if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = 1; } apply(); };
+$('tbody').onclick = (e) => { const t = e.target.closest('tr.row'); if (t) openD(t.dataset.no); };
+$('tbody').onkeydown = (e) => { if (e.key === 'Enter') { const t = e.target.closest('tr.row'); if (t) openD(t.dataset.no); } };
+$('prev').onclick = () => { pageNo--; render(); };
+$('next').onclick = () => { pageNo++; render(); };
+$('csv').onclick = () => csv(COLS, view, 'ACMEPOINT_案場資料.csv');
+
+$('cq').oninput = () => { cPageNo = 0; cApply(); };
+$('cThead').onclick = (e) => { const k = e.target.closest('th')?.dataset.k; if (!k) return; if (cSortKey === k) cSortDir = -cSortDir; else { cSortKey = k; cSortDir = 1; } cApply(); };
+$('cTbody').onclick = (e) => { const t = e.target.closest('tr.row'); if (t) openC(t.dataset.no); };
+$('cTbody').onkeydown = (e) => { if (e.key === 'Enter') { const t = e.target.closest('tr.row'); if (t) openC(t.dataset.no); } };
+$('cPrev').onclick = () => { cPageNo--; cRender(); };
+$('cNext').onclick = () => { cPageNo++; cRender(); };
+$('cCsv').onclick = () => csv(CCOLS, cView, 'ACMEPOINT_合約資料.csv');
+
+['eWindow', 'eType', 'eStatus'].forEach((i) => $(i).onchange = eApply);
+$('eq').oninput = eApply;
+$('eTbody').onclick = (e) => { const b = e.target.closest('.jump'); if (b) { openD(b.dataset.site); return; } const t = e.target.closest('tr.row'); if (t) openC(t.dataset.contract); };
+$('eTbody').onkeydown = (e) => { if (e.key === 'Enter') { const t = e.target.closest('tr.row'); if (t) openC(t.dataset.contract); } };
+$('eCsv').onclick = () => csv([['field_no','案場編號'],['site_name','案場名稱'],['contract_no','合約編號'],['contract_type','合約類型'],['end_date','合約結束日期'],['days','剩餘天數'],['customer','客戶'],['status','狀態']], eRows, 'ACMEPOINT_合約到期清單.csv');
+$('eCopy').onclick = async () => {
+  try { await navigator.clipboard.writeText(eText()); $('eCopy').textContent = '已複製通知清單'; }
+  catch { $('eCopy').textContent = '無法複製，請改用 CSV'; }
+  setTimeout(() => $('eCopy').textContent = '複製通知清單', 2000);
+};
+
+$('kq').oninput = () => { kPageNo = 0; kApply(); };
+$('kScope').onchange = () => { kPageNo = 0; kApply(); };
+$('kThead').onclick = (e) => { const k = e.target.closest('th')?.dataset.k; if (!k) return; if (kSortKey === k) kSortDir = -kSortDir; else { kSortKey = k; kSortDir = 1; } kApply(); };
+$('kTbody').onclick = (e) => { const t = e.target.closest('tr.row'); if (t) openK(t.dataset.no); };
+$('kTbody').onkeydown = (e) => { if (e.key === 'Enter') { const t = e.target.closest('tr.row'); if (t) openK(t.dataset.no); } };
+$('kPrev').onclick = () => { kPageNo--; kRender(); };
+$('kNext').onclick = () => { kPageNo++; kRender(); };
+$('kCsv').onclick = () => csv(KCOLS, kView, 'ACMEPOINT_客戶資料.csv');
+
+$('mList').onclick = (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const m = markers[b.dataset.no];
+  if (m) cluster.zoomToShowLayer(m, () => m.openPopup());
+};
+$('dBody').onclick = (e) => {
+  const b = e.target.closest('.jump');
+  if (!b) return;
+  if (b.dataset.site) openD(b.dataset.site);
+  else if (b.dataset.customer) openK(b.dataset.customer);
+  else openC(b.dataset.contract);
+};
+$('dClose').onclick = closeD;
+$('scrim').onclick = closeD;
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (!$('drawerWrap').hidden) closeD();
+    if (!$('pwModal').hidden) closePwModal();
+  }
+});
+
+// Admin Forms & Table Events
+$('aRole').onchange = () => {
+  const isViewer = $('aRole').value === 'viewer';
+  $('aCommercial').checked = !isViewer;
+  $('aCommercial').disabled = isViewer;
+  $('aExport').checked = !isViewer;
+  $('aExport').disabled = isViewer;
+};
+
+$('aForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('aAdd').disabled = true;
+  aMsg('處理授權中…', true);
+  try {
+    const r = await apiCall({
+      action: 'add',
+      email: $('aEmail').value,
+      display_name: $('aName').value,
+      role: $('aRole').value,
+      password: $('aPass').value,
+      can_view_commercial: $('aCommercial').checked,
+      can_export: $('aExport').checked,
+      wx_viewer: $('aWx').checked,
+    }, true);
+    aMsg(r.created ? '已建立登入帳號並寫入授權權限。' : r.password_ignored ? '此信箱原已有帳號，已更新權限設定（密碼維持不變）。' : '已加入授權名單並設定權限。', true);
+    $('aEmail').value = '';
+    $('aName').value = '';
+  } catch (err) {
+    aMsg(err.message);
+  } finally {
+    $('aPass').value = '';
+    $('aAdd').disabled = false;
+    aLoadMembers();
+  }
+};
+
+$('aTbody').onchange = (e) => {
+  if (e.target.dataset.f === 'role') {
+    const tr = e.target.closest('tr');
+    const isViewer = e.target.value === 'viewer';
+    const c1 = tr.querySelector('[data-f="can_view_commercial"]');
+    const c2 = tr.querySelector('[data-f="can_export"]');
+    if (isViewer) { c1.checked = false; c2.checked = false; }
+    c1.disabled = isViewer;
+    c2.disabled = isViewer;
+  }
+};
+
+$('aTbody').onclick = async (e) => {
+  const sv = e.target.closest('[data-save]');
+  const pw = e.target.closest('[data-pw]');
+  const rm = e.target.closest('[data-rm]');
+  try {
+    if (sv) {
+      const tr = sv.closest('tr');
+      sv.disabled = true;
+      await apiCall({
+        action: 'update_member',
+        email: sv.dataset.save,
+        role: tr.querySelector('[data-f="role"]').value,
+        enabled: tr.querySelector('[data-f="enabled"]').checked,
+        can_view_commercial: tr.querySelector('[data-f="can_view_commercial"]').checked,
+        can_export: tr.querySelector('[data-f="can_export"]').checked,
+      }, true);
+      aMsg(`已更新 ${sv.dataset.save} 的角色與存取權限。`, true);
+      aLoadMembers();
+    }
+    if (pw) {
+      const v = prompt('輸入 ' + pw.dataset.pw + ' 的新密碼（至少 8 個字元）');
+      if (!v) return;
+      await apiCall({ action: 'password', email: pw.dataset.pw, password: v }, true);
+      aMsg(`已重設 ${pw.dataset.pw} 的登入密碼。`, true);
+    }
+    if (rm) {
+      if (!confirm('確定從案場資料庫授權名單移除 ' + rm.dataset.rm + '？（登入帳號保留，風雨戰情站權限將同步停用）')) return;
+      await apiCall({ action: 'remove', email: rm.dataset.rm, wx_also: true }, true);
+      aMsg(`已移除 ${rm.dataset.rm} 的授權。`, true);
+      aLoadMembers();
+    }
+  } catch (err) {
+    aMsg(err.message);
+    if (sv) sv.disabled = false;
+  }
+};
+
+$('keyForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('kCreateBtn').disabled = true;
+  aMsg('產生加密存取金鑰中…', true);
+  try {
+    const expVal = $('kExpires').value ? new Date($('kExpires').value + 'T23:59:59+08:00').toISOString() : null;
+    const r = await apiCall({
+      action: 'create_key',
+      label: $('kLabel').value,
+      custom_key: $('kCustom').value,
+      expires_at: expVal,
+    }, true);
+    $('keyRevealCode').textContent = r.plain_key;
+    $('keyRevealBox').hidden = false;
+    $('kLabel').value = '';
+    $('kCustom').value = '';
+    $('kExpires').value = '';
+    aMsg('新存取金鑰已建立！請立即複製上方明碼交付授權人員。', true);
+    aLoadKeysAndConfig();
+  } catch (err) {
+    aMsg(err.message);
+  } finally {
+    $('kCreateBtn').disabled = false;
+  }
+};
+
+$('copyNewKeyBtn').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($('keyRevealCode').textContent);
+    $('copyNewKeyBtn').textContent = '已複製！';
+    setTimeout(() => $('copyNewKeyBtn').textContent = '複製金鑰', 1800);
+  } catch {}
+};
+$('dismissKeyReveal').onclick = () => { $('keyRevealBox').hidden = true; $('keyRevealCode').textContent = '—'; };
+
+$('kKeysTbody').onclick = async (e) => {
+  const tg = e.target.closest('[data-toggle-key]');
+  const dlBtn = e.target.closest('[data-del-key]');
+  try {
+    if (tg) {
+      const next = tg.dataset.next === '1';
+      await apiCall({ action: 'toggle_key', id: tg.dataset.toggleKey, enabled: next }, true);
+      aMsg(next ? '已重新啟用此存取金鑰。' : '已停用此存取金鑰（原憑證即時失效）。', true);
+      aLoadKeysAndConfig();
+    }
+    if (dlBtn) {
+      if (!confirm('確定永久刪除此已停用的存取金鑰紀錄？')) return;
+      await apiCall({ action: 'delete_key', id: dlBtn.dataset.delKey }, true);
+      aMsg('已刪除存取金鑰。', true);
+      aLoadKeysAndConfig();
+    }
+  } catch (err) {
+    aMsg(err.message);
+  }
+};
+
+$('cfgForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('cfgSaveBtn').disabled = true;
+  try {
+    await apiCall({
+      action: 'update_config',
+      require_access_key: $('cfgRequireKey').checked,
+      drive_folder_url: $('cfgDriveUrl').value,
+      portal_notice: $('cfgNotice').value,
+    }, true);
+    aMsg('系統安全設定與機密連結已儲存生效。', true);
+    const refreshed = await apiCall({ action: 'me' }, true);
+    portalConfig = refreshed.config || {};
+    gateState.required = !!refreshed.require_access_key;
+    applyRoleUI();
+  } catch (err) {
+    aMsg(err.message);
+  } finally {
+    $('cfgSaveBtn').disabled = false;
+  }
+};
+
+$('rotateSecretBtn').onclick = async () => {
+  if (!confirm('確定輪替門禁簽章密鑰？所有已驗證之裝置（包含目前裝置）將於下次重新整理時被要求重新輸入存取金鑰。')) return;
+  try {
+    await apiCall({ action: 'update_config', rotate_gate_secret: true }, true);
+    setGateToken('');
+    aMsg('已完成全域簽章輪替！所有裝置重新整理後皆須重新驗證存取金鑰。', true);
+  } catch (err) {
+    aMsg(err.message);
+  }
+};
+
+bootstrap();
 </script>
 </body>
 </html>
