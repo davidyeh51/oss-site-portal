@@ -355,6 +355,51 @@ tbody tr.row:hover{background:var(--acme-sky)}
 .footer-meta .conf{display:inline-block;border:1px solid rgba(161,206,57,.5);color:var(--acme-lime);padding:3px 9px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:10px}
 .footer-meta a{color:#D5E6F7;display:block;margin-bottom:4px}
 
+/* ── Executive Overview & Admin Console ── */
+.role-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--navy);color:var(--acme-lime);font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:2px}
+.role-pill.admin{background:var(--acme-deep);color:#fff}
+.role-pill.member{background:var(--acme-sky);color:var(--navy);border:1px solid var(--acme-blue)}
+.role-pill.viewer{background:var(--surface-alt);color:var(--mute);border:1px solid var(--rule)}
+.ov-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;margin-bottom:28px}
+.ex-card{background:var(--canvas);border:1px solid var(--rule);border-top:2.5px solid var(--navy);padding:22px 24px}
+.ex-card h3{font:600 17px/1.35 var(--serif);color:var(--navy);margin:0 0 4px}
+.ex-card .ex-sub{font-size:12.5px;color:var(--mute);margin:0 0 16px}
+.hbar-row{display:grid;grid-template-columns:110px 1fr 125px;gap:10px;align-items:center;padding:7px 6px;border-bottom:1px solid var(--rule-light);cursor:pointer;transition:background .12s;font-size:13px}
+.hbar-row:hover{background:var(--acme-sky)}
+.hbar-track{height:10px;background:var(--surface-alt);overflow:hidden;border-radius:1px}
+.hbar-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--acme-blue))}
+.hbar-val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:12.5px;white-space:nowrap}
+.prio-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prio-tile{border:1px solid var(--rule);border-left:4px solid var(--navy);background:var(--surface);padding:14px 16px;cursor:pointer;text-align:left;transition:transform .12s,background .12s}
+.prio-tile:hover{background:var(--acme-sky);transform:translateY(-1px)}
+.prio-tile.danger{border-left-color:var(--t-danger)}
+.prio-tile.warn{border-left-color:var(--t-warning)}
+.prio-tile.info{border-left-color:var(--acme-blue)}
+.prio-tile.muted{border-left-color:var(--t-incomplete)}
+.prio-tile small{display:block;font-size:11.5px;color:var(--mute);font-weight:600;margin-bottom:4px}
+.prio-tile strong{display:block;font:600 26px/1.1 var(--serif);color:var(--navy);font-variant-numeric:tabular-nums}
+.brand-matrix{background:var(--navy);color:#fff;padding:24px 28px;border-top:3px solid var(--acme-lime);margin-bottom:8px}
+.brand-matrix-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.14)}
+.brand-matrix-head h3{font:600 20px var(--serif);margin:0;color:#fff}
+.brand-matrix-head span{font-size:12.5px;color:var(--acme-lime);font-weight:600;letter-spacing:.05em}
+.sol-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.sol-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);padding:14px}
+.sol-item .num-tag{font-size:11px;font-weight:700;color:var(--acme-lime);letter-spacing:.1em;margin-bottom:4px;display:block}
+.sol-item b{display:block;font-size:14px;color:#fff;margin-bottom:4px}
+.sol-item p{margin:0;font-size:12px;color:#B8C9DA;line-height:1.5}
+
+.adm-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;margin-bottom:26px}
+.adm-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.adm-form .full{grid-column:1/-1}
+.adm-check-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink)}
+.adm-check-row label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.secret-reveal{background:#ECFDF3;border:1px solid #ABEFC6;border-left:4px solid var(--acme-emerald);padding:14px 16px;margin-top:14px;font-size:13px;color:#065F46}
+.secret-reveal code{display:inline-block;margin:6px 0;padding:6px 10px;background:#fff;border:1px solid #84E1BC;font:700 15px var(--mono);color:var(--navy);letter-spacing:.05em}
+.status-badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:11.5px;font-weight:600}
+.status-badge.on{background:#ECFDF3;color:#065F46;border:1px solid #ABEFC6}
+.status-badge.off{background:#F2F4F7;color:#475467;border:1px solid #D0D5DD}
+.masked-val{color:var(--mute);font-size:12.5px;font-style:italic}
+
 @media(max-width:1060px){
   .gate-shell{grid-template-columns:1fr}
   .gate-brand{padding:36px 28px;border-right:0;border-bottom:4px solid var(--acme-lime)}
@@ -371,7 +416,8 @@ tbody tr.row:hover{background:var(--acme-sky)}
   .filters{grid-template-columns:1fr 1fr}
   .filters .q{grid-column:1/-1}
   .filters.c,.filters.k{grid-template-columns:1fr 1fr}
-  .riskgrid,.mapwrap,.footer-inner{grid-template-columns:1fr}
+  .ov-grid,.adm-grid,.sol-grid,.riskgrid,.mapwrap,.footer-inner{grid-template-columns:1fr}
+  .adm-form,.prio-grid{grid-template-columns:1fr}
   .footer-meta{text-align:left}
   .mapwrap{height:auto}
   #map{height:60vh}
@@ -454,19 +500,22 @@ tbody tr.row:hover{background:var(--acme-sky)}
         </div>
       </div>
       <nav aria-label="主要功能">
+        <button class="tab" id="tabOverview">營運總覽</button>
         <button class="tab" id="tabContracts">合約總覽</button>
         <button class="tab" id="tabExpiry">到期預警</button>
         <button class="tab" id="tabSites">案場資料庫</button>
         <button class="tab" id="tabCustomers">客戶圖譜</button>
         <button class="tab" id="tabMap">風雨戰情地圖</button>
+        <button class="tab" id="tabAdmin" hidden>後台管理</button>
         <a class="tab dl-tab" id="driveLink" href="#" target="_blank" rel="noopener" hidden>雲端資料庫 ↗</a>
       </nav>
       <div class="user-bar">
+        <span class="role-pill" id="roleBadge" title="目前存取金鑰授權等級">OWNER</span>
         <div class="key-cycle-chip" id="keyCycleChip" title="每 60 天定期變更存取金鑰">
           <i class="key-dot"></i>
           <span id="keyCycleText">60 天變更週期：檢查中</span>
         </div>
-        <button class="hdr-link" id="openRotateModal" type="button">變更金鑰</button>
+        <button class="hdr-link" id="openRotateModal" type="button" hidden>變更金鑰</button>
         <button class="hdr-link" id="logout" type="button">鎖定離開</button>
       </div>
     </header>
@@ -486,6 +535,66 @@ tbody tr.row:hover{background:var(--acme-sky)}
       <button class="btn btn-sm" id="alertRotateBtn" type="button">立即變更金鑰（重設 60 天週期）</button>
     </div>
   </div>
+
+  <!-- EXHIBIT 00: 高階執行摘要總覽 (McKinsey × ACMEPOINT) -->
+  <main id="overviewView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 00 · EXECUTIVE ASSET &amp; O&amp;M OVERVIEW</p>
+      <h1 class="title" id="ovHeadline">載入企業營運總覽中…</h1>
+      <p class="sub" id="ovSubline">智慧能源整合｜從建置到交易，創造最大能源價值（24 小時即時監控電站運作狀態與合約履約風險）。</p>
+    </div>
+    <div class="kpis" id="ovKpis"></div>
+
+    <div class="ov-grid">
+      <section class="ex-card">
+        <h3>維運分區資產容量結構</h3>
+        <p class="ex-sub">依區域劃分納管案場座數與裝置容量（MW）；點選任一分區立即檢視明細</p>
+        <div id="ovRegions"><p class="empty">計算分區結構中…</p></div>
+      </section>
+      <section class="ex-card">
+        <h3>合約履約到期與風險優先序</h3>
+        <p class="ex-sub">依急迫程度分層檢視續約窗口；點選區塊直接跳轉到期預警清冊</p>
+        <div class="prio-grid" id="ovExpiryMatrix"><p class="empty">計算合約到期分佈中…</p></div>
+      </section>
+    </div>
+
+    <section class="brand-matrix" aria-label="進金生能源多元綠能解決方案">
+      <div class="brand-matrix-head">
+        <div>
+          <p class="gate-kicker" style="margin:0 0 4px">ACMEPOINT ENERGY SERVICES · TPEx 6692</p>
+          <h3>多元綠能解決方案與全流程智慧能源管理</h3>
+        </div>
+        <span>德國萊因 TÜV 太陽光電維運 AAA 級認證 · 24H 即時監控</span>
+      </div>
+      <div class="sol-grid">
+        <div class="sol-item">
+          <span class="num-tag">PILLAR 01</span>
+          <b>太陽光電 Solar PV</b>
+          <p>提供太陽能電站規劃、設計、施工及驗收等全方位 EPC 建置服務。</p>
+        </div>
+        <div class="sol-item">
+          <span class="num-tag">PILLAR 02</span>
+          <b>儲能與微電網 BESS</b>
+          <p>涵蓋表前／表後儲能與防災微電網建置，強化電網韌性與調度彈性。</p>
+        </div>
+        <div class="sol-item">
+          <span class="num-tag">PILLAR 03</span>
+          <b>電廠維運與服務 O&amp;M</b>
+          <p>24 小時即時監控電站運作狀態，快速掌握異常並提升發電效益與資產價值。</p>
+        </div>
+        <div class="sol-item">
+          <span class="num-tag">PILLAR 04</span>
+          <b>地熱發電 Geothermal</b>
+          <p>佈局 24 小時穩定供電之永續基載綠電，支援企業淨零與 AIDC 電力需求。</p>
+        </div>
+        <div class="sol-item">
+          <span class="num-tag">PILLAR 05</span>
+          <b>碳封存 Carbon Storage</b>
+          <p>整合前瞻碳封存技術服務，協助企業客戶實質降低溫室氣體排放。</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- EXHIBIT 01: 合約總覽 -->
   <main id="contractsView" hidden>
@@ -633,6 +742,112 @@ tbody tr.row:hover{background:var(--acme-sky)}
     <p class="foot" id="mFoot"></p>
   </main>
 
+  <!-- EXHIBIT 06: 後台管理控制台 (Owner / Admin Only) -->
+  <main id="adminView" hidden>
+    <div class="exhibit-head">
+      <p class="exhibit">EXHIBIT 06 · GOVERNANCE &amp; ACCESS CONTROL</p>
+      <h1 class="title">系統權限、存取金鑰與資安稽核管理後台</h1>
+      <p class="sub">統一管理分級存取金鑰（Owner / Admin / Member / Viewer）、授權人員名單、雲端資料庫入口與安全稽核軌跡。</p>
+    </div>
+    <div class="kpis" id="admKpis"></div>
+
+    <div class="adm-grid">
+      <section class="ex-card">
+        <h3>發行新分級存取金鑰</h3>
+        <p class="ex-sub">為不同部門或外部稽核發行獨立金鑰，支援設定匯出權限、商務條款遮罩與到期強制鎖定</p>
+        <form id="admNewKeyForm" class="adm-form" autocomplete="off">
+          <label class="field" style="margin:0">
+            <span class="lbl">金鑰用途標籤</span>
+            <input id="admKeyLabel" required placeholder="例如：財務部稽核唯讀金鑰">
+          </label>
+          <label class="field" style="margin:0">
+            <span class="lbl">權限等級（Role Scope）</span>
+            <select id="admKeyScope">
+              <option value="member">Member · 內部維運同仁（全檢視＋匯出）</option>
+              <option value="viewer">Viewer · 唯讀訪客（隱藏商務金額／禁匯出）</option>
+              <option value="admin">Admin · 管理員（含後台管理權限）</option>
+              <option value="owner" id="admOptOwner">Owner · 最高擁有者（全系統最高權限）</option>
+            </select>
+          </label>
+          <label class="field" style="margin:0">
+            <span class="lbl">自訂金鑰（留白則自動產生）</span>
+            <input id="admKeyRaw" class="mono" minlength="8" placeholder="留白自動產生 ACME-XXXX-XXXX">
+          </label>
+          <label class="field" style="margin:0">
+            <span class="lbl">有效／輪替週期（天數）</span>
+            <input id="admKeyDays" type="number" min="1" max="365" value="60">
+          </label>
+          <div class="full adm-check-row">
+            <label><input id="admKeyExport" type="checkbox" checked> 允許匯出 CSV 報表</label>
+            <label><input id="admKeyCommercial" type="checkbox" checked> 允許檢視商務金額與保發條款</label>
+            <label><input id="admKeyEnforce" type="checkbox"> 到期後強制鎖定禁止登入</label>
+          </div>
+          <div class="full" style="display:flex;align-items:center;gap:12px;margin-top:4px">
+            <button class="btn btn-sm" id="admCreateKeyBtn" type="submit">發行新存取金鑰</button>
+            <button class="btn btn-ghost btn-sm" id="admRefreshBtn" type="button">重新整理後台資料</button>
+          </div>
+        </form>
+        <p class="err" id="admKeyErr" role="alert"></p>
+        <div class="secret-reveal" id="admNewKeyReveal" hidden></div>
+      </section>
+
+      <section class="ex-card">
+        <h3>平台入口與公告設定（Config）</h3>
+        <p class="ex-sub">更新上方「雲端資料庫 ↗」連結與頁首機密警示橫幅；僅解鎖後對授權使用者顯示</p>
+        <form id="admConfigForm" autocomplete="off">
+          <label class="field">
+            <span class="lbl">公司雲端資料庫網址（Google Drive）</span>
+            <input id="admDriveUrl" type="url" placeholder="https://drive.google.com/drive/folders/...">
+          </label>
+          <label class="field">
+            <span class="lbl">機密警示公告橫幅</span>
+            <textarea id="admNoticeText" rows="3" maxlength="300"></textarea>
+          </label>
+          <button class="btn btn-sm" id="admSaveCfgBtn" type="submit">儲存系統設定</button>
+          <p class="err" id="admCfgErr" role="alert"></p>
+        </form>
+      </section>
+    </div>
+
+    <h2 class="ex">存取金鑰清冊（Access Keys）<small>僅顯示遮罩識別碼；停用或刪除將立即阻斷該金鑰之所有已登入工作階段</small></h2>
+    <div class="tw" style="margin-bottom:28px">
+      <table>
+        <thead>
+          <tr><th>用途標籤</th><th>金鑰識別</th><th>等級</th><th>匯出</th><th>商務金額</th><th>使用次數</th><th>最後使用</th><th>到期日</th><th>狀態</th><th>操作</th></tr>
+        </thead>
+        <tbody id="admKeysTbody"></tbody>
+      </table>
+    </div>
+
+    <h2 class="ex">授權人員權限名單（oss_admins）<small>維護公司核心人員角色與功能權限備查名錄</small></h2>
+    <div class="ex-card" style="margin-bottom:14px;padding:16px 18px">
+      <form id="admMemberForm" style="display:grid;grid-template-columns:1.5fr 1fr .9fr auto auto auto auto;gap:10px;align-items:end">
+        <label class="field" style="margin:0"><span class="lbl">公司 Email</span><input id="admMemEmail" type="email" required placeholder="name@acmepointes.com"></label>
+        <label class="field" style="margin:0"><span class="lbl">姓名／職稱</span><input id="admMemName" placeholder="選填"></label>
+        <label class="field" style="margin:0"><span class="lbl">角色</span><select id="admMemRole"><option value="member">member</option><option value="viewer">viewer</option><option value="admin">admin</option><option value="owner">owner</option></select></label>
+        <label style="font-size:12.5px;padding-bottom:9px"><input id="admMemExport" type="checkbox" checked> 匯出</label>
+        <label style="font-size:12.5px;padding-bottom:9px"><input id="admMemComm" type="checkbox" checked> 商務</label>
+        <label style="font-size:12.5px;padding-bottom:9px"><input id="admMemEnabled" type="checkbox" checked> 啟用</label>
+        <button class="btn btn-sm" type="submit">新增 / 更新名單</button>
+      </form>
+      <p class="err" id="admMemErr" role="alert"></p>
+    </div>
+    <div class="tw" style="margin-bottom:28px">
+      <table>
+        <thead><tr><th>Email</th><th>姓名</th><th>角色</th><th>匯出權限</th><th>商務條款</th><th>狀態</th><th>更新時間</th><th>操作</th></tr></thead>
+        <tbody id="admMembersTbody"></tbody>
+      </table>
+    </div>
+
+    <h2 class="ex">安全稽核日誌（最近 80 筆）<small>記錄金鑰解鎖、錯誤嘗試、報表匯出、金鑰輪替與後台異動</small></h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>時間（台北）</th><th>操作者</th><th>事件動作</th><th>目標</th><th>詳細內容</th></tr></thead>
+        <tbody id="admLogsTbody"></tbody>
+      </table>
+    </div>
+  </main>
+
   <!-- Executive Brand Footer -->
   <footer class="site-footer">
     <div class="footer-inner">
@@ -725,6 +940,8 @@ const KCOLS = [['customer_no','客戶編號'],['name','客戶名稱'],['tax_id',
 
 let portalConfig = {};
 let keyRotation = null;
+let currentPerms = { role: 'viewer', is_owner: false, is_admin: false, can_manage_keys: false, can_rotate: false, can_export: false, can_view_commercial: false };
+let adminLoaded = false;
 let all = [], view = [], pageNo = 0, sortKey = 'field_no', sortDir = 1, lastFocus = null;
 let cAll = [], cView = [], cPageNo = 0, cSortKey = 'end_date', cSortDir = 1, contractsOfSite = {};
 let kRaw = [], kAll = [], kView = [], kPageNo = 0, kSortKey = 'contract_count', kSortDir = -1;
@@ -795,6 +1012,41 @@ function renderRotationStatus(rot) {
   `;
 }
 
+const ROLE_LABELS = {
+  owner: 'OWNER 最高擁有者',
+  admin: 'ADMIN 管理員',
+  member: 'MEMBER 維運同仁',
+  viewer: 'VIEWER 唯讀檢視',
+};
+
+function applyPermissions(perms) {
+  currentPerms = {
+    role: 'viewer',
+    is_owner: false,
+    is_admin: false,
+    can_manage_keys: false,
+    can_rotate: false,
+    can_export: false,
+    can_view_commercial: false,
+    ...(perms || {}),
+  };
+  const badge = $('roleBadge');
+  badge.textContent = ROLE_LABELS[currentPerms.role] || currentPerms.role.toUpperCase();
+  badge.className = 'role-pill ' + currentPerms.role;
+
+  $('tabAdmin').hidden = !currentPerms.is_admin;
+  $('openRotateModal').hidden = !currentPerms.can_rotate;
+  $('alertRotateBtn').hidden = !currentPerms.can_rotate;
+
+  ['csv', 'cCsv', 'eCsv', 'eCopy', 'kCsv'].forEach((id) => {
+    const el = $(id);
+    if (el) el.hidden = !currentPerms.can_export;
+  });
+
+  const optOwner = $('admOptOwner');
+  if (optOwner) optOwner.hidden = !currentPerms.is_owner;
+}
+
 function showGateScreen(errMsg = '') {
   $('authShell').hidden = false;
   $('appView').hidden = true;
@@ -810,10 +1062,13 @@ async function enterPortalWithResponse(res) {
       refresh_token: res.session.refresh_token,
     });
   }
+  applyPermissions(res.permissions);
   portalConfig = res.config || {};
   if (portalConfig.drive_folder_url) {
     $('driveLink').href = portalConfig.drive_folder_url;
     $('driveLink').hidden = false;
+  } else {
+    $('driveLink').hidden = true;
   }
   if (portalConfig.portal_notice) {
     $('noticeText').textContent = portalConfig.portal_notice;
@@ -824,6 +1079,7 @@ async function enterPortalWithResponse(res) {
 
   $('authShell').hidden = true;
   $('appView').hidden = false;
+  adminLoaded = false;
 
   const { data, error } = await sb.from('oss_sites').select('*').order('field_no');
   if (error) {
@@ -836,7 +1092,8 @@ async function enterPortalWithResponse(res) {
   initFilters();
   summary();
   apply();
-  switchTab('contracts');
+  renderOverview();
+  switchTab('overview');
   loadContracts();
   loadRisk();
 }
@@ -899,6 +1156,7 @@ async function loadContracts() {
     cApply();
     buildCustomers();
     eInit();
+    renderOverview();
   } catch (e) {
     $('cHeadline').textContent = '合約資料載入失敗';
     $('cSubline').textContent = e.message;
@@ -906,13 +1164,80 @@ async function loadContracts() {
   }
 }
 
+function renderOverview() {
+  if (!all.length) return;
+  const totalCapKw = all.reduce((s, r) => s + (+r.capacity || 0), 0);
+  const actSites = all.filter((r) => r.active_contract === '有');
+  const actCapKw = actSites.reduce((s, r) => s + (+r.capacity || 0), 0);
+  const covPct = totalCapKw ? Math.round((actCapKw / totalCapKw) * 100) : 0;
+
+  const onContracts = cAll.filter((c) => c.status === '進行中');
+  const due7 = cAll.filter((c) => { const d = daysLeft(c); return d != null && d >= 0 && d <= 7; });
+  const due30 = cAll.filter((c) => { const d = daysLeft(c); return d != null && d >= 0 && d <= 30; });
+  const due90 = cAll.filter((c) => { const d = daysLeft(c); return d != null && d >= 0 && d <= 90; });
+  const expired30 = cAll.filter((c) => { const d = daysLeft(c); return d != null && d < 0 && d >= -30; });
+
+  const wxWarnCnt = risk.by
+    ? Object.values(risk.by).filter((r) => r.weather?.status === 'danger' || r.weather?.status === 'warning').length
+    : null;
+
+  $('ovHeadline').textContent = cAll.length
+    ? `納管 ${all.length} 座電廠（${fmt(totalCapKw / 1000)} MW）與 ${cAll.length} 份合約；有效容量覆蓋率 ${covPct}%，${due30.length} 份合約將於 30 天內到期`
+    : `納管 ${all.length} 座電廠資產，累計裝置容量 ${fmt(totalCapKw / 1000)} MW，有效合約案場 ${actSites.length} 座`;
+
+  $('ovKpis').innerHTML = [
+    [fmt(totalCapKw / 1000) + ' MW', `累計納管裝置容量（${all.length} 座電廠）`],
+    [covPct + '%', `有效合約容量覆蓋率（${actSites.length} 座）`],
+    [cAll.length ? `${onContracts.length} 份` : '讀取中…', `履約進行中合約（30 天內到期 ${due30.length} 份）`],
+    [wxWarnCnt == null ? '同步中…' : `${wxWarnCnt} 座`, '即時風雨注意／警戒監測站數'],
+  ].map(([a, b]) => `<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+
+  // Regional Capacity Breakdown
+  const areaMap = new Map();
+  for (const s of all) {
+    const k = s.area || '未分區';
+    const cur = areaMap.get(k) || { area: k, count: 0, kw: 0 };
+    cur.count += 1;
+    cur.kw += (+s.capacity || 0);
+    areaMap.set(k, cur);
+  }
+  const areas = [...areaMap.values()].sort((a, b) => b.kw - a.kw);
+  const maxKw = Math.max(1, ...areas.map((a) => a.kw));
+  $('ovRegions').innerHTML = areas.map((a) => `
+    <div class="hbar-row" data-jump-area="${esc(a.area)}">
+      <strong>${esc(a.area)}</strong>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(a.kw / maxKw * 100).toFixed(1)}%"></div></div>
+      <span class="hbar-val">${a.count} 座 · ${fmt(a.kw / 1000)} MW</span>
+    </div>
+  `).join('');
+
+  // Renewal Priority Matrix
+  $('ovExpiryMatrix').innerHTML = [
+    ['danger', '7 天內急迫續約', due7.length, '7', '需立即確認續約簽核狀態'],
+    ['warn', '30 天內高優先到期', due30.length, '30', '安排業務與甲方對接續約'],
+    ['info', '90 天內規劃續約', due90.length, '90', '提前盤點 SLA 與電價條款'],
+    ['muted', '近 30 天已屆期合約', expired30.length, '-30', '追蹤結案或補簽展延文件'],
+  ].map(([cls, label, cnt, win, hint]) => `
+    <button class="prio-tile ${cls}" type="button" data-jump-exp="${win}">
+      <small>${esc(label)}</small>
+      <strong>${cnt} 份</strong>
+      <span style="font-size:11.5px;color:var(--mute)">${esc(hint)} →</span>
+    </button>
+  `).join('');
+}
+
 function switchTab(t) {
-  [['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map']].forEach(([v, n]) => {
-    $(v + 'View').hidden = v !== t;
-    if (v === t) $('tab' + n).setAttribute('aria-current', 'page');
-    else $('tab' + n).removeAttribute('aria-current');
+  if (t === 'admin' && !currentPerms.is_admin) t = 'overview';
+  [['overview','Overview'],['sites','Sites'],['contracts','Contracts'],['expiry','Expiry'],['customers','Customers'],['map','Map'],['admin','Admin']].forEach(([v, n]) => {
+    const viewEl = $(v + 'View');
+    const tabEl = $('tab' + n);
+    if (!viewEl || !tabEl) return;
+    viewEl.hidden = v !== t;
+    if (v === t) tabEl.setAttribute('aria-current', 'page');
+    else tabEl.removeAttribute('aria-current');
   });
   if (t === 'map') showMap();
+  if (t === 'admin' && !adminLoaded) loadAdminConsole();
 }
 
 function fileList(type, no) {
@@ -1245,6 +1570,7 @@ async function loadRisk() {
     risk.error = e.message || '無法連線';
   }
   computeRisk();
+  renderOverview();
   if (map) mApply();
 }
 
@@ -1427,11 +1753,15 @@ function openC(no) {
   $('dNo').textContent = c.contract_type || '合約';
   $('dTitle').textContent = c.contract_no;
   const sites = c.sites.length ? c.sites.map((s) => `<li><button class="jump" data-site="${esc(s.field_no)}">${esc(s.field_no)}　${esc(s.site_name)}</button></li>`).join('') : '';
+  const masked = '🔒 依目前金鑰權限遮罩（限 Member 以上檢視）';
+  const commBlock = currentPerms.can_view_commercial
+    ? dl([['收款時程', c.payment_schedule], ['維運金額', c.maintenance_amount], ['保發責任', c.guaranteed_liability], ['保發結算時間', c.clearing_timing], ['獎懲計算方式', c.calculation_type, 1], ['獎金定義', c.award_terms, 1], ['罰款定義', c.indemnity_clause, 1]])
+    : `<p class="masked-val">${masked}</p>`;
   $('dBody').innerHTML = custLink(c.customer_no, c.customer)
     + '<h3>基本資料</h3>' + dl([['合約狀態', c.status], ['合約開始', c.start_date], ['合約結束', c.end_date], ['合約年限', c.years]])
     + `<h3>關聯案場（${c.sites.length}）</h3>` + (sites ? `<ul style="margin:0;padding-left:18px">${sites}</ul>` : '<p class="empty">無資料</p>')
     + '<h3>維運服務條件 (SLA)</h3>' + dl([['查檢到場時限（小時）', c.inspection_dl], ['修復零件更換時限（小時）', c.repair_dl], ['巡檢週期（天）', c.inspection_cycle], ['高壓週期（天）', c.hv_cycle], ['清洗週期（天）', c.clean_cycle], ['環境整理週期（天）', c.weeding_cycle]])
-    + '<h3>商務與保發條款</h3>' + dl([['收款時程', c.payment_schedule], ['維運金額', c.maintenance_amount], ['保發責任', c.guaranteed_liability], ['保發結算時間', c.clearing_timing], ['獎懲計算方式', c.calculation_type, 1], ['獎金定義', c.award_terms, 1], ['罰款定義', c.indemnity_clause, 1]])
+    + '<h3>商務與保發條款</h3>' + commBlock
     + '<h3>保險與風險轉移</h3>' + dl([['雇主意外責任保險編號', c.eli_no], ['保險到期日', c.eli_end_date], ['營繕承包人保險編號', c.cli_no], ['保險到期日', c.repair_contractor_end_date]])
     + '<h3>報告與交付文件</h3>' + dl([['年度維運報告書', c.anr], ['繳交時程', c.anr_content], ['最晚繳交日期', c.anr_last_date], ['保固書開立日期', c.warranty_issue_date], ['工程期滿通知書開立日期', c.pen_date]])
     + sub('災前、災後巡檢紀錄', c.inspections)
@@ -1504,7 +1834,7 @@ function openD(no) {
   $('dTitle').textContent = r.name;
   const g = validXY(r) ? `<p style="margin:10px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank" rel="noopener">在 Google 地圖開啟定位 ↗</a></p>` : '';
   $('dBody').innerHTML = g + siteRiskHtml(r.field_no) + custLink(r.customer_no, r.customer)
-    + '<h3>基本與電氣規格</h3>' + dl([['容量 (kW)', r.capacity], ['維運分區', r.area], ['GPS 座標', r.gps], ['負責工程師', r.engineer], ['負責管理師', r.manager], ['案場屬性', r.source], ['案場類型', r.field_type], ['變流器 (INV)', r.inverter], ['模組 (PV)', r.pv], ['躉售費率', r.bulk_tariff], ['交流規格', r.ac_spec], ['驗收日期', r.acceptance_date], ['併聯日期', r.parallel_date], ['MOF 表倍數', r.mof_ratio], ['高壓案場', r.is_high_voltage], ['高保由我司施作', r.hv_by_us], ['有效合約', r.active_contract], ['案場地址', r.address, 1], ['維運注意事項', r.note, 1]])
+    + '<h3>基本與電氣規格</h3>' + dl([['容量 (kW)', r.capacity], ['維運分區', r.area], ['GPS 座標', r.gps], ['負責工程師', r.engineer], ['負責管理師', r.manager], ['案場屬性', r.source], ['案場類型', r.field_type], ['變流器 (INV)', r.inverter], ['模組 (PV)', r.pv], ['躉售費率', currentPerms.can_view_commercial ? r.bulk_tariff : '🔒 依權限遮罩'], ['交流規格', r.ac_spec], ['驗收日期', r.acceptance_date], ['併聯日期', r.parallel_date], ['MOF 表倍數', r.mof_ratio], ['高壓案場', r.is_high_voltage], ['高保由我司施作', r.hv_by_us], ['有效合約', r.active_contract], ['案場地址', r.address, 1], ['維運注意事項', r.note, 1]])
     + `<h3>關聯合約</h3>` + ((contractsOfSite[r.field_no] || []).length ? `<ul style="margin:0;padding-left:18px">${contractsOfSite[r.field_no].map((n) => `<li><button class="jump" data-contract="${esc(n)}">${esc(n)}</button></li>`).join('')}</ul>` : '<p class="empty">無資料</p>')
     + sub('案場聯絡人', r.contacts) + sub('通知 E-Mail', r.emails)
     + sub('台電電號', r.electric_nos) + sub('協力與設備', r.accessories) + sub('計量硬體設備', r.devices) + fileList('site', r.field_no);
@@ -1514,6 +1844,10 @@ function openD(no) {
 function closeD() { $('drawerWrap').hidden = true; lastFocus && lastFocus.focus && lastFocus.focus(); }
 
 function csv(cols, list, name) {
+  if (!currentPerms.can_export) {
+    alert('目前存取金鑰為唯讀權限，不開放匯出報表。');
+    return;
+  }
   const q = (v) => { let s = String(v ?? ''); if (/^[=+\-@]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
   const rows = [cols.map((c) => q(c[1])).join(','), ...list.map((r) => cols.map((c) => q(r[c[0]])).join(','))];
   const a = document.createElement('a');
@@ -1522,6 +1856,73 @@ function csv(cols, list, name) {
   a.click();
   URL.revokeObjectURL(a.href);
   apiCall({ action: 'log_export', target: name, rows: list.length }).catch(() => {});
+}
+
+// ── Admin Console Logic (Owner / Admin Only) ──
+async function loadAdminConsole() {
+  if (!currentPerms.is_admin) return;
+  try {
+    const res = await apiCall({ action: 'admin_overview' });
+    adminLoaded = true;
+    const keys = res.keys || [];
+    const admins = res.admins || [];
+    const logs = res.audit_logs || [];
+    const activeKeys = keys.filter((k) => k.enabled).length;
+    const okLogins = logs.filter((l) => l.action === 'gate_verified').length;
+    const failLogins = logs.filter((l) => l.action === 'gate_failed').length;
+
+    $('admKpis').innerHTML = [
+      [`${activeKeys} / ${keys.length}`, '啟用中／總存取金鑰（把）'],
+      [admins.filter((a) => a.enabled).length, '授權人員名錄（位）'],
+      [okLogins, '近期成功解鎖紀錄（次）'],
+      [failLogins, '近期失敗驗證警示（次）'],
+    ].map(([a, b]) => `<div class="kpi"><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('');
+
+    $('admDriveUrl').value = res.config?.drive_folder_url || '';
+    $('admNoticeText').value = res.config?.portal_notice || '';
+
+    $('admKeysTbody').innerHTML = keys.map((k) => {
+      const canEdit = currentPerms.is_owner || k.scope !== 'owner';
+      return `<tr>
+        <td><b>${esc(k.label)}</b>${k.is_current ? ' <span class="tag t-normal">目前使用中</span>' : ''}</td>
+        <td class="nw"><span class="mono-code">${esc(k.key_hint)}</span></td>
+        <td class="nw"><span class="role-pill ${esc(k.scope)}">${esc(k.scope.toUpperCase())}</span></td>
+        <td class="nw">${k.can_export ? '✓ 可匯出' : '— 禁止'}</td>
+        <td class="nw">${k.can_view_commercial ? '✓ 可檢視' : '🔒 遮罩'}</td>
+        <td class="num">${k.usage_count ?? 0}</td>
+        <td class="nw">${k.last_used_at ? esc(twTime(k.last_used_at)) : '—'}</td>
+        <td class="nw">${k.expires_at ? esc(twDate(k.expires_at)) : '—'}${k.enforce_expiry ? ' <small>(強制)</small>' : ''}</td>
+        <td class="nw"><span class="status-badge ${k.enabled ? 'on' : 'off'}">${k.enabled ? '啟用中' : '已停用'}</span></td>
+        <td class="nw">${canEdit && !k.is_current ? `<button class="link" data-key-toggle="${esc(k.id)}" data-next="${!k.enabled}">${k.enabled ? '停用' : '啟用'}</button> · <button class="link" style="color:var(--t-danger)" data-key-del="${esc(k.id)}">刪除</button>` : '<span class="empty">—</span>'}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="10" class="empty">尚無存取金鑰</td></tr>';
+
+    $('admMembersTbody').innerHTML = admins.map((m) => {
+      const canEdit = currentPerms.is_owner || m.role !== 'owner';
+      return `<tr>
+        <td class="nw">${esc(m.email)}</td>
+        <td>${esc(m.display_name || '—')}</td>
+        <td class="nw"><span class="role-pill ${esc(m.role)}">${esc(m.role.toUpperCase())}</span></td>
+        <td class="nw">${m.can_export ? '✓' : '—'}</td>
+        <td class="nw">${m.can_view_commercial ? '✓' : '🔒'}</td>
+        <td class="nw"><span class="status-badge ${m.enabled ? 'on' : 'off'}">${m.enabled ? '啟用' : '停用'}</span></td>
+        <td class="nw">${m.updated_at ? esc(twTime(m.updated_at)) : '—'}</td>
+        <td class="nw">${canEdit ? `<button class="link" data-mem-edit="${esc(m.email)}">帶入編輯</button> · <button class="link" style="color:var(--t-danger)" data-mem-del="${esc(m.email)}">移除</button>` : '<span class="empty">—</span>'}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="8" class="empty">尚無授權名單</td></tr>';
+    window._admMembersCache = admins;
+
+    $('admLogsTbody').innerHTML = logs.map((l) => `<tr>
+      <td class="nw">${esc(twFull(l.created_at))}</td>
+      <td class="nw">${esc(l.actor_email || '—')}</td>
+      <td class="nw"><span class="mono-code">${esc(l.action)}</span></td>
+      <td>${esc(l.target || '—')}</td>
+      <td><small>${esc(JSON.stringify(l.detail || {}))}</small></td>
+    </tr>`).join('') || '<tr><td colspan="5" class="empty">尚無稽核紀錄</td></tr>';
+  } catch (err) {
+    $('admKeyErr').className = 'err';
+    $('admKeyErr').textContent = '後台資料讀取失敗：' + (err.message || 'unknown');
+  }
 }
 
 // ── Event Bindings ──
@@ -1609,11 +2010,185 @@ $('rotateModalForm').onsubmit = async (e) => {
 };
 
 // Main Navigation & Tables
+$('tabOverview').onclick = () => switchTab('overview');
 $('tabSites').onclick = () => switchTab('sites');
 $('tabContracts').onclick = () => switchTab('contracts');
 $('tabExpiry').onclick = () => switchTab('expiry');
 $('tabCustomers').onclick = () => switchTab('customers');
 $('tabMap').onclick = () => switchTab('map');
+$('tabAdmin').onclick = () => switchTab('admin');
+
+// Executive Overview Drill-down Shortcuts
+$('ovRegions').onclick = (e) => {
+  const row = e.target.closest('[data-jump-area]');
+  if (!row) return;
+  const area = row.dataset.jumpArea;
+  $('fArea').value = area === '未分區' ? '' : area;
+  pageNo = 0;
+  apply();
+  switchTab('sites');
+};
+$('ovExpiryMatrix').onclick = (e) => {
+  const tile = e.target.closest('[data-jump-exp]');
+  if (!tile) return;
+  $('eWindow').value = tile.dataset.jumpExp;
+  eApply();
+  switchTab('expiry');
+};
+
+// Admin Console Actions
+$('admKeyScope').onchange = () => {
+  const sc = $('admKeyScope').value;
+  $('admKeyExport').checked = sc !== 'viewer';
+  $('admKeyCommercial').checked = sc !== 'viewer';
+};
+$('admRefreshBtn').onclick = () => loadAdminConsole();
+
+$('admNewKeyForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('admKeyErr').textContent = '';
+  $('admNewKeyReveal').hidden = true;
+  $('admCreateKeyBtn').disabled = true;
+  try {
+    const res = await apiCall({
+      action: 'create_access_key',
+      label: $('admKeyLabel').value.trim(),
+      scope: $('admKeyScope').value,
+      raw_key: $('admKeyRaw').value.trim(),
+      expires_days: Number($('admKeyDays').value || 60),
+      can_export: $('admKeyExport').checked,
+      can_view_commercial: $('admKeyCommercial').checked,
+      enforce_expiry: $('admKeyEnforce').checked,
+    });
+    const rev = $('admNewKeyReveal');
+    rev.innerHTML = `
+      <div><strong>✓ 新存取金鑰已發行！</strong>（明文金鑰僅顯示這一次，請立即複製妥善保管）</div>
+      <code>${esc(res.plaintext_key)}</code>
+      <button class="btn btn-sm" id="admCopyNewKeyBtn" type="button" style="margin-left:10px">複製金鑰</button>
+    `;
+    rev.hidden = false;
+    $('admCopyNewKeyBtn').onclick = async () => {
+      try { await navigator.clipboard.writeText(res.plaintext_key); $('admCopyNewKeyBtn').textContent = '已複製 ✓'; }
+      catch {}
+    };
+    $('admNewKeyForm').reset();
+    $('admKeyDays').value = '60';
+    $('admKeyExport').checked = true;
+    $('admKeyCommercial').checked = true;
+    await loadAdminConsole();
+  } catch (err) {
+    $('admKeyErr').className = 'err';
+    $('admKeyErr').textContent = err.message || '發行金鑰失敗';
+  } finally {
+    $('admCreateKeyBtn').disabled = false;
+  }
+};
+
+$('admKeysTbody').onclick = async (e) => {
+  const tBtn = e.target.closest('[data-key-toggle]');
+  if (tBtn) {
+    try {
+      await apiCall({ action: 'update_access_key', id: tBtn.dataset.keyToggle, enabled: tBtn.dataset.next === 'true' });
+      await loadAdminConsole();
+    } catch (err) {
+      $('admKeyErr').className = 'err';
+      $('admKeyErr').textContent = err.message;
+    }
+    return;
+  }
+  const dBtn = e.target.closest('[data-key-del]');
+  if (dBtn) {
+    if (!confirm('確定要永久刪除此存取金鑰嗎？刪除後原金鑰將立即失效。')) return;
+    try {
+      await apiCall({ action: 'delete_access_key', id: dBtn.dataset.keyDel });
+      await loadAdminConsole();
+    } catch (err) {
+      $('admKeyErr').className = 'err';
+      $('admKeyErr').textContent = err.message;
+    }
+  }
+};
+
+$('admConfigForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('admCfgErr').textContent = '';
+  $('admSaveCfgBtn').disabled = true;
+  try {
+    const res = await apiCall({
+      action: 'update_portal_config',
+      drive_folder_url: $('admDriveUrl').value.trim(),
+      portal_notice: $('admNoticeText').value.trim(),
+    });
+    if (res.config?.drive_folder_url) {
+      $('driveLink').href = res.config.drive_folder_url;
+      $('driveLink').hidden = false;
+    } else {
+      $('driveLink').hidden = true;
+    }
+    if (res.config?.portal_notice) $('noticeText').textContent = res.config.portal_notice;
+    $('admCfgErr').className = 'err ok';
+    $('admCfgErr').textContent = '✓ 平台系統設定已儲存並即時生效。';
+    await loadAdminConsole();
+  } catch (err) {
+    $('admCfgErr').className = 'err';
+    $('admCfgErr').textContent = err.message || '儲存失敗';
+  } finally {
+    $('admSaveCfgBtn').disabled = false;
+  }
+};
+
+$('admMemberForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('admMemErr').textContent = '';
+  try {
+    await apiCall({
+      action: 'upsert_admin_member',
+      email: $('admMemEmail').value.trim(),
+      display_name: $('admMemName').value.trim(),
+      role: $('admMemRole').value,
+      can_export: $('admMemExport').checked,
+      can_view_commercial: $('admMemComm').checked,
+      enabled: $('admMemEnabled').checked,
+    });
+    $('admMemberForm').reset();
+    $('admMemExport').checked = true;
+    $('admMemComm').checked = true;
+    $('admMemEnabled').checked = true;
+    $('admMemErr').className = 'err ok';
+    $('admMemErr').textContent = '✓ 人員名單已更新。';
+    await loadAdminConsole();
+  } catch (err) {
+    $('admMemErr').className = 'err';
+    $('admMemErr').textContent = err.message || '更新名單失敗';
+  }
+};
+
+$('admMembersTbody').onclick = async (e) => {
+  const eBtn = e.target.closest('[data-mem-edit]');
+  if (eBtn) {
+    const m = (window._admMembersCache || []).find((x) => x.email === eBtn.dataset.memEdit);
+    if (!m) return;
+    $('admMemEmail').value = m.email;
+    $('admMemName').value = m.display_name || '';
+    $('admMemRole').value = m.role || 'member';
+    $('admMemExport').checked = m.can_export !== false;
+    $('admMemComm').checked = m.can_view_commercial !== false;
+    $('admMemEnabled').checked = m.enabled !== false;
+    $('admMemEmail').focus();
+    return;
+  }
+  const dBtn = e.target.closest('[data-mem-del]');
+  if (dBtn) {
+    if (!confirm(`確定要自授權名錄移除 ${dBtn.dataset.memDel} 嗎？`)) return;
+    try {
+      await apiCall({ action: 'delete_admin_member', email: dBtn.dataset.memDel });
+      await loadAdminConsole();
+    } catch (err) {
+      $('admMemErr').className = 'err';
+      $('admMemErr').textContent = err.message;
+    }
+  }
+};
 
 $('q').oninput = () => { pageNo = 0; apply(); };
 $('thead').onclick = (e) => { const k = e.target.closest('th')?.dataset.k; if (!k) return; if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = 1; } apply(); };
